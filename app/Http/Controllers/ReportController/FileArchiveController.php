@@ -88,23 +88,22 @@ class FileArchiveController extends Controller
         foreach($data as $key=>$item){
             $actions = $this->action($item);
             $response[] = [
+                'id' => $item->id,
                 'no' => ++$key,
                 'filename' => $item->filename,
                 'report_type' => $item->module_dtls->module,
                 'uploaded_at' => $item->created_at->format('M d, Y'),
                 'action' => $actions['button'],
-                'created_by' => $item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname
+                'created_by' => $item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname,
             ];
         }
         return response()->json($response);
     }
-
+    
     public function action($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="view-file-btn" data-name="'.$data->filename.'"><i class="bi bi-eye"></i></button>
-            <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-sp-file-btn" data-id="'.$data->id.'" data-name="'.$data->filename.'"><i class="bi bi-trash"></i></button>
-        ';
-
+            <button type="button" class="btn btn-outline-info btn-sm px-3" id="view-file-btn" data-name="'.$data->filename.'"><i class="bi bi-eye"></i></button>';
+    
         return [
             'button' => $button,
         ];
@@ -134,5 +133,41 @@ class FileArchiveController extends Controller
         return $data;
     }
 
+    public function deleteSelectedFiles(Request $request){
+        try {
+            $files = $request->input('files');
+            if (count($files) == 0) {
+                $files = FileArchive::pluck('filename')->toArray();
+            }
+            $deleted = 0;
+            $notDeleted = 0;
+    
+            foreach($files as $file){
+                $filePath = public_path('reports/' . $file);
+                if (file_exists($filePath)) {
+                    if (unlink($filePath)) {
+                        $deletedFile = FileArchive::where('filename', $file)->delete();
+                        if($deletedFile){
+                            $deleted++;
+                        } else {
+                            $notDeleted++;
+                        }
+                    } else {
+                        $notDeleted++;
+                    }
+                } else {
+                    $notDeleted++;
+                }
+            }
+    
+            if($deleted > 0){
+                return response()->json(['success' => true, 'message' => $deleted.' files deleted successfully.']);
+            } else {
+                return response()->json(['success' => false, 'message' => 'No files deleted.']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while deleting files.']);
+        }
+    }
     
 }

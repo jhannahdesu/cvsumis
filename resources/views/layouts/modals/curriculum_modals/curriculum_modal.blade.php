@@ -521,11 +521,22 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
-                    <label for="school_year" class="form-label">Certificate Details (LOCATIONS)</label>
-                    <input type="text" class="form-control" id="certiface_details" name="certificate_details" required>
-                    <div class="valid-feedback">
-                        Looks good!
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label for="certificate_details" class="form-label">Certificate Details (LOCATIONS)</label>
+                        <textarea 
+                            class="form-control" 
+                            id="certificate_details" 
+                            name="certificate_details" 
+                            rows="4" 
+                            style="resize: none;" 
+                            placeholder="ex. Automotive Servicing - (Chassis Repair)
+Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA" 
+                            required
+                        ></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
                     </div>
                 </div>
 

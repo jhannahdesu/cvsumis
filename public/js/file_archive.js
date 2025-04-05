@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     reportTable();
     fetchReport();
@@ -51,6 +52,9 @@ const reportTable = () => {
             }
         },
         columns:[
+            {title:"<input type='checkbox' id='select-all'>", field:"checkbox", hozAlign:"center", vertAlign:"middle", formatter:function(cell, formatterParams, onRendered){
+                return '<input type="checkbox" class="form-check-input" id="file-'+cell.getData().id+'" value="'+cell.getData().filename+'">';
+            }},
             {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"created_by", hozAlign:"left", vertAlign:"middle"},
             {title:"REPORT TYPE ", field:"report_type", hozAlign:"left", vertAlign:"middle"},
@@ -60,6 +64,66 @@ const reportTable = () => {
         ]
     }); 
 }
+
+$(document).on('click', '#select-all', function() {
+    if (this.checked) {
+        $('#reports-table input[type="checkbox"]').each(function() {
+            this.checked = true;
+        });
+    } else {
+        $('#reports-table input[type="checkbox"]').each(function() {
+            this.checked = false;
+        });
+    }
+});
+
+$(document).on('click', '#delete-selected-files', function(e){
+    var selectedFiles = [];
+    $('#reports-table input[type="checkbox"]:checked').each(function(){
+        selectedFiles.push($(this).val());
+    });
+
+    if(selectedFiles.length > 0){
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "/delete-selected-files",
+                    type: 'POST',
+                    data: {files: selectedFiles},
+                    success: function (response) {
+                        console.log('Success:', response);
+                        Swal.fire({
+                            title: "Success!",
+                            text: response.message,
+                            icon: "success"
+                        });
+                        fetchReport();
+                    },
+                    error: function (xhr, status) {
+                        console.log('Error:', xhr);
+                    }
+                });
+            }
+        });
+    } else {
+        Swal.fire({
+            title: "Error!",
+            text: "Please select at least one file to delete.",
+            icon: "error"
+        });
+    }
+});
 
 function searchreports(value){
     reports.setFilter([

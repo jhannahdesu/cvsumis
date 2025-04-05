@@ -52,10 +52,12 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
 
 
     Route::get('/view-file/{filename}', [\App\Http\Controllers\ReportController\ManageReportController::class, 'index'])->name('manage_report.view');
+    
     Route::get('/file-archive', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'index'])->name('file_archive.index');
     Route::get('/fetch-file-archive', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'fetchReportData'])->name('file_archive.fetch');
     Route::post('/remove-file/{filename}', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'deleteSpFile'])->name('file_archive.remove');
     Route::get('/module-year', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'getYearPerModule'])->name('file_archive.get_year');
+    Route::post('/delete-selected-files', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'deleteSelectedFiles'])->name('file_archive.delete_selected');
     //REPORTSS  
     Route::get('/manage-annual-report', [\App\Http\Controllers\Admin\AnnualReportController::class, 'index'])->name('manage_annual_report.index');
     Route::get('/fetch-annual-report', [\App\Http\Controllers\Admin\AnnualReportController::class, 'fetchAnnualReportData'])->name('manage_annual_report.fetch');
