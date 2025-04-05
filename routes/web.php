@@ -25,6 +25,7 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
      //SETTINGS 
         Route::get('change-password', [\App\Http\Controllers\Admin\ChangePasswordController::class, 'index'])->name('change_password.index');
         Route::post('update-password', [\App\Http\Controllers\Admin\ChangePasswordController::class, 'updatePassword'])->name('change_password.update');
+        
 
         Route::get('user-profile', [\App\Http\Controllers\Admin\UserProfileController::class, 'index'])->name('user_profile.index');
         Route::post('/update-user-profile-image', [\App\Http\Controllers\Admin\UserProfileController::class, 'updateProfileImage'])->name('user_profile.updateProfileImage');

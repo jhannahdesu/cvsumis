@@ -25,56 +25,57 @@
             </div>
           </div><!-- End USER COUNT -->
 --}} 
-          <!-- Total Progrmas -->
-          <div class="col-xxl-4 col-md-6">
-            <div class="card info-card revenue-card">
-              <div class="card-body">
+              <!-- Total Programs -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card info-card revenue-card">
+            <div class="card-body">
                 <h5 class="card-title">Total Programs</h5>
                 <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-display"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>{{ $program_count }}</h6>
-                  </div>
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="bi bi-display"></i>
+                    </div>
+                    <div class="ps-3">
+                        <h6>{{ $program_count }}</h6>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div><!-- End -->
+        </div>
+    </div>
 
-           <!-- Total Department -->
-           <div class="col-xxl-4 col-md-6">
-            <div class="card info-card revenue-card">
-              <div class="card-body">
-                <h5 class="card-title">Total Department</h5>
+    <!-- Total Departments -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card info-card revenue-card">
+            <div class="card-body">
+                <h5 class="card-title">Total Departments</h5>
                 <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-building text-warning"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>{{ $department_count - 1 }}</h6>
-                  </div>
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="bi bi-building text-warning"></i>
+                    </div>
+                    <div class="ps-3">
+                        <h6>{{ $department_count - 1 }}</h6>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div><!-- End -->
+        </div>
+    </div>
 
-           <!-- Num of faculty -->
-           <div class="col-xxl-4 col-md-6">
-            <div class="card info-card revenue-card">
-              <div class="card-body">
+    <!-- Number of Faculty -->
+    <div class="col-lg-4 col-md-6">
+        <div class="card info-card revenue-card">
+            <div class="card-body">
                 <h5 class="card-title">Number of Faculty</h5>
                 <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-people"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>{{ $faculty_count }}</h6>
-                  </div>
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                        <h6>{{ $faculty_count }}</h6>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div><!-- End -->
+        </div>
+    </div>
+</div><!-- End -->
 
           <!--Enrolees Reports -->
             <div class="col-12">
@@ -106,67 +107,69 @@
                 </div>
               </div>
             </div><!-- End Reports -->
+<!-- Research & Extension Reports Row -->
+<div class="row">
+    <!-- Research Reports -->
+    <div class="col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Research Report | <span class="research_year_text">All data</span></h5>
+                <div class="d-flex justify-content-between align-items-end">
+                    <div class="d-flex">
+                        <div class="form-group me-2">
+                            <label for="research-year" class="form-label">Research Year</label>
+                            <select id="research-year" class="form-select" aria-label="Select Year">
+                                <option disabled selected value="">Select Research Year</option>
+                                @foreach ($research_year as $year)
+                                    <option value="{{ $year->year }}">{{ $year->year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group me-2">
+                            <label for="research-status" class="form-label">Status</label>
+                            <select id="research-status" class="form-select" aria-label="Select Status">
+                                <option disabled selected value="">Select Status</option>
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary" id="reset-research">
+                        <i class="bi bi-database"></i> All Data
+                    </button>
+                </div>
+                <!-- Line Chart -->
+                <div id="research-report"></div>
+            </div>
+        </div>
+    </div><!-- End Research -->
 
-          <!-- Research Reports -->
-          <div class="col-6">
-              <div class="card">
-                  <div class="card-body">
-                      <h5 class="card-title">Research Report | <span class="research_year_text">All data</span></h5>
-                      <div class="d-flex justify-content-between align-items-end">
-                          <div class="d-flex">
-                              <div class="form-group me-2">
-                                  <label for="research-year" class="form-label">Research Year</label>
-                                  <select id="research-year" class="form-select" aria-label="Select Year">
-                                      <option disabled selected value="">Select Research Year</option>
-                                      @foreach ($research_year as $year)
-                                          <option value="{{ $year->year }}">{{ $year->year }}</option>
-                                      @endforeach
-                                  </select>
-                              </div>
+    <!-- Extension Reports -->
+    <div class="col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Extension Chart | <span class="extension_year_text"> All data</span></h5>
+                <div class="d-flex justify-content-between align-items-end">
+                    <div class="form-group me-2">
+                        <label for="extension-year" class="form-label">Extension Year</label>
+                        <select id="extension-year" class="form-select" aria-label="Select Year">
+                            <option disabled selected value="">Select Extension Year</option>
+                            @foreach ($extension_year as $year)
+                                <option value="{{$year->year}}">{{$year->year}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button class="btn btn-outline-primary" id="reset-extension">
+                        <i class="bi bi-database"></i> All Data
+                    </button>
+                </div>
+                <!-- Line Chart -->
+                <div id="extension-report"></div>
+            </div>
+        </div>
+    </div><!-- End Extension -->
+</div><!-- End row -->
 
-                              <div class="form-group me-2">
-                                  <label for="research-status" class="form-label">Status</label>
-                                  <select id="research-status" class="form-select" aria-label="Select Status">
-                                      <option disabled selected value="">Select Status</option>
-                                      <option value="Ongoing">Ongoing</option>
-                                      <option value="Completed">Completed</option>
-                                  </select>
-                              </div>
-                          </div>
-                          <button class="btn btn-outline-primary" id="reset-research">
-                              <i class="bi bi-database"></i> All Data
-                          </button>
-                      </div>
-                      <!-- Line Chart -->
-                      <div id="research-report"></div>
-                  </div>
-              </div>
-          </div><!-- End Reports -->
-
-          <!-- Extension Reports -->
-          <div class="col-6">
-              <div class="card">
-                  <div class="card-body">
-                      <h5 class="card-title">Extension Chart | <span class="extension_year_text"> All data</span></h5>
-                      <div class="d-flex justify-content-between align-items-end">
-                          <div class="form-group me-2">
-                              <label for="extension-year" class="form-label">Extension Year</label>
-                              <select id="extension-year" class="form-select" aria-label="Select Year">
-                                  <option disabled selected value="">Select Extension Year</option>
-                                  @foreach ($extension_year as $year)
-                                      <option value="{{$year->year}}">{{$year->year}}</option>
-                                  @endforeach
-                              </select>
-                          </div>
-                          <button class="btn btn-outline-primary" id="reset-extension">
-                              <i class="bi bi-database"></i> All Data
-                          </button>
-                      </div>
-                      <!-- Line Chart -->
-                      <div id="extension-report"></div>
-                  </div>
-              </div>
-          </div><!-- End Reports -->
 
 
           <div class="col-12">

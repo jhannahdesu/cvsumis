@@ -66,47 +66,52 @@ class FacultyStaffProfileController extends Controller
     }
 
     public function EducationalAttainmentCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
+    {
+        $directory = public_path('reports');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+    
+        $filename = $directory . '/Faculty_Educational_Attainment_List.csv';
+    
+        $fp = fopen($filename, "w+");
+    
+        fputcsv($fp, ['ADDED BY', 'EDUCATION ATTAINMENT', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
+    
+        $query = EducationalAttainment::latest()->with('created_by_dtls', 'education_dtls');
+    
+        // Apply filters if provided
+        if ($request->has('semester') && !empty($request->semester)) {
+            $query->where('semester', $request->semester);
+        }
+    
+        if ($request->has('school_year') && !empty($request->school_year)) {
+            $query->where('school_year', $request->school_year);
+        }
+    
+        $data = $query->get();
+    
+        foreach ($data as $row) {
+            if ($row->created_by_dtls && $row->education_dtls) {
+                fputcsv($fp, [
+                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+                    ucwords($row->education_dtls->type),
+                    ucwords($row->semester),
+                    $row->school_year,
+                    $row->number_of_faculty
+                ]);
+            } else {
+                // You can either skip this record or add a default value
+                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
+            }
+        }
+    
+        fclose($fp);
+    
+        $headers = ['Content-Type' => 'text/csv'];
+    
+        return response()->download($filename, 'Faculty_Educational_Attainment_List.csv', $headers)->deleteFileAfterSend(true);
     }
-
-    $filename = $directory . '/Faculty_Educational_Attainment_List.csv';
-
-    $fp = fopen($filename, "w+");
-
-    fputcsv($fp, ['ADDED BY', 'EDUCATION ATTAINMENT', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
-
-    $query = EducationalAttainment::latest()->with('created_by_dtls', 'education_dtls');
-
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
-
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
-
-    $data = $query->get();
-
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->education_dtls->type),
-            ucwords($row->semester),
-            $row->school_year,
-            $row->number_of_faculty
-        ]);
-    }
-
-    fclose($fp);
-
-    $headers = ['Content-Type' => 'text/csv'];
-
-    return response()->download($filename, 'Faculty_Educational_Attainment_List.csv', $headers)->deleteFileAfterSend(true);
-}
 
     public function storeEducationalAttainment(Request $request) {
         try {
@@ -142,7 +147,7 @@ class FacultyStaffProfileController extends Controller
     public function fetchEducationalAttainment(){
         $response = [];
         $query = EducationalAttainment::query();
-    
+        
         // Apply filters based on the user's position
         if(Auth::user()->position == 1 || Auth::user()->position == 5){
             // No additional filters
@@ -155,21 +160,23 @@ class FacultyStaffProfileController extends Controller
                 $query->where('added_by', Auth::id());
             }
         }
-    
+        
         // Execute the query
-        $data = $query->orderBy('created_at', 'desc')->get();
-    
+        $data = $query->with('created_by_dtls', 'education_dtls')->orderBy('created_at', 'desc')->get();
+        
         foreach ($data as $key => $item) {
-            $actions = $this->educationalAttainmentAction($item);
-            $response[] = [
-                'no' => ++$key,
-                'name' => Auth::user()->position != 4 ? ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname) : 'N/A',
-                'education' => ucwords($item->education_dtls->type),
-                'semester' => ucwords($item->semester),
-                'number_of_faculty' => $item->number_of_faculty,
-                'school_year' => $item->school_year,
-                'action' => $actions['button']
-            ];
+            if ($item->created_by_dtls && $item->education_dtls) {
+                $actions = $this->educationalAttainmentAction($item);
+                $response[] = [
+                    'no' => ++$key,
+                    'name' => Auth::user()->position != 4 ? ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname) : 'N/A',
+                    'education' => ucwords($item->education_dtls->type),
+                    'semester' => ucwords($item->semester),
+                    'number_of_faculty' => $item->number_of_faculty,
+                    'school_year' => $item->school_year,
+                    'action' => $actions['button']
+                ];
+            }
         }
         return response()->json($response);
     }
@@ -260,13 +267,18 @@ class FacultyStaffProfileController extends Controller
         $data = $query->get();
     
         foreach ($data as $row) {
-            fputcsv($fp, [
-                ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-                ucwords($row->apointment_nature_dtls->type),
-                ucwords($row->semester),
-                $row->school_year,
-                $row->number_of_faculty
-            ]);
+            if ($row->created_by_dtls && $row->apointment_nature_dtls) {
+                fputcsv($fp, [
+                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+                    ucwords($row->apointment_nature_dtls->type),
+                    ucwords($row->semester),
+                    $row->school_year,
+                    $row->number_of_faculty
+                ]);
+            } else {
+                // You can either skip this record or add a default value
+                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
+            }
         }
     
         fclose($fp);
@@ -310,7 +322,7 @@ class FacultyStaffProfileController extends Controller
     public function fetchNatureAppointment() {
         $response = [];
         $query = NatureOfAppointment::query();
-    
+        
         // Apply filters based on the user's position
         if (Auth::user()->position == 1 || Auth::user()->position == 5) {
             // No additional filters
@@ -323,30 +335,32 @@ class FacultyStaffProfileController extends Controller
                 $query->where('added_by', Auth::id());
             }
         }
-    
+        
         // Apply filters if provided
         if (request()->has('semester') && !empty(request()->semester)) {
             $query->where('semester', request()->semester);
         }
-    
+        
         if (request()->has('school_year') && !empty(request()->school_year)) {
             $query->where('school_year', request()->school_year);
         }
-    
+        
         // Execute the query
-        $data = $query->orderBy('created_at', 'desc')->get();
-    
+        $data = $query->with('created_by_dtls', 'apointment_nature_dtls')->orderBy('created_at', 'desc')->get();
+        
         foreach ($data as $key => $item) {
-            $actions = $this->NatureAppointmentAction($item);
-            $response[] = [
-                'no' => ++$key,
-                'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
-                'apointment_nature' => ucwords($item->apointment_nature_dtls->type),
-                'semester' => ucwords($item->semester),
-                'number_of_faculty' => $item->number_of_faculty,
-                'school_year' => $item->school_year,
-                'action' => $actions['button']
-            ];
+            if ($item->created_by_dtls && $item->apointment_nature_dtls) {
+                $actions = $this->NatureAppointmentAction($item);
+                $response[] = [
+                    'no' => ++$key,
+                    'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
+                    'apointment_nature' => ucwords($item->apointment_nature_dtls->type),
+                    'semester' => ucwords($item->semester),
+                    'number_of_faculty' => $item->number_of_faculty,
+                    'school_year' => $item->school_year,
+                    'action' => $actions['button']
+                ];
+            }
         }
         return response()->json($response);
     }
@@ -436,13 +450,18 @@ class FacultyStaffProfileController extends Controller
         $data = $query->get();
     
         foreach ($data as $row) {
-            fputcsv($fp, [
-                ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-                ucwords($row->academic_rank_dtls->type),
-                ucwords($row->semester),
-                $row->school_year,
-                $row->number_of_faculty
-            ]);
+            if ($row->created_by_dtls && $row->academic_rank_dtls) {
+                fputcsv($fp, [
+                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+                    ucwords($row->academic_rank_dtls->type),
+                    ucwords($row->semester),
+                    $row->school_year,
+                    $row->number_of_faculty
+                ]);
+            } else {
+                // You can either skip this record or add a default value
+                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
+            }
         }
     
         fclose($fp);
@@ -483,49 +502,51 @@ class FacultyStaffProfileController extends Controller
         }
     }
 
-public function fetchAcademicRank(Request $request) {
-    $response = [];
-    $query = AcademicRank::query();
-
-    // Apply filters based on the user's position
-    if (Auth::user()->position == 1 || Auth::user()->position == 5) {
-        // No additional filters
-    } else {
-        if (Auth::user()->position != 4) {
-            $query->whereHas('created_by_dtls', function ($query) {
-                $query->where('department', Auth::user()->department);
-            });
+    public function fetchAcademicRank(Request $request) {
+        $response = [];
+        $query = AcademicRank::query();
+    
+        // Apply filters based on the user's position
+        if (Auth::user()->position == 1 || Auth::user()->position == 5) {
+            // No additional filters
         } else {
-            $query->where('added_by', Auth::id());
+            if (Auth::user()->position != 4) {
+                $query->whereHas('created_by_dtls', function ($query) {
+                    $query->where('department', Auth::user()->department);
+                });
+            } else {
+                $query->where('added_by', Auth::id());
+            }
         }
+    
+        // Apply filters if provided
+        if ($request->has('semester') && !empty($request->semester)) {
+            $query->where('semester', $request->semester);
+        }
+    
+        if ($request->has('school_year') && !empty($request->school_year)) {
+            $query->where('school_year', $request->school_year);
+        }
+    
+        // Execute the query
+        $data = $query->with('created_by_dtls', 'academic_rank_dtls')->orderBy('created_at', 'desc')->get();
+    
+        foreach ($data as $key => $item) {
+            if ($item->created_by_dtls && $item->academic_rank_dtls) {
+                $actions = $this->AcademicRankAction($item);
+                $response[] = [
+                    'no' => ++$key,
+                    'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
+                    'academic_rank' => ucwords($item->academic_rank_dtls->type),
+                    'semester' => ucwords($item->semester),
+                    'number_of_faculty' => $item->number_of_faculty,
+                    'school_year' => $item->school_year,
+                    'action' => $actions['button']
+                ];
+            }
+        }
+        return response()->json($response);
     }
-
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
-
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
-
-    // Execute the query
-    $data = $query->orderBy('created_at', 'desc')->get();
-
-    foreach ($data as $key => $item) {
-        $actions = $this->AcademicRankAction($item);
-        $response[] = [
-            'no' => ++$key,
-            'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
-            'academic_rank' => ucwords($item->academic_rank_dtls->type),
-            'semester' => ucwords($item->semester),
-            'number_of_faculty' => $item->number_of_faculty,
-            'school_year' => $item->school_year,
-            'action' => $actions['button']
-        ];
-    }
-    return response()->json($response);
-}
 
     public function AcademicRankAction($data){
         $button = '
@@ -587,47 +608,52 @@ public function fetchAcademicRank(Request $request) {
     // List of faculty scholars
 
     public function FacultyScholarCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
+    {
+        $directory = public_path('reports');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+    
+        $filename = $directory . '/Faculty_Scholars_List.csv';
+    
+        $fp = fopen($filename, "w+");
+    
+        fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'SCHOLARSHIP', 'INSTITUTION', 'PROGRAM']);
+    
+        $query = FacultyScholars::latest()->with('created_by_dtls');
+    
+        // Apply filters if provided
+        if ($request->has('semester') && !empty($request->semester)) {
+            $query->where('semester', $request->semester);
+        }
+    
+        if ($request->has('school_year') && !empty($request->school_year)) {
+            $query->where('school_year', $request->school_year);
+        }
+    
+        $data = $query->get();
+    
+        foreach ($data as $row) {
+            if ($row->created_by_dtls) {
+                fputcsv($fp, [
+                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+                    ucwords($row->faculty_name),
+                    ucwords($row->scholarship),
+                    ucwords($row->institution),
+                    ucwords($row->program)
+                ]);
+            } else {
+                // You can either skip this record or add a default value
+                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
+            }
+        }
+    
+        fclose($fp);
+    
+        $headers = ['Content-Type' => 'text/csv'];
+    
+        return response()->download($filename, 'Faculty_Scholars_List.csv', $headers)->deleteFileAfterSend(true);
     }
-
-    $filename = $directory . '/Faculty_Scholars_List.csv';
-
-    $fp = fopen($filename, "w+");
-
-    fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'SCHOLARSHIP', 'INSTITUTION', 'PROGRAM']);
-
-    $query = FacultyScholars::latest()->with('created_by_dtls');
-
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
-
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
-
-    $data = $query->get();
-
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->faculty_name),
-            ucwords($row->scholarship),
-            ucwords($row->institution),
-            ucwords($row->program)
-        ]);
-    }
-
-    fclose($fp);
-
-    $headers = ['Content-Type' => 'text/csv'];
-
-    return response()->download($filename, 'Faculty_Scholars_List.csv', $headers)->deleteFileAfterSend(true);
-}
 
     public function storeFacultyScholar(Request $request) {
         try {
@@ -664,49 +690,34 @@ public function fetchAcademicRank(Request $request) {
         $response = [];
         
         if(Auth::user()->position == 1 || Auth::user()->position == 5){
-            $data = FacultyScholars::orderBy('created_at', 'desc')->get();
+            $data = FacultyScholars::with('created_by_dtls')->orderBy('created_at', 'desc')->get();
         }else{
             if(Auth::user()->position != 4){
                 $data = FacultyScholars::whereHas('created_by_dtls', function ($query) {
                     $query->where('department', Auth::user()->department);
-                })->orderBy('created_at', 'desc')->get();
+                })->with('created_by_dtls')->orderBy('created_at', 'desc')->get();
             }else{
-                $data = FacultyScholars::where('added_by', Auth::id())->get();
+                $data = FacultyScholars::where('added_by', Auth::id())->with('created_by_dtls')->get();
             }
-
+    
         }
         foreach ($data as $key=>$item) {
-            $actions = $this->FacultyScholarAction($item);
-            $response[] = [
-                'no' => ++$key,
-                'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
-                'faculty_name' => ucwords($item->faculty_name),
-                'scholarship' => ucwords($item->scholarship),
-                'institution' => ucwords($item->institution),
-                'program' => ucwords($item->program),
-                'action' => $actions['button']
-            ];
+            if ($item->created_by_dtls) {
+                $actions = $this->FacultyScholarAction($item);
+                $response[] = [
+                    'no' => ++$key,
+                    'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
+                    'faculty_name' => ucwords($item->faculty_name),
+                    'scholarship' => ucwords($item->scholarship),
+                    'institution' => ucwords($item->institution),
+                    'program' => ucwords($item->program),
+                    'action' => $actions['button']
+                ];
+            }
         }
         return response()->json($response);
     }
-
-    public function FacultyScholarAction($data){
-        $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-faculty-scholar-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
-            <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-faculty-scholar-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
-        ';
-
-        return [
-            'button' => $button,
-        ];
-    }
-
-    public function viewFacultyScholar($id){
-        $data = FacultyScholars::where('id', $id)->first();
-
-        return response()->json($data);
-    }
-
+    
     public function updateFacultyScholar(Request $request, $id) {
         try {
             $validatedData = $request->validate([

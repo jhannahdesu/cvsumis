@@ -38,31 +38,37 @@
 <body class="{{ Auth::user()->position == 4 ? 'no-sidebar' : '' }}" >
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center" style="background:rgb(244, 152, 59); color-font:black;">
-    <div class="d-flex align-items-center justify-content-between">
-    <a href="{{ 
-      Auth::user()->position == 4 ? route('faculty_staff_profile.index') : 
-      (Auth::user()->position == 2 || Auth::user()->position == 5 ? route('curriculum.index') : 
-      route('admin.index')) 
-    }}" class="logo d-flex align-items-center">
+  <!-- NAVIGATION (BURGER) AND LOGO -->
+  {{-- FACULTY NAVIGATION --}}
+  <div class="d-flex align-items-center justify-content-between w-100">
+
+    @if(Auth::user()->position != 4)
+      <div class="d-flex align-items-center">
+        <!-- Hamburger Button with margin -->
+        <i class="bi bi-list toggle-sidebar-btn" style="margin-right: 15px;"></i>
+
+        <!-- Logo -->
+        <a href="{{ 
+          Auth::user()->position == 4 ? route('faculty_staff_profile.index') : 
+          (Auth::user()->position == 2 || Auth::user()->position == 5 ? route('curriculum.index') : 
+          route('admin.index')) 
+        }}" class="logo d-flex align-items-center">
+            <img src="{{ asset('images/background/ceit.png') }}" alt="">
+            <span class="d-none d-lg-block ">CEIT</span>
+        </a>
+      </div>
+    @else
+      <!-- Logo only for faculty (no sidebar) -->
+      <a href="{{ route('faculty_staff_profile.index') }}" class="logo d-flex align-items-center">
           <img src="{{ asset('images/background/ceit.png') }}" alt="">
           <span class="d-none d-lg-block">CEIT</span>
       </a>
-
-      <!-- NAVIGATION (BURGER) -->
-      {{-- FACULTY NAVIGATION --}}
-      @if(Auth::user()->position != 4)
-        <i class="bi bi-list toggle-sidebar-btn"></i>
-      @endif
-    </div><!-- End Logo -->
+    @endif
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-        <li class="nav-item d-block d-lg-none">
-          <a class="nav-link nav-icon search-bar-toggle " href="#">
-            <i class="bi bi-search"></i>
-          </a>
-        </li><!-- End Search Icon-->
+
 
         <li class="nav-item dropdown">
 
@@ -112,7 +118,7 @@
             <li>
               <a class="dropdown-item d-flex align-items-center" href="{{ route('change_password.index') }}">
                 <i class="bi bi-person-lock"></i>
-                <span>Privacy Settings</span>
+                <span>Change Password</span>
               </a>
             </li>
             <li>

@@ -19,16 +19,20 @@
                             <div class="col-12">
                                 <label for="yourUsername" class="form-label">Email</label>
                                 <div class="input-group has-validation">
-                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                    <input type="email" name="email" class="form-control">
+                                    <input type="email" name="email" class="form-control" placeholder="example@gmail.com">
                                     <div class="invalid-feedback">Please enter your email.</div>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <label for="yourPassword" class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control">
-                                <div class="invalid-feedback">Please enter your password!</div>
+                                <div class="input-group has-validation">
+                                    <input type="password" name="password" class="form-control" id="password" placeholder="password">
+                                    <span class="input-group-text" id="show-password">
+                                        <i class="bi bi-eye" id="eye-icon"></i>
+                                    </span>
+                                    <div class="invalid-feedback">Please enter your password!</div>
+                                </div>
                             </div>
 
                             <div class="col-12">
@@ -58,4 +62,17 @@
 </div>
 
 <script src="{{ asset('js/login.js') }} "></script>
+<script>
+    $(document).ready(function() {
+        $('#show-password').on('click', function() {
+            if ($('#password').attr('type') === 'password') {
+                $('#password').attr('type', 'text');
+                $('#eye-icon').removeClass('bi-eye').addClass('bi-eye-slash');
+            } else {
+                $('#password').attr('type', 'password');
+                $('#eye-icon').removeClass('bi-eye-slash').addClass('bi-eye');
+            }
+        });
+    });
+</script>
 @endsection

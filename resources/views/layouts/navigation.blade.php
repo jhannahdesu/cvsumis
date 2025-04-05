@@ -1,13 +1,11 @@
-
-
 @if(Auth::user()->position != 4)
   <ul class="sidebar-nav" id="sidebar-nav">
     @if(Auth::user()->position == 1)
       <li class="nav-item">
-        <a class="nav-link " href="{{ route('admin.index') }}">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
+      <a class="nav-link collapsed" href="{{ route('admin.index') }}">
+        <i class="bi bi-grid"></i>
+        <span class="nav-text">Dashboard</span>
+      </a>
       </li><!-- End Dashboard Nav -->
     @endif
 

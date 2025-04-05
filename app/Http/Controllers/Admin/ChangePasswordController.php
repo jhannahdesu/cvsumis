@@ -15,28 +15,42 @@ class ChangePasswordController extends Controller
         return view('admin.settings.change_password', compact('main_title', 'nav'));
     }
 
-    public function updatePassword(Request $request)    {
-
+    public function updatePassword(Request $request)
+    {
         $user = Auth::user();
-
-         // Validate the request
-        $request->validate([
-            'current_password' => 'required_unless:changepassword_at,null',
-            'new_password' => 'required|min:8|confirmed',
+    
+        $rules = [
+            'new_password' => [
+                'required',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{12,}$/'
+            ],
             'new_password_confirmation' => 'required',
-        ]);
-
-        // If 'changepassword_at' is not null, verify the current password
+        ];
+    
         if ($user->change_password_at !== null) {
-            if (!Hash::check($request->current_password, $user->password)) {
-                return response()->json(['errors' => 'Current password is incorrect'], 400);
-            }
+            $rules['current_password'] = 'required';
         }
-
-        $user->password = Hash::make($request->new_password);
-        $user->change_password_at = now(); // Update the timestamp
+    
+        $messages = [
+            'new_password.regex' => 'Password must be at least 12 characters and contain uppercase, lowercase, and a special character.',
+            'current_password.required' => 'Current password is required.'
+        ];
+    
+        $validator = \Validator::make($request->all(), $rules, $messages);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+    
+        if ($user->change_password_at !== null && !\Hash::check($request->current_password, $user->password)) {
+            return response()->json(['errors' => ['current_password' => ['Current password is incorrect.']]], 422);
+        }
+    
+        $user->password = \Hash::make($request->new_password);
+        $user->change_password_at = now();
         $user->save();
-
+    
         return response()->json(['message' => 'Password changed successfully.']);
     }
 }
