@@ -101,11 +101,22 @@
                 </div>
 
                 <div class="col-md-12">
-                  <label for="game_placement" class="form-label">Medal Type</label>
-                  <input type="text" class="form-control" id="medal_type" name="medal_type" required>
-                  <div class="valid-feedback">
-                      Looks good!
-                  </div>
+                    <label for="medal_type" class="form-label">Medal Type</label>
+                    <select class="form-select" id="medal_type" name="medal_type" required>
+                        <option selected disabled value="">Select Medal Type</option>
+                        <option value="Gold medalist">Gold</option>
+                        <option value="Silver medalist">Silver</option>
+                        <option value="Bronze medalist">Bronze</option>
+                        <option value="Participation">Participation</option>
+                        <option value="Championship">Championship</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <div id="other-medal-type" style="display: none;">
+                        <input type="text" class="form-control" id="other_medal_type" name="other_medal_type" placeholder="Enter custom medal type">
+                    </div>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <div class="col-md-12">

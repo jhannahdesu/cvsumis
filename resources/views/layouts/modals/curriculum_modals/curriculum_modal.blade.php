@@ -509,9 +509,9 @@
             <form class="row g-3 needs-validation" id="faculty-tvet-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="program" class="form-label">Examination Type</label>
+                    <label for="program" class="form-label">Type of Certificate</label>
                     <select class="form-select" id="certification_type" name="certification_type" required>
-                        <option selected disabled value="">Select Examination Type</option>
+                        <option selected disabled value="">Select Certificate Type</option>
                         @foreach ($certificates as $certificate)
                             <option value="{{ $certificate->id }}">{{ ucwords($certificate->type) }}</option>
                         @endforeach
@@ -523,7 +523,7 @@
 
                 <div class="row mb-3">
                     <div class="col-12">
-                        <label for="certificate_details" class="form-label">Certificate Details (LOCATIONS)</label>
+                        <label for="certificate_details" class="form-label">Certificate Details </label>
                         <textarea 
                             class="form-control" 
                             id="certificate_details" 
@@ -532,7 +532,7 @@
                             style="resize: none;" 
                             placeholder="ex. Automotive Servicing - (Chassis Repair)
 Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA" 
-                            required
+                            
                         ></textarea>
                         <div class="valid-feedback">
                             Looks good!
@@ -550,7 +550,7 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
 
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Name Of Certificate Holder</label>
-                    <input type="text" class="form-control" id="certificate_holder" name="certificate_holder" required>
+                    <input type="text" class="form-control" id="certificate_holder" name="certificate_holder" placeholder="Surname, Firstname MiddleInitial."  required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -576,9 +576,9 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
             <form class="row g-3 needs-validation" id="view-faculty-tvet-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="program" class="form-label">Examination Type</label>
+                    <label for="program" class="form-label">Type of Certification</label>
                     <select class="form-select" id="view_certification_type" name="certification_type" required>
-                        <option selected disabled value="">Select Examination Type</option>
+                        <option selected disabled value="">Select Certificate Type</option>
                         @foreach ($certificates as $certificate)
                             <option value="{{ $certificate->id }}">{{ ucwords($certificate->type) }}</option>
                         @endforeach
@@ -589,7 +589,7 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                 </div>
 
                 <div class="col-md-12">
-                    <label for="school_year" class="form-label">Certificate Details (DATE/LOCATIONS)</label>
+                    <label for="school_year" class="form-label">Certificate Details</label>
                     <input type="text" class="form-control" id="view_certificate_details" name="certificate_details" required>
                     <div class="valid-feedback">
                         Looks good!
@@ -632,9 +632,9 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
             <form class="row g-3 needs-validation" id="student-tvet-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="program" class="form-label">Examination Type</label>
+                    <label for="program" class="form-label">Type of Certificate</label>
                     <select class="form-select" id="student_tvet_certification_type" name="certification_type" required>
-                        <option selected disabled value="">Select Examination Type</option>
+                        <option selected disabled value="">Select Certificate Type</option>
                         @foreach ($certificates as $certificate)
                             <option value="{{ $certificate->id }}">{{ ucwords($certificate->type) }}</option>
                         @endforeach
@@ -652,11 +652,22 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                     </div>
                 </div>
 
-                <div class="col-md-12">
-                    <label for="school_year" class="form-label">Certificate Details (LOCATIONS)</label>
-                    <input type="text" class="form-control" id="student_tvet_location" name="student_tvet_location" required>
-                    <div class="valid-feedback">
-                        Looks good!
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label for="certificate_details" class="form-label">Certificate Details</label>
+                        <textarea 
+                            class="form-control" 
+                            id="certificate_details" 
+                            name="certificate_details" 
+                            rows="4" 
+                            required
+                            style="resize: none;" 
+                            placeholder="ex. Automotive Servicing - (Chassis Repair)
+                            Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA">
+                        </textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
                     </div>
                 </div>
 
@@ -701,7 +712,7 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                 </div>
 
                 <div class="col-md-12">
-                    <label for="school_year" class="form-label">Certificate Details (DATE/LOCATIONS)</label>
+                    <label for="school_year" class="form-label">Certificate Details</label>
                     <input type="text" class="form-control" id="view_student_tvet_certificate_details" name="certificate_details" required>
                     <div class="valid-feedback">
                         Looks good!
@@ -761,3 +772,19 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
         });
     });
 </script>
+
+<script>
+  (function () {
+    'use strict'
+    const form = document.getElementById('student-tvet-form');
+    
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  })();
+</script>
+

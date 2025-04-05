@@ -404,7 +404,7 @@
                 @csrf
                 <div class="col-md-12">
                     <label for="faculty_name" class="form-label">Name of Faculty</label>
-                    <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name" required>
+                    <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name" placeholder="Surname, First Name Middle Initial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -412,7 +412,7 @@
                 
                 <div class="col-md-12">
                     <label for="sholarship" class="form-label">Scholarship</label>
-                    <input type="text" class="form-control" id="fs_scholarship" name="scholarship" required>
+                    <input type="text" class="form-control" id="fs_scholarship" name="scholarship" placeholder="ex.CHED Scholarships for Instructors’ Knowledge Advancement Program (SIKAP)" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -420,7 +420,7 @@
 
                 <div class="col-md-12">
                     <label for="institution" class="form-label">Institution</label>
-                    <input type="text" class="form-control" id="fs_institution" name="institution" required>
+                    <input type="text" class="form-control" id="fs_institution" name="institution" placeholder="ex.University of the East – Manila"required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -428,7 +428,7 @@
 
                 <div class="col-md-12">
                     <label for="program" class="form-label">Program</label>
-                    <input type="text" class="form-control" id="fs_program" name="program" required>
+                    <input type="text" class="form-control" id="fs_program" name="program" placeholder="ex.Doctor in Information Technology"required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -1110,3 +1110,4 @@
         });
     });
 </script>
+

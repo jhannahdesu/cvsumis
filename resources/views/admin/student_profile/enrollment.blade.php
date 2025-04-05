@@ -26,7 +26,7 @@
                             
                             <div class="ms-auto d-flex">
                             @if(Auth::user()->position != 5)
-                                <button type="button" class="btn btn-outline-primary me-2" id="graduate-modal">
+                                <button type="button" class="btn btn-outline-primary me-2" id="enrollment-modal">
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
                             @endif

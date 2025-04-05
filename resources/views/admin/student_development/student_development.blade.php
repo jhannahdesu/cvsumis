@@ -13,7 +13,7 @@
                     
                             <div class="col-md-12">
                                 <label for="org_abbrev" class="form-label">Organization Abbreviation</label>
-                                <input type="text" class="form-control" id="org_abbrev" name="org_abbrev" required>
+                                <input type="text" class="form-control" id="org_abbrev" name="org_abbrev" placeholder="ex.ELITS"  required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -21,7 +21,7 @@
             
                             <div class="col-md-12">
                                 <label for="program_abbrev" class="form-label">Program Abbreviation</label>
-                                <input type="text" class="form-control" id="program_abbrev" name="program_abbrev" required>
+                                <input type="text" class="form-control" id="program_abbrev" name="program_abbrev" placeholder="ex.BSIT" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -29,7 +29,7 @@
 
                             <div class="col-md-12">
                                 <label for="org_name" class="form-label">Organization Name</label>
-                                <input type="text" class="form-control" id="org_name" name="org_name" required>
+                                <input type="text" class="form-control" id="org_name" name="org_name" placeholder="ex.Elite league of Information Technology Students" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>

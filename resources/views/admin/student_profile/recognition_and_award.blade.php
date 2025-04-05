@@ -10,10 +10,10 @@
                         <h5 class="card-title">Recognition and Award Form</h5>
                         <form class="row g-3 needs-validation" id="award-header-form" novalidate>
                             @csrf
-                    
+
                             <div class="col-md-12">
                                 <label for="award" class="form-label">Name of Recognition / Award</label>
-                                <textarea class="form-control" id="award" name="award" required></textarea>
+                                <textarea class="form-control" id="award" name="award" placeholder= "ex. University Games" required></textarea>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -21,7 +21,7 @@
             
                             <div class="col-md-12">
                                 <label for="granting_agency" class="form-label">Granting Agency / Institution</label>
-                                <input type="text" class="form-control" id="granting_agency" name="granting_agency" required>
+                                <input type="text" class="form-control" id="granting_agency" name="granting_agency" placeholder="ex. Cavite State University - Indang Campus"required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -76,9 +76,7 @@
                         
                             <div class="ms-auto d-flex">
                             @if(Auth::user()->position != 5)
-                                <button type="button" class="btn btn-outline-primary me-2" id="add-award-modal">
-                                    <i class="bi bi-plus-circle-fill"></i>
-                                </button>
+                                
                             @endif
                                 <form id="recognitionAwardCsvDownloadForm" class="form-inline" method="GET" action="{{ route('RecognitionAndAwardCSV') }}">
                                     <input type="hidden" name="year" id="recognitionAwardCsvYearInput">

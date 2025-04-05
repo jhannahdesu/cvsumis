@@ -11,7 +11,7 @@
         
                 <div class="col-md-12">
                     <label for="org_abbrev" class="form-label">Organization Abbreviation</label>
-                    <input type="text" class="form-control" id="view_org_abbrev" name="org_abbrev" required>
+                    <input type="text" class="form-control" id="view_org_abbrev" name="org_abbrev"  required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>

@@ -18,7 +18,7 @@
                                     <h5 class="card-title">List of on-going and completed faculty researches funded by the University</h5>
                                     <div class="d-flex justify-content-between mb-3">
                                         <form class="form-inline">
-                                            <input class="form-control mr-sm-2" type="search" oninput="searchuniversityResearchs(value)" placeholder="Search" aria-label="Search">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchuniversityResearchs(value)" placeholder="Title" aria-label="Search">
                                         </form>
                                         <div class="ms-auto d-flex">
                                     @if(Auth::user()->position != 5)
@@ -62,7 +62,7 @@
                                     <h5 class="card-title">List of extension activities conducted </h5>
                                     <div class="d-flex justify-content-between mb-3">
                                         <form class="form-inline">
-                                            <input class="form-control mr-sm-2" type="search" oninput="searchextensionActvities(value)" placeholder="Search" aria-label="Search">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchextensionActvities(value)" placeholder="Activity" aria-label="Search">
                                         </form>
                                         <div class="ms-auto d-flex">
                                     @if(Auth::user()->position != 5)

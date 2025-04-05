@@ -17,7 +17,7 @@
                                     <h5 class="card-title">Accreditation status of academic programs</h5>
                                     <div class="d-flex justify-content-between mb-3">
                                         <form class="form-inline">
-                                            <input class="form-control mr-sm-2" type="search" oninput="searchAcademicProgram(value)" placeholder="Search" aria-label="Search">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchAcademicProgram(value)" placeholder="ex.BS Agricultural And Biosystems Engineering" aria-label="Search">
                                         </form>
                                         <div class="form-group ms-2">
                                             <select id="accreditation-status-years" class="form-select" aria-label="Filter Year">
@@ -63,9 +63,9 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Academic programs with Government Recognition (CoPC)</h5>
                                     <div class="d-flex justify-content-between mb-3">
-                                        <form class="form-inline">
-                                            <input class="form-control mr-sm-2" type="search" oninput="searchRecognition(value)" placeholder="Search" aria-label="Search">
-                                        </form>
+                                    <form class="form-inline">
+    <input class="form-control me-2" type="search" oninput="searchRecognition(value)" placeholder="ex. BS Information Technology" aria-label="Search" style="width: 250px;">
+</form>
                                         
 					                    <div class="form-group ms-2">
                                             <select id="gov-recognition-years" class="form-select" aria-label="Filter Year">
@@ -112,7 +112,7 @@
                                     <h5 class="card-title">Performance in the licensure examination</h5>
                                     <div class="d-flex justify-content-between mb-3">
                                         <form class="form-inline">
-                                            <input class="form-control mr-sm-2" type="search" oninput="searchlicensureExam(value)" placeholder="Search" aria-label="Search">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchlicensureExam(value)" placeholder="ex. Architecture" aria-label="Search">
                                         </form>
 
                                         <div class="form-group ms-2">
@@ -159,10 +159,9 @@
                                 <div class="card-body">
                                     <h5 class="card-title">List of faculty members with national TVET qualification and certification </h5>
                                     <div class="d-flex justify-content-between mb-3">
-                                        <form class="form-inline">
-                                           
-                                            <input class="form-control mr-sm-2" type="search" oninput="searchfacultyTvets(value)" placeholder="Search" aria-label="Search">
-                                        </form>
+                                    <form class="form-inline">
+                                        <input class="form-control me-2" type="search" oninput="searchfacultyTvets(value)" placeholder="Holder Name" aria-label="Search" style="width: 250px;">
+                                    </form>
                                         
                                         <div class="form-group ms-2">
                                             <select id="faculty-tvet-years" class="form-select" aria-label="Filter Year">
@@ -209,7 +208,7 @@
                                     <h5 class="card-title">Number of students with national TVET qualification and certification </h5>
                                     <div class="d-flex justify-content-between mb-3">
                                         <form class="form-inline">
-                                            <input class="form-control mr-sm-2" type="search" oninput="searchstudentTvets(value)" placeholder="Search" aria-label="Search">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchstudentTvets(value)" placeholder="ex. National Certificate I" aria-label="Search">
                                         </form>
                                         <div class="form-group ms-2">
                                             <select id="student-tvet-years" class="form-select" aria-label="Filter Year">
@@ -242,6 +241,8 @@
         </div>
 
     </div>
+
+
 @include('layouts.modals.curriculum_modals.curriculum_modal')
 @endsection
 @section('scripts')

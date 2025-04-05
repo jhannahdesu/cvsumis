@@ -131,15 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('faculty-tvet-years').addEventListener('change', function () {
     const selectedYear = this.value;
-
     document.getElementById('facultyTvetYearInput').value = selectedYear;
 
     if (selectedYear === "") {
-        facultyTvetTable.clearFilter(); 
+        facultyTvets.clearFilter(); 
     } else {
-        facultyTvetTable.setFilter("date", "like", selectedYear); 
+        facultyTvets.setFilter("date", "like", selectedYear); // Filter by year
     }
-
 });
 
 //STudent TVET
@@ -837,45 +835,33 @@ $('#view_national_overall_passer, #view_national_overall_taker').on('keyup', fun
 
 let facultyTvetTable = () => {
     facultyTvets = new Tabulator("#faculty-tvet-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
-        // layout:"fitColumns",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
-        },
-        columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"CERTICATE TYPE", field:"certificate", hozAlign:"left", vertAlign:"middle"},
-            {title:"DATE", field:"date", hozAlign:"left", vertAlign:"middle"},
-            {title:"HOLDER", field:"holder", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        columns: [
+            { title: "NO", field: "no", hozAlign: "center", width: 75, vertAlign: "middle" },
+            { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+            { title: "CERTIFICATE TYPE", field: "certificate", hozAlign: "left", vertAlign: "middle" },
+            { title: "DATE", field: "date", hozAlign: "left", vertAlign: "middle" },
+            { title: "HOLDER", field: "holder", hozAlign: "left", vertAlign: "middle" },
+            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle" },
         ]
-    }); 
+    });
 }
 
-function searchfacultyTvets(value){
+
+function searchfacultyTvets(value) {
     facultyTvets.setFilter([
         [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"certificate", type:"like", value:value.trim()},
-            {field:"holder", type:"like", value:value.trim()},
+            { title: 'NO', field: 'no' },
+            { field: "holder", type: "like", value: value.trim() } // Search by holder name
         ]
     ]);
 }
