@@ -62,17 +62,46 @@ let linkagesTable = () => {
     }); 
 }
 
-function searchlinkages(value){
-    linkages.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"agency", type:"like", value:value.trim()},
-            {field:"linkage_nature", type:"like", value:value.trim()},
-            {field:"activity_title", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchlinkages(value){
+//     linkages.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"agency", type:"like", value:value.trim()},
+//             {field:"linkage_nature", type:"like", value:value.trim()},
+//             {field:"activity_title", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchlinkages(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        linkages.clearFilter();
+        return;
+    }
+
+    linkages.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.agency.toLowerCase().includes(term) &&
+                !data.linkage_nature.toLowerCase().includes(term) &&
+                !data.activity_title.toLowerCase().includes(term) &&
+                !data.date_venue.toLowerCase().includes(term) &&
+                !data.attendees.toLowerCase().includes(term) &&
+                !data.facilitators.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 // function searchEnrollment(value){
 //     enrollments.setFilter([

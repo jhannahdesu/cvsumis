@@ -124,15 +124,41 @@ let educationalAttainmentTable = () => {
     }); 
 }
 
-function searcheducationalAttainments(value){
-    educationalAttainments.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"semester", type:"like", value:value.trim()},
-            {field:"school_year", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searcheducationalAttainments(value){
+//     educationalAttainments.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"semester", type:"like", value:value.trim()},
+//             {field:"school_year", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searcheducationalAttainments(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        educationalAttainments.clearFilter();
+        return;
+    }
+
+    educationalAttainments.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.education.toLowerCase().includes(term) &&
+                !data.semester.toLowerCase().includes(term) &&
+                !data.school_year.toLowerCase().includes(term) &&
+                !data.number_of_faculty.toString().toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 $('#education-attainment-modal').click( function(e) {
@@ -305,17 +331,44 @@ let natureAppointmentTable = () => {
     }); 
 }
 
-function searchnatureAppointments(value){
-    natureAppointments.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"semester", type:"like", value:value.trim()},
-            {field:"school_year", type:"like", value:value.trim()},
-            {field:"apointment_nature", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchnatureAppointments(value){
+//     natureAppointments.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"semester", type:"like", value:value.trim()},
+//             {field:"school_year", type:"like", value:value.trim()},
+//             {field:"apointment_nature", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchnatureAppointments(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        natureAppointments.clearFilter();
+        return;
+    }
+
+    natureAppointments.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.apointment_nature.toLowerCase().includes(term) &&
+                !data.semester.toLowerCase().includes(term) &&
+                !data.school_year.toLowerCase().includes(term) &&
+                !data.number_of_faculty.toString().toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 $('#nature-appointment-modal').click(function () {
     $('#AddNatureAppointmentModal').modal('show'); 
 });
@@ -484,17 +537,44 @@ let academicRankTable = () => {
     }); 
 }
 
-function searchacademicRanks(value){
-    academicRanks.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"semester", type:"like", value:value.trim()},
-            {field:"school_year", type:"like", value:value.trim()},
-            {field:"academic_rank", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchacademicRanks(value){
+//     academicRanks.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"semester", type:"like", value:value.trim()},
+//             {field:"school_year", type:"like", value:value.trim()},
+//             {field:"academic_rank", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchacademicRanks(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        academicRanks.clearFilter();
+        return;
+    }
+
+    academicRanks.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.academic_rank.toLowerCase().includes(term) &&
+                !data.semester.toLowerCase().includes(term) &&
+                !data.school_year.toLowerCase().includes(term) &&
+                !data.number_of_faculty.toString().toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 $('#academic-rank-modal').click(function () {
     $('#AddAcademicRankModal').modal('show');
@@ -664,16 +744,42 @@ let facultyScholarTable = () => {
     }); 
 }
 
-function searchfacultyScholars(value){
-    facultyScholars.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"faculty_name", type:"like", value:value.trim()},
-            {field:"scholarship", type:"like", value:value.trim()},
-            {field:"institution", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchfacultyScholars(value){
+//     facultyScholars.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"faculty_name", type:"like", value:value.trim()},
+//             {field:"scholarship", type:"like", value:value.trim()},
+//             {field:"institution", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchfacultyScholars(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        facultyScholars.clearFilter();
+        return;
+    }
+
+    facultyScholars.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.faculty_name.toLowerCase().includes(term) &&
+                !data.scholarship.toLowerCase().includes(term) &&
+                !data.institution.toLowerCase().includes(term) &&
+                !data.program.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 $('#faculty-scholar-modal').click(function(){
@@ -841,16 +947,42 @@ let facultyGraduateStudiesTable = () => {
     }); 
 }
 
-function searchfacultyGraduateStudies(value){
-    facultyGraduateStudies.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"faculty_name", type:"like", value:value.trim()},
-            {field:"degree", type:"like", value:value.trim()},
-            {field:"institution", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchfacultyGraduateStudies(value){
+//     facultyGraduateStudies.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"faculty_name", type:"like", value:value.trim()},
+//             {field:"degree", type:"like", value:value.trim()},
+//             {field:"institution", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchfacultyGraduateStudies(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        facultyGraduateStudies.clearFilter();
+        return;
+    }
+
+    facultyGraduateStudies.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.faculty_name.toLowerCase().includes(term) &&
+                !data.degree.toLowerCase().includes(term) &&
+                !data.institution.toLowerCase().includes(term) &&
+                !data.date_of_graduation.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 $('#faculty-graduate-studies-modal').click(function () {
@@ -1020,19 +1152,47 @@ let facultySeminarTrainingTable = () => {
     }); 
 }
 
-function searchseminarTrainings(value){
-    seminarTrainings.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"seminar_category", type:"like", value:value.trim()},
-            {field:"conference_title", type:"like", value:value.trim()},
-            {field:"participants", type:"like", value:value.trim()},
-            {field:"venue", type:"like", value:value.trim()},
-            {field:"date", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchseminarTrainings(value){
+//     seminarTrainings.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"seminar_category", type:"like", value:value.trim()},
+//             {field:"conference_title", type:"like", value:value.trim()},
+//             {field:"participants", type:"like", value:value.trim()},
+//             {field:"venue", type:"like", value:value.trim()},
+//             {field:"date", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchseminarTrainings(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        seminarTrainings.clearFilter();
+        return;
+    }
+
+    seminarTrainings.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.seminar_category.toLowerCase().includes(term) &&
+                !data.conference_title.toLowerCase().includes(term) &&
+                !data.participants.toLowerCase().includes(term) &&
+                !data.venue.toLowerCase().includes(term) &&
+                !data.date.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 $('#seminar-training-modal').click(function(){
     $('#AddSeminarTrainingModal').modal('show');
@@ -1203,19 +1363,47 @@ let recognitionTable = () => {
     }); 
 }
 
-function searchrecognitions(value){
-    recognitions.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"award_type", type:"like", value:value.trim()},
-            {field:"award", type:"like", value:value.trim()},
-            {field:"agency", type:"like", value:value.trim()},
-            {field:"date_received", type:"like", value:value.trim()},
-            {field:"event", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchrecognitions(value){
+//     recognitions.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"award_type", type:"like", value:value.trim()},
+//             {field:"award", type:"like", value:value.trim()},
+//             {field:"agency", type:"like", value:value.trim()},
+//             {field:"date_received", type:"like", value:value.trim()},
+//             {field:"event", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchrecognitions(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        recognitions.clearFilter();
+        return;
+    }
+
+    recognitions.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.award_type.toLowerCase().includes(term) &&
+                !data.award.toLowerCase().includes(term) &&
+                !data.agency.toLowerCase().includes(term) &&
+                !data.date_received.toLowerCase().includes(term) &&
+                !data.event.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 $('#recognition-modal').click(function(){
     $('#AddRecognitionModal').modal('show');
@@ -1385,18 +1573,46 @@ let presentationTable = () => {
     }); 
 }
 
-function searchpresentations(value){
-    presentations.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"presentation_type", type:"like", value:value.trim()},
-            {field:"paper_name", type:"like", value:value.trim()},
-            {field:"conference_name", type:"like", value:value.trim()},
-            {field:"date_venue", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchpresentations(value){
+//     presentations.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"presentation_type", type:"like", value:value.trim()},
+//             {field:"paper_name", type:"like", value:value.trim()},
+//             {field:"conference_name", type:"like", value:value.trim()},
+//             {field:"date_venue", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchpresentations(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        presentations.clearFilter();
+        return;
+    }
+
+    presentations.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.presentation_type.toLowerCase().includes(term) &&
+                !data.conference_name.toLowerCase().includes(term) &&
+                !data.paper_name.toLowerCase().includes(term) &&
+                !data.presenter_name.toLowerCase().includes(term) &&
+                !data.date_venue.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 $('#presentation-modal').click(function(){
     $('#AddPresentation').modal('show');

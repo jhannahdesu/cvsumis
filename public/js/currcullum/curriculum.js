@@ -233,16 +233,43 @@ $('#accreditation-status-modal').click(function() {
 });
 
 //searchAcademicProgram
-function searchAcademicProgram(value){
-    accreditationStatus.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"program", type:"like", value:value.trim()},
-            {field:"status", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchAcademicProgram(value){
+//     accreditationStatus.setFilter([
+//         [
+//             {title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"program", type:"like", value:value.trim()},
+//             {field:"status", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchAcademicProgram(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        accreditationStatus.clearFilter();
+        return;
+    }
+
+    accreditationStatus.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                //!data.no.toString().toLowerCase().includes(term) &&
+                !data.name.toLowerCase().includes(term) &&
+                !data.program.toLowerCase().includes(term) &&
+                !data.status.toLowerCase().includes(term) &&
+                !data.date.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 $('#submit-accreditation-status-btn').on('click', function(event) {
     var form = $('#accreditation-status-form')[0];
@@ -404,17 +431,47 @@ let govRecognitionTable = () => {
     }); 
 }
 
-function searchRecognition(value){
-    govRecognitions.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"program", type:"like", value:value.trim()},
-            {field:"status", type:"like", value:value.trim()},
-            {field:"copc", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchRecognition(value){
+//     govRecognitions.setFilter([
+//         [
+//             {title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"program", type:"like", value:value.trim()},
+//             {field:"status", type:"like", value:value.trim()},
+//             {field:"copc", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchRecognition(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        govRecognitions.clearFilter();
+        return;
+    }
+
+    govRecognitions.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                //!data.no.toString().toLowerCase().includes(term) &&
+                !data.name.toLowerCase().includes(term) &&
+                !data.program.toLowerCase().includes(term) &&
+                !data.status.toLowerCase().includes(term) &&
+                !data.copc.toLowerCase().includes(term) &&
+                !data.date.toLowerCase().includes(term) // <-- added date field
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
+
+
 $('#gov-recognition-modal').click(function() {
    $('#AddGovRecognition').modal('show');
 });
@@ -584,15 +641,44 @@ let licensureExamTable = () => {
     }); 
 }
 
-function searchlicensureExam(value){
-    licensureExams.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"exam", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchlicensureExam(value){
+//     licensureExams.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"exam", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchlicensureExam(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        licensureExams.clearFilter();
+        return;
+    }
+
+    licensureExams.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.exam.toLowerCase().includes(term) &&
+                !data.exam_date.toLowerCase().includes(term) &&
+                !data.cvsu_rate.toLowerCase().includes(term) &&
+                !data.national_rate.toLowerCase().includes(term) &&
+                !data.cvsu_overall_passing_rate.toLowerCase().includes(term) &&
+                !data.national_overall_passing_rate.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 $('#licensure-exam-modal').click(function() {
    $('#AddLicensureExam').modal('show');
@@ -857,13 +943,38 @@ let facultyTvetTable = () => {
 }
 
 
+// function searchfacultyTvets(value) {
+//     facultyTvets.setFilter([
+//         [
+//             { title: 'NO', field: 'no' },
+//             { field: "holder", type: "like", value: value.trim() } // Search by holder name
+//         ]
+//     ]);
+// }
 function searchfacultyTvets(value) {
-    facultyTvets.setFilter([
-        [
-            { title: 'NO', field: 'no' },
-            { field: "holder", type: "like", value: value.trim() } // Search by holder name
-        ]
-    ]);
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        facultyTvets.clearFilter();
+        return;
+    }
+
+    facultyTvets.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.certificate.toLowerCase().includes(term) &&
+                !data.date.toLowerCase().includes(term) &&
+                !data.holder.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 $('#faculty-tvet-modal').click(function (event) {
@@ -1031,15 +1142,40 @@ let studentTvetTable = () => {
     }); 
 }
 
-function searchstudentTvets(value){
-    studentTvets.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"certificate", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchstudentTvets(value){
+//     studentTvets.setFilter([
+//         [
+//             {title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"certificate", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchstudentTvets(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        studentTvets.clearFilter();
+        return;
+    }
+
+    studentTvets.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.certificate.toLowerCase().includes(term) &&
+                !data.number.toString().toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 $('#student-tvet-modal').click(function (event) {
     $('#AddStudentTvet').modal('show');
 });

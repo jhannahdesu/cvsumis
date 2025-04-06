@@ -133,16 +133,41 @@ $(document).on('click', '#delete-selected-files', function(e){
     }
 });
 
-function searchreports(value){
-    reports.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"created_by", type:"like", value:value.trim()},
-            {field:"report_type", type:"like", value:value.trim()},
-            {field:"filename", type:"like", value:value.trim()},
-            {field:"faculty", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchreports(value){
+//     reports.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"created_by", type:"like", value:value.trim()},
+//             {field:"report_type", type:"like", value:value.trim()},
+//             {field:"filename", type:"like", value:value.trim()},
+//             {field:"faculty", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchreports(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        reports.clearFilter();
+        return;
+    }
+
+    reports.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.created_by.toLowerCase().includes(term) &&
+                !data.report_type.toLowerCase().includes(term) &&
+                !data.filename.toLowerCase().includes(term) &&
+                !data.faculty.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 function fetchReport(){

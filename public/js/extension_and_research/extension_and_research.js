@@ -64,17 +64,43 @@ let universityResearchTable = () => {
     }); 
 }
 
-function searchuniversityResearchs(value){
-    universityResearchs.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"agency", type:"like", value:value.trim()},
-            {field:"title", type:"like", value:value.trim()},
-            {field:"researcher", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchuniversityResearchs(value){
+//     universityResearchs.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"agency", type:"like", value:value.trim()},
+//             {field:"title", type:"like", value:value.trim()},
+//             {field:"researcher", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchuniversityResearchs(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        universityResearchs.clearFilter();
+        return;
+    }
+
+    universityResearchs.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.agency.toLowerCase().includes(term) &&
+                !data.title.toLowerCase().includes(term) &&
+                !data.researcher.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 
 $('#university-research-modal').click( function() {
    $('#UniversityResearchModal').modal('show'); 
@@ -265,17 +291,43 @@ let extensionActvitieTable = () => {
     }); 
 }
 
-function searchextensionActvities(value){
-    extensionActvities.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"extension_activity", type:"like", value:value.trim()},
-            {field:"partner_agency", type:"like", value:value.trim()},
-            {field:"extensionist", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchextensionActvities(value){
+//     extensionActvities.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"extension_activity", type:"like", value:value.trim()},
+//             {field:"partner_agency", type:"like", value:value.trim()},
+//             {field:"extensionist", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchextensionActvities(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        extensionActvities.clearFilter();
+        return;
+    }
+
+    extensionActvities.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.extension_activity.toLowerCase().includes(term) &&
+                !data.partner_agency.toLowerCase().includes(term) &&
+                !data.extensionist.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 $('#extension-activity-modal').click(function () {
     $('#ExtensionActivityModal').modal('show');
 });

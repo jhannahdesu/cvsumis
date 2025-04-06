@@ -58,16 +58,41 @@ let accomplishmentTable = () => {
         ]
     }); 
 }
-function searchaccomplishments(value){
-    accomplishments.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"program_id", type:"like", value:value.trim()},
-            {field:"university", type:"like", value:value.trim()},
-            {field:"faculty", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchaccomplishments(value){
+//     accomplishments.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"program_id", type:"like", value:value.trim()},
+//             {field:"university", type:"like", value:value.trim()},
+//             {field:"faculty", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchaccomplishments(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        accomplishments.clearFilter();
+        return;
+    }
+
+    accomplishments.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.program_id.toLowerCase().includes(term) &&
+                !data.university.toLowerCase().includes(term) &&
+                !data.faculty.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 //accomplishment

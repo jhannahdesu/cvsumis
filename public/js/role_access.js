@@ -38,15 +38,42 @@ const loadingSwal = () => {
     });
 };
 
-function searcRoles(value){
-    roles.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"position", type:"like", value:value.trim()},
-            {field:"employee_number", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searcRoles(value){
+//     roles.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"position", type:"like", value:value.trim()},
+//             {field:"employee_number", type:"like", value:value.trim()},
+//         ]
+//     ]);
+    
+// }
+
+function searcRoles(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        roles.clearFilter();
+        return;
+    }
+
+    roles.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                //!data.no.toString().toLowerCase().includes(term) &&
+                !data.name.toLowerCase().includes(term) &&
+                !data.position.toLowerCase().includes(term) &&
+                !data.employee_number.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 const rolesTable = () => {

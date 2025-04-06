@@ -60,14 +60,37 @@ let programTable = () => {
     }); 
 }
 
-function searchprogram(value){
-    programs.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"abbreviation", type:"like", value:value.trim()},
-            {field:"program", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchprogram(value){
+//     programs.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"abbreviation", type:"like", value:value.trim()},
+//             {field:"program", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchprogram(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        programs.clearFilter();
+        return;
+    }
+
+    programs.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.program.toLowerCase().includes(term) &&
+                !data.abbreviation.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 $('#program-modal').click(function() {

@@ -36,6 +36,31 @@ let attachmentHeaderTable = () => {
         ]
     }); 
 }
+function searchattachments(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        attachments.clearFilter();
+        return;
+    }
+
+    attachments.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.module_id.toLowerCase().includes(term) &&
+                !data.attachment_detail.toLowerCase().includes(term) &&
+                !data.created_at.toLowerCase().includes(term) // Ensuring 'created_at' is treated as a string
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
+}
 
 let attachmentDetailsTable = () => {
     attachmentsDetails= new Tabulator("#attachment-details-table", {

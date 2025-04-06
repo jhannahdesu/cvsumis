@@ -57,14 +57,37 @@ let organizationTable = () => {
     }); 
 }
 
-function searchorganizations(value){
-    organizations.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"org_abbrev", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchorganizations(value){
+//     organizations.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"org_abbrev", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchorganizations(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        organizations.clearFilter();
+        return;
+    }
+
+    organizations.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.org_abbrev.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 
