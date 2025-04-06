@@ -30,7 +30,7 @@
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
                             @endif
-                                <form id="graduateCsvDownloadForm" class="form-inline" method="GET" action="{{ route('GraduateCSV') }}">
+                                <form id="graduateCsvDownloadForm" class="form-inline" method="GET" action="{{ route('EnrollmentCSV') }}">
                                     <input type="hidden" name="year" id="graduateCsvYearInput">
                                     <input type="hidden" name="semester" id="graduateCsvSemesterInput">
                                     @if(Auth::user()->position == 1)
