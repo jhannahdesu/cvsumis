@@ -13,10 +13,11 @@
                     
                             <div class="col-md-6">
                                 <label for="faculty" class="form-label">Faculty</label>
-                                <input type="text" class="form-control" id="faculty" name="faculty" required>
+                                <input type="text" class="form-control" id="faculty" name="faculty" placeholder="Surname, First Name Middle Initial." required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
+                                <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                             </div>
             
                             <div class="col-md-6">
@@ -107,4 +108,24 @@
 @endsection
 @section('scripts')
 <script src="{{ asset('js/accomplishment/accomplishment.js') }}"> </script>
+<script>
+    document.getElementById('faculty').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+
+    function validateFacultyForm() {
+        const facultyName = document.getElementById('faculty').value;
+        const errorMessage = document.getElementById('faculty-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(facultyName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
+</script>
 @endsection

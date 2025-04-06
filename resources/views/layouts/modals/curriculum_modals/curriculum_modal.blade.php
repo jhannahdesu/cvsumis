@@ -251,7 +251,7 @@
 
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Exam Date</label>
-                    <input type="text" class="form-control" id="exam_date" name="exam_date" required>
+                    <input type="text" class="form-control" id="exam_date" name="exam_date" placeholder="e.g. 01/07, 01/09, 01/13/2025" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -550,11 +550,13 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
 
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Name Of Certificate Holder</label>
-                    <input type="text" class="form-control" id="certificate_holder" name="certificate_holder" placeholder="Surname, Firstname MiddleInitial."  required>
+                    <input type="text" class="form-control" id="certificate_holder" name="certificate_holder" placeholder="Surname, Firstname MiddleInitial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
+
+
             </form>
         </div>
         <div class="modal-footer">
@@ -788,3 +790,9 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
   })();
 </script>
 
+<script>
+    document.getElementById('certificate_holder').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+</script>

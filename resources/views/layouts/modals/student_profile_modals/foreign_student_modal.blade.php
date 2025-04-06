@@ -60,8 +60,8 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="number_of_student" class="form-label">Number of  Student</label>
-                    <input type="text" class="form-control" id="number_of_student" name="number_of_student" required>
+                    <label for="number_of_student" class="form-label">Number of Student</label>
+                    <input type="number" class="form-control" id="view_number_of_student" name="number_of_student" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>

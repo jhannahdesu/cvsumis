@@ -19,10 +19,11 @@
 
                 <div class="col-md-12">
                     <label for="researcher" class="form-label">Researchers</label>
-                    <input type="text" class="form-control" id="researcher" name="researcher" required>
+                    <input type="text" class="form-control" id="researcher" name="researcher" placeholder="Surname, First Name Middle Initial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                    <div class="invalid-feedback" id="researcher-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
 
                 <div class="col-md-12">
@@ -188,7 +189,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="extensionist" class="form-label">Exntensionist</label>
+                    <label for="extensionist" class="form-label">Extensionist</label>
                     <input type="text" class="form-control" id="extensionist" name="extensionist" required>
                     <div class="valid-feedback">
                         Looks good!
@@ -310,4 +311,24 @@
             });
         });
     });
+</script>
+<script>
+    document.getElementById('researcher').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+
+    function validateResearcherForm() {
+        const researcherName = document.getElementById('researcher').value;
+        const errorMessage = document.getElementById('researcher-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(researcherName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
 </script>

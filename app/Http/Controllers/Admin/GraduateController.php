@@ -144,16 +144,27 @@ class GraduateController extends Controller
         }
     }
 
-    public function fetchGraduateHdrData(){
+    public function fetchGraduateHdrData(Request $request){
         $response = [];
-        
+        $query = GraduateHeader::query();
+    
+        // Apply filters if provided
+        if ($request->has('semester') && !empty($request->semester)) {
+            $query->where('semester', $request->semester);
+        }
+    
+        if ($request->has('year') && !empty($request->year)) {
+            $query->where('school_year', $request->year);
+        }
+    
         if(Auth::user()->position == 1 || Auth::user()->position == 5){
-            $data = GraduateHeader::orderBy('created_at', 'desc')->get();
-        }else{
-            $data = GraduateHeader::whereHas('created_by_dtls', function ($query) {
+            $data = $query->orderBy('created_at', 'desc')->get();
+        } else {
+            $data = $query->whereHas('created_by_dtls', function ($query) {
                 $query->where('department', Auth::user()->department);
             })->orderBy('created_at', 'desc')->get();
         }
+    
         foreach ($data as $key=>$item) {
             $actions = $this->headerAction($item);
             $response[] = [
@@ -310,5 +321,15 @@ class GraduateController extends Controller
         );
         return response()->json(['message' => 'Data removed successfully'], 200);
     }
+
+    public function getGraduateYears()
+{
+    $years = DB::table('graduate_hdrs')
+        ->select('school_year')
+        ->distinct()
+        ->pluck('school_year');
+
+    return response()->json($years);
+}
     
 }

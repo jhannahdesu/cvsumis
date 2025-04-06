@@ -115,12 +115,14 @@
                         <label for="firstname" class="form-label">Firstname</label>
                         <input type="text" class="form-control" id="firstname" name="firstname" required>
                         <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Only letters are allowed.</div>
                     </div>
 
                     <div class="col-md-12">
                         <label for="lastname" class="form-label">Lastname</label>
                         <input type="text" class="form-control" id="lastname" name="lastname" required>
                         <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Only letters are allowed.</div>
                     </div>
 
                     <div class="col-md-12">
@@ -162,6 +164,15 @@
     </div>
 </div>
 
+<script>
+    document.getElementById('firstname').addEventListener('input', function() {
+        this.value = this.value.replace(/[^A-Za-z]/g, '');
+    });
+
+    document.getElementById('lastname').addEventListener('input', function() {
+        this.value = this.value.replace(/[^A-Za-z]/g, '');
+    });
+</script>
 
 <script>
     //FOR RESET VALIDATION :D

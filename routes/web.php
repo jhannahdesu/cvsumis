@@ -5,6 +5,7 @@ use App\Http\Middleware\CheckChangePasswordMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
+
 Route::get('/home', function () {
     return view('welcome');
 });
@@ -17,6 +18,8 @@ Route::post('store-account', [\App\Http\Controllers\RegisterController::class, '
 
 Route::get('/forgot-password', [\App\Http\Controllers\ForgotPasswordController::class, 'index'])->name('forgot_password.index');
 Route::post('/reset-password', [\App\Http\Controllers\ForgotPasswordController::class, 'resetPassword'])->name('forgot_password.reset');
+
+
 
 Route::get('/reset-password-form/{id}', [\App\Http\Controllers\ResetPasswordController::class, 'index'])->name('reset_password.index');
 Route::post('/update-new-password/{id}', [\App\Http\Controllers\ResetPasswordController::class, 'resetPassword'])->name('reset_password.update');

@@ -57,11 +57,12 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="facilitators" class="form-label">Facilitators</label>
-                    <input type="text" class="form-control" id="view_facilitators" name="facilitators" required>
+                    <label for="view_facilitators" class="form-label">Facilitators</label>
+                    <input type="text" class="form-control" id="view_facilitators" name="facilitators" placeholder="Surname, First Name Middle Initial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                    <div class="invalid-feedback" id="facilitators-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
                 
             </form>
@@ -73,3 +74,24 @@
       </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('view_facilitators').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+
+    function validateFacilitatorsForm() {
+        const facilitatorsName = document.getElementById('view_facilitators').value;
+        const errorMessage = document.getElementById('facilitators-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(facilitatorsName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
+</script>

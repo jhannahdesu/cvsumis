@@ -54,7 +54,7 @@ const graduateHeaderTable = () => {
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"PROGRAM", field:"program_id", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACADEMIC YEAR", field:"school_year", hozAlign:"left", vertAlign:"middle"},
+            { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
             {title:"NO. OF STUDENT", field:"number_of_student", hozAlign:"left", vertAlign:"middle"},
             {title:"DATE", field:"date", hozAlign:"left", vertAlign:"middle"},
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
@@ -106,13 +106,19 @@ function searchGraduate(value){
 }
 
 function fetchGraduateHdrData(){
+    const selectedYear = document.getElementById('graduate-years').value;
+    const selectedSemester = document.getElementById('semester').value; // Use the correct ID for semester
+
     $.ajax({
         url: '/fetch-graduate-hdr',
         type: 'GET',
+        data: {
+            year: selectedYear,
+            semester: selectedSemester
+        },
         success: function(response) {
             console.log(response);
             graduatesHeader.setData(response);
-            
         },
         error: function (xhr, status) {
             console.log("Error:", xhr.responseText);
@@ -437,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-document.getElementById('graduate-years').addEventListener('change', function () {
+document.getElementById('graduate-years').addEventListener('change', function () { 
     const selectedYear = this.value;
 
     // Set the hidden input value for CSV
@@ -445,10 +451,18 @@ document.getElementById('graduate-years').addEventListener('change', function ()
 
     // Apply filter to Tabulator table
     if (selectedYear === "") {
-        graduateTable.clearFilter();
+        graduatesHeader.clearFilter(); // <-- Correct table variable
     } else {
-        graduateTable.setFilter("graduate_hdr", "like", selectedYear);
+        graduatesHeader.setFilter("school_year", "like", selectedYear); // <-- Correct field
     }
+});
+
+document.getElementById('graduate-years').addEventListener('change', function () {
+    fetchGraduateHdrData(); 
+});
+
+document.getElementById('semester').addEventListener('change', function () {
+    fetchGraduateHdrData(); 
 });
 
 // Initialize the table after the DOM is ready

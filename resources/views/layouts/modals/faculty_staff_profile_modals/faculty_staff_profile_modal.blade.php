@@ -402,12 +402,14 @@
         <div class="modal-body">
             <form class="row g-3 needs-validation" id="faculty-scholar-form" novalidate>
                 @csrf
+
                 <div class="col-md-12">
-                    <label for="faculty_name" class="form-label">Name of Faculty</label>
-                    <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name" placeholder="Surname, First Name Middle Initial." required>
+                    <label for="fs_faculty_name" class="form-label">Name of Faculty</label>
+                    <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name" placeholder="Surname, Firstname MiddleInitial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                    <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
                 
                 <div class="col-md-12">
@@ -417,6 +419,7 @@
                         Looks good!
                     </div>
                 </div>
+
 
                 <div class="col-md-12">
                     <label for="institution" class="form-label">Institution</label>
@@ -505,16 +508,17 @@
             <form class="row g-3 needs-validation" id="faculty-graduate-studies-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="faculty_name" class="form-label">Name of Faculty</label>
-                    <input type="text" class="form-control" id="fgs_faculty_name" name="faculty_name" required>
+                    <label for="fgs_faculty_name" class="form-label">Name of Faculty</label>
+                    <input type="text" class="form-control" id="fgs_faculty_name" name="faculty_name" placeholder="Surname, First Name Middle Initial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                    <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
                 
                 <div class="col-md-12">
                     <label for="sholarship" class="form-label">Degree</label>
-                    <input type="text" class="form-control" id="fgs_degree" name="degree" required>
+                    <input type="text" class="form-control" id="fgs_degree" name="degree" placeholder="ex.MS Computer Science" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -522,7 +526,7 @@
 
                 <div class="col-md-12">
                     <label for="institution" class="form-label">Institution</label>
-                    <input type="text" class="form-control" id="fgs_institution" name="institution" required>
+                    <input type="text" class="form-control" id="fgs_institution" name="institution" placeholder="ex.Technological Institute of the Philippines - Manila" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -623,23 +627,24 @@
                 
                 <div class="col-md-12">
                     <label for="conference_title" class="form-label">Title of Conference / Seminar</label>
-                    <input type="text" class="form-control" id="st_conference_title" name="conference_title" required>
+                    <input type="text" class="form-control" id="st_conference_title" name="conference_title" placeholder="ex.Webinar on The Magna Carta of Women:Knowing your Rights" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 
                 <div class="col-md-12">
-                    <label for="participants" class="form-label">Participants</label>
-                    <input type="text" class="form-control" id="st_participants" name="participants" required>
+                    <label for="st_participants" class="form-label">Participants</label>
+                    <input type="text" class="form-control" id="st_participants" name="participants" placeholder="Surname, First Name Middle Initial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                    <div class="invalid-feedback" id="participants-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
 
                 <div class="col-md-12">
                     <label for="date" class="form-label">Date</label>
-                    <input type="text" class="form-control" id="st_date" name="date" required>
+                    <input type="text" class="form-control" id="st_date" name="date" placeholder="ex. mm/dd – mm/dd/yyyy" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -770,16 +775,17 @@
                 </div>
                 
                 <div class="col-md-12">
-                    <label for="conference_title" class="form-label">Name of awardee</label>
-                    <input type="text" class="form-control" id="ra_awardee_name" name="awardee_name" required>
+                    <label for="ra_awardee_name" class="form-label">Name of Awardee</label>
+                    <input type="text" class="form-control" id="ra_awardee_name" name="awardee_name" placeholder="Surname, First Name Middle Initial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                    <div class="invalid-feedback" id="awardee-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
                 
                 <div class="col-md-12">
                     <label for="participants" class="form-label">Award / Recognition</label>
-                    <input type="text" class="form-control" id="ra_award" name="award" required>
+                    <input type="text" class="form-control" id="ra_award" name="award" placeholder="ex. Loyalty and Service Award" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -787,7 +793,7 @@
 
                 <div class="col-md-12">
                     <label for="venue" class="form-label">Granting Agency / Institution</label>
-                    <input type="text" class="form-control" id="ra_agency" name="agency" required>
+                    <input type="text" class="form-control" id="ra_agency" name="agency" placeholder="ex. ITSO, CvSU" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -795,7 +801,7 @@
 
                 <div class="col-md-12">
                     <label for="venue" class="form-label">Event</label>
-                    <input type="text" class="form-control" id="ra_event" name="event" required>
+                    <input type="text" class="form-control" id="ra_event" name="event" placeholder="ex. CvSU 117th Founding Anniversary SHINE CvSU: Tiwala at Malasakit sa Isa’t – isa para sa mas Maningning na CvSU" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -922,26 +928,27 @@
                 
                 <div class="col-md-12">
                     <label for="conference_name" class="form-label">Title of Conference</label>
-                    <input type="text" class="form-control" id="pp_conference_name" name="conference_name" required>
+                    <input type="text" class="form-control" id="pp_conference_name" name="conference_name" placeholder="ex. 11th ERDT Congress" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 
                 <div class="col-md-12">
-                    <label for="participants" class="form-label">Title of paper</label>
-                    <input type="text" class="form-control" id="pp_paper_name" name="paper_name" required>
+                    <label for="participants" class="form-label">Title of paper/study presented</label>
+                    <input type="text" class="form-control" id="pp_paper_name" name="paper_name" placeholder="ex. Temperature Gradient of Solar-Assisted Ground heat Exchanger System (GA-GHES)"required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
 
                 <div class="col-md-12">
-                    <label for="venue" class="form-label">Presenter</label>
-                    <input type="text" class="form-control" id="pp_presenter_name" name="presenter_name" required>
+                    <label for="pp_presenter_name" class="form-label">Presenter</label>
+                    <input type="text" class="form-control" id="pp_presenter_name" name="presenter_name" placeholder="Surname, First Name Middle Initial." required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                    <div class="invalid-feedback" id="presenter-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
 
                 <div class="col-md-12">
@@ -1110,4 +1117,103 @@
         });
     });
 </script>
+<script>
+    document.getElementById('fs_faculty_name').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
 
+    function validateFacultyForm() {
+        const facultyName = document.getElementById('fs_faculty_name').value;
+        const errorMessage = document.getElementById('faculty-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(facultyName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
+</script>
+<script>
+    document.getElementById('fgs_faculty_name').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+
+    function validateFacultyForm() {
+        const facultyName = document.getElementById('fgs_faculty_name').value;
+        const errorMessage = document.getElementById('faculty-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(facultyName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
+</script>
+<script>
+    document.getElementById('st_participants').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+
+    function validateParticipantsForm() {
+        const participantsName = document.getElementById('st_participants').value;
+        const errorMessage = document.getElementById('participants-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(participantsName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
+</script>
+<script>
+    document.getElementById('ra_awardee_name').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+
+    function validateAwardeeForm() {
+        const awardeeName = document.getElementById('ra_awardee_name').value;
+        const errorMessage = document.getElementById('awardee-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(awardeeName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
+</script>
+<script>
+    document.getElementById('pp_presenter_name').addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+
+    function validatePresenterForm() {
+        const presenterName = document.getElementById('pp_presenter_name').value;
+        const errorMessage = document.getElementById('presenter-error-message');
+
+        // Check if the input is valid
+        if (!/^[A-Za-z\s.,]+$/.test(presenterName)) {
+            errorMessage.style.display = 'block';
+            return false; // Prevent form submission
+        }
+
+        errorMessage.style.display = 'none'; // Hide error message
+        return true; // Allow form submission
+    }
+</script>

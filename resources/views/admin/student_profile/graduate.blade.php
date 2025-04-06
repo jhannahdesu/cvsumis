@@ -98,11 +98,15 @@
                                     <i class="bi bi-printer-fill"></i>
                                 </button>
                             </div> -->
-                            <div class="form-group ms-2">
-                                <select id="graduate-years" class="form-select" aria-label="Filter Year">
-                                    <option value="" selected>All Data in Years</option>
+                            <form class="form-inline ms-2">
+                                <select class="form-select" id="graduate-years" aria-label="Filter Academic Year">
+                                    <option value="" selected>Filter Academic Year</option>
+                                    @foreach ($academicYears as $defaultAcademicYears)
+                                        <option value="{{ $academicYear->school_year }}">{{ $academicYear->school_year }}</option>
+                                    @endforeach
                                 </select>
-                            </div>
+                            </form>
+
                             <div class="ms-auto d-flex">
                                 <form id="graduateCsvDownloadForm" class="from-inline" method="GET" action="{{ route('GraduateCSV') }}">
                                     <input type="hidden" name="year" id="graduateCsvYearInput">
