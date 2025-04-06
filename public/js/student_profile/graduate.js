@@ -50,7 +50,7 @@ const graduateHeaderTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"PROGRAM", field:"program_id", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
@@ -86,7 +86,7 @@ let graduateDetailsTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
             {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
             {title:"NO. OF STUDENT", field:"number_of_student", hozAlign:"left", vertAlign:"middle"},
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},

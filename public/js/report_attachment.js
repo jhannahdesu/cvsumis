@@ -27,7 +27,7 @@ let attachmentHeaderTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"MODULE", field:"module_id", hozAlign:"left", vertAlign:"middle"},
             {title:"ATTACHMENT DETAILS", field:"attachment_detail", hozAlign:"left", vertAlign:"middle"},
@@ -61,7 +61,7 @@ let attachmentDetailsTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ATTACHMENT", field:"image", hozAlign:"left", formatter:"html", vertAlign:"middle"},
             {title:"FILE NAME", field:"attachment", hozAlign:"left", vertAlign:"middle"},
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},

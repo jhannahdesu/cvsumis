@@ -71,7 +71,7 @@ const rolesTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"EMPLOYEE ID", field:"employee_number", hozAlign:"left", vertAlign:"middle"},
             {title:"FULLNAME", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"POSITION", field:"position", hozAlign:"left", vertAlign:"middle"},

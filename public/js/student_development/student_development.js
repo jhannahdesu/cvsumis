@@ -49,7 +49,7 @@ let organizationTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"ORGANIZATION", field:"org_abbrev", hozAlign:"left", vertAlign:"middle"},
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
@@ -60,7 +60,7 @@ let organizationTable = () => {
 function searchorganizations(value){
     organizations.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"org_abbrev", type:"like", value:value.trim()},
         ]

@@ -52,10 +52,18 @@ const reportTable = () => {
             }
         },
         columns:[
-            {title:"<input type='checkbox' id='select-all'>", field:"checkbox", hozAlign:"center", vertAlign:"middle", formatter:function(cell, formatterParams, onRendered){
-                return '<input type="checkbox" class="form-check-input" id="file-'+cell.getData().id+'" value="'+cell.getData().filename+'">';
-            }},
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            {
+                title: "<input type='checkbox' id='select-all'>", 
+                field: "checkbox", 
+                hozAlign: "center", 
+                vertAlign: "middle", 
+                sortable: false,  // Disable sorting for this column
+                formatter: function(cell, formatterParams, onRendered) {
+                    return '<input type="checkbox" class="form-check-input" id="file-'+cell.getData().id+'" value="'+cell.getData().filename+'">';
+                },
+                headerSort: false  // Disable sorting header interaction (this hides the sorting arrows)
+            },
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"created_by", hozAlign:"left", vertAlign:"middle"},
             {title:"REPORT TYPE ", field:"report_type", hozAlign:"left", vertAlign:"middle"},
             {title:"FILES", field:"filename", hozAlign:"left", vertAlign:"middle"},

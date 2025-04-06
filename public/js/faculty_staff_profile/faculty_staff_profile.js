@@ -113,7 +113,7 @@ let educationalAttainmentTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"EDUCATION ATTAIMMENT", field:"education", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
@@ -127,7 +127,7 @@ let educationalAttainmentTable = () => {
 function searcheducationalAttainments(value){
     educationalAttainments.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"semester", type:"like", value:value.trim()},
             {field:"school_year", type:"like", value:value.trim()},
@@ -294,7 +294,7 @@ let natureAppointmentTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"NATURE OF APPOINTMENT", field:"apointment_nature", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
@@ -308,7 +308,7 @@ let natureAppointmentTable = () => {
 function searchnatureAppointments(value){
     natureAppointments.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"semester", type:"like", value:value.trim()},
             {field:"school_year", type:"like", value:value.trim()},
@@ -473,7 +473,7 @@ let academicRankTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"ACADEMIC RANK", field:"academic_rank", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
@@ -487,7 +487,7 @@ let academicRankTable = () => {
 function searchacademicRanks(value){
     academicRanks.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"semester", type:"like", value:value.trim()},
             {field:"school_year", type:"like", value:value.trim()},
@@ -653,7 +653,7 @@ let facultyScholarTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"FACULTY NAME", field:"faculty_name", hozAlign:"left", vertAlign:"middle"},
             {title:"SCHOLARSHIP", field:"scholarship", hozAlign:"left", vertAlign:"middle"},
@@ -667,7 +667,7 @@ let facultyScholarTable = () => {
 function searchfacultyScholars(value){
     facultyScholars.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"faculty_name", type:"like", value:value.trim()},
             {field:"scholarship", type:"like", value:value.trim()},
@@ -830,7 +830,7 @@ let facultyGraduateStudiesTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"FACULTY NAME", field:"faculty_name", hozAlign:"left", vertAlign:"middle"},
             {title:"DEGREE", field:"degree", hozAlign:"left", vertAlign:"middle"},
@@ -844,7 +844,7 @@ let facultyGraduateStudiesTable = () => {
 function searchfacultyGraduateStudies(value){
     facultyGraduateStudies.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"faculty_name", type:"like", value:value.trim()},
             {field:"degree", type:"like", value:value.trim()},
@@ -1007,7 +1007,7 @@ let facultySeminarTrainingTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"CONFERENCE CATEGORY", field:"seminar_category", hozAlign:"left", vertAlign:"middle"},
             {title:"TITLE OF CONFERENCE", field:"conference_title", hozAlign:"left", vertAlign:"middle"},
@@ -1023,7 +1023,7 @@ let facultySeminarTrainingTable = () => {
 function searchseminarTrainings(value){
     seminarTrainings.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"seminar_category", type:"like", value:value.trim()},
             {field:"conference_title", type:"like", value:value.trim()},
@@ -1190,7 +1190,7 @@ let recognitionTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"TYPE", field:"award_type", hozAlign:"left", vertAlign:"middle"},
             {title:"NAME OF AWARDEE ", field:"awardee_name", hozAlign:"left", vertAlign:"middle"},
@@ -1206,7 +1206,7 @@ let recognitionTable = () => {
 function searchrecognitions(value){
     recognitions.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"award_type", type:"like", value:value.trim()},
             {field:"award", type:"like", value:value.trim()},
@@ -1373,7 +1373,7 @@ let presentationTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"TYPE", field:"presentation_type", hozAlign:"left", vertAlign:"middle"},
             {title:"TITILE OF CONFERENCE ", field:"conference_name", hozAlign:"left", vertAlign:"middle"},
@@ -1388,7 +1388,7 @@ let presentationTable = () => {
 function searchpresentations(value){
     presentations.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"presentation_type", type:"like", value:value.trim()},
             {field:"paper_name", type:"like", value:value.trim()},

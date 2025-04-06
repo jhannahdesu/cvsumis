@@ -48,7 +48,7 @@ const annualReportTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"created_by", hozAlign:"left", vertAlign:"middle"},
             {title:"YEAR", field:"year", hozAlign:"left", vertAlign:"middle"},
             {title:"FILES", field:"filename", hozAlign:"left", vertAlign:"middle"},
@@ -61,7 +61,7 @@ const annualReportTable = () => {
 function searchreports(value){
     reports.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"created_by", type:"like", value:value.trim()},
             {field:"filename", type:"like", value:value.trim()},
             {field:"year", type:"like", value:value.trim()},

@@ -48,7 +48,7 @@ const scholarshipTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"SCHOLAR TYPE", field:"type", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
@@ -62,7 +62,7 @@ const scholarshipTable = () => {
 function searchScholarship(value){
     scholarships.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"semester", type:"like", value:value.trim()},
             {field:"school_year", type:"like", value:value.trim()},

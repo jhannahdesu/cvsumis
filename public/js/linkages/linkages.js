@@ -49,7 +49,7 @@ let linkagesTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"AGENCY", field:"agency", hozAlign:"left", vertAlign:"middle"},
             {title:"NATURE OF LINKAGE", field:"linkage_nature", hozAlign:"left", vertAlign:"middle"},
@@ -65,7 +65,7 @@ let linkagesTable = () => {
 function searchlinkages(value){
     linkages.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"agency", type:"like", value:value.trim()},
             {field:"linkage_nature", type:"like", value:value.trim()},
@@ -74,17 +74,17 @@ function searchlinkages(value){
     ]);
 }
 
-function searchEnrollment(value){
-    enrollments.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"semester", type:"like", value:value.trim()},
-            {field:"school_year", type:"like", value:value.trim()},
-            {field:"program", type:"like", value:value.trim()},
-        ]
-    ]);
-}
+// function searchEnrollment(value){
+//     enrollments.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"name", type:"like", value:value.trim()},
+//             {field:"semester", type:"like", value:value.trim()},
+//             {field:"school_year", type:"like", value:value.trim()},
+//             {field:"program", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
 
 
 $('#submit-linkages-btn').on('click', function(event) {

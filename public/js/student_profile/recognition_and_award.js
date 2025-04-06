@@ -49,7 +49,7 @@ const awardHeaderTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
             {title:"RECOGNITION", field:"award", hozAlign:"left", vertAlign:"middle"},
             {title:"GRANTING AGENCY", field:"granting_agency", hozAlign:"left", vertAlign:"middle"},
             {title:"YEAR", field:"year", hozAlign:"left", vertAlign:"middle"},
@@ -61,7 +61,7 @@ const awardHeaderTable = () => {
 function searchawardsHeader(value){
     awardsHeader.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"award", type:"like", value:value.trim()},
             {field:"granting_agency", type:"like", value:value.trim()},
         ]
@@ -91,7 +91,7 @@ let awardDetailsTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
             {title:"AWARD DETAILS", field:"award_details", hozAlign:"left", vertAlign:"middle"},
             {title:"AWARD", field:"game_placement", hozAlign:"left", vertAlign:"middle"},
             {title:"GRANTEES", field:"grantees_name", hozAlign:"left", vertAlign:"middle"},

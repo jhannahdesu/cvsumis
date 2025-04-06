@@ -53,7 +53,7 @@ let universityResearchTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"AGENCY", field:"agency", hozAlign:"left", vertAlign:"middle"},
             {title:"TITLE", field:"title", hozAlign:"left", vertAlign:"middle"},
@@ -67,7 +67,7 @@ let universityResearchTable = () => {
 function searchuniversityResearchs(value){
     universityResearchs.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"agency", type:"like", value:value.trim()},
             {field:"title", type:"like", value:value.trim()},
@@ -254,7 +254,7 @@ let extensionActvitieTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"EXTENSION ACTIVITY", field:"extension_activity", formatter: "html", hozAlign:"left", vertAlign:"middle"},
             {title:"EXTENSIONIST", field:"extensionist", hozAlign:"left", vertAlign:"middle"},
@@ -268,7 +268,7 @@ let extensionActvitieTable = () => {
 function searchextensionActvities(value){
     extensionActvities.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"extension_activity", type:"like", value:value.trim()},
             {field:"partner_agency", type:"like", value:value.trim()},

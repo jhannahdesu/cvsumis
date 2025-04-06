@@ -49,7 +49,7 @@ const infrastractureTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"INFRASTRUCTURE", field:"infrastracture", hozAlign:"left", vertAlign:"middle"},
             {title:"STATUS", field:"status", hozAlign:"left", vertAlign:"middle"},
@@ -61,7 +61,7 @@ const infrastractureTable = () => {
 function searchinfrastructures(value){
     infrastructures.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"infrastracture", type:"like", value:value.trim()},
             {field:"status", type:"like", value:value.trim()},

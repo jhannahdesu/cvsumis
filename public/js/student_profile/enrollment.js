@@ -49,7 +49,7 @@ const enrollmentTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
@@ -60,17 +60,32 @@ const enrollmentTable = () => {
     }); 
 }
 
-function searchEnrollment(value){
-    enrollments.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"semester", type:"like", value:value.trim()},
-            {field:"school_year", type:"like", value:value.trim()},
-            {field:"program", type:"like", value:value.trim()},
-        ]
-    ]);
+function searchEnrollment(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        enrollments.clearFilter();
+        return;
+    }
+
+    enrollments.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.semester.toLowerCase().includes(term) &&
+                !data.school_year.toLowerCase().includes(term) &&
+                !data.program.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+        return matches;
+    });
 }
+
+
 
 $('#filter-status').change(function(){
     var value = $('#filter-status').val();

@@ -219,7 +219,7 @@ let accreditationStatusTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
             {title:"STATUS", field:"status", hozAlign:"left", vertAlign:"middle"},
@@ -393,7 +393,7 @@ let govRecognitionTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
             {title:"STATUS", field:"status", hozAlign:"left", vertAlign:"middle"},
@@ -571,7 +571,7 @@ let licensureExamTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"EXAM TYPE", field:"exam", hozAlign:"left", vertAlign:"middle"},
             {title:"EXAM DATE", field:"exam_date", hozAlign:"left", vertAlign:"middle"},
@@ -846,7 +846,7 @@ let facultyTvetTable = () => {
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
         columns: [
-            { title: "NO", field: "no", hozAlign: "center", width: 75, vertAlign: "middle" },
+            //{ title: "NO", field: "no", hozAlign: "center", width: 75, vertAlign: "middle" },
             { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
             { title: "CERTIFICATE TYPE", field: "certificate", hozAlign: "left", vertAlign: "middle" },
             { title: "DATE", field: "date", hozAlign: "left", vertAlign: "middle" },
@@ -1022,7 +1022,7 @@ let studentTvetTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"CERTICATE TYPE", field:"certificate", hozAlign:"left", vertAlign:"middle"},
             {title:"NUMBER OF STUDENT", field:"number", hozAlign:"left", vertAlign:"middle"},

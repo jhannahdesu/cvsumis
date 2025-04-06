@@ -51,8 +51,8 @@ let programTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
             {title:"ABBREVIATION", field:"abbreviation", hozAlign:"left", vertAlign:"middle"},
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
@@ -63,7 +63,7 @@ let programTable = () => {
 function searchprogram(value){
     programs.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"abbreviation", type:"like", value:value.trim()},
             {field:"program", type:"like", value:value.trim()},
         ]
@@ -219,7 +219,7 @@ let academicYearTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ACADEMIC YEAR", field:"academic_year", hozAlign:"left", vertAlign:"middle"},
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
         ]
