@@ -58,7 +58,7 @@
                         <h5 class="card-title">Attachment List</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <form class="form-inline">
-                                <input class="form-control mr-sm-2" type="search" oninput="searchEnrollment(value)" placeholder="Search" aria-label="Search">
+                                <input class="form-control mr-sm-2" type="search" oninput="searchattachments(value)" placeholder="Search" aria-label="Search">
                             </form>
                         </div>
                         <div id="attachment-header-table"></div>

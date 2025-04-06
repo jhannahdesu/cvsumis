@@ -49,7 +49,7 @@ const foreignStudents = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"center", vertAlign:"middle"},
             {title:"COUNTRY", field:"country", hozAlign:"center", vertAlign:"middle"},
             {title:"PROGRAM", field:"program", hozAlign:"center", vertAlign:"middle"},
@@ -64,7 +64,7 @@ const foreignStudents = () => {
 function searchForeignStudent(value){
     foreign_students.setFilter([
         [
-            {title:'NO', field: 'no'},
+            //{title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
             {field:"semester", type:"like", value:value.trim()},
             {field:"school_year", type:"like", value:value.trim()},

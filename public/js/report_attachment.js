@@ -27,7 +27,7 @@ let attachmentHeaderTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
             {title:"MODULE", field:"module_id", hozAlign:"left", vertAlign:"middle"},
             {title:"ATTACHMENT DETAILS", field:"attachment_detail", hozAlign:"left", vertAlign:"middle"},
@@ -35,6 +35,31 @@ let attachmentHeaderTable = () => {
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
         ]
     }); 
+}
+function searchattachments(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        attachments.clearFilter();
+        return;
+    }
+
+    attachments.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.module_id.toLowerCase().includes(term) &&
+                !data.attachment_detail.toLowerCase().includes(term) &&
+                !data.created_at.toLowerCase().includes(term) // Ensuring 'created_at' is treated as a string
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 let attachmentDetailsTable = () => {
@@ -61,7 +86,7 @@ let attachmentDetailsTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ATTACHMENT", field:"image", hozAlign:"left", formatter:"html", vertAlign:"middle"},
             {title:"FILE NAME", field:"attachment", hozAlign:"left", vertAlign:"middle"},
             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},

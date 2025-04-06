@@ -48,7 +48,7 @@ const annualReportTable = () => {
             }
         },
         columns:[
-            {title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
+            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
             {title:"ADDED BY", field:"created_by", hozAlign:"left", vertAlign:"middle"},
             {title:"YEAR", field:"year", hozAlign:"left", vertAlign:"middle"},
             {title:"FILES", field:"filename", hozAlign:"left", vertAlign:"middle"},
@@ -58,16 +58,41 @@ const annualReportTable = () => {
     }); 
 }
 
-function searchreports(value){
-    reports.setFilter([
-        [
-            {title:'NO', field: 'no'},
-            {field:"created_by", type:"like", value:value.trim()},
-            {field:"filename", type:"like", value:value.trim()},
-            {field:"year", type:"like", value:value.trim()},
-        ]
-    ]);
+// function searchreports(value){
+//     reports.setFilter([
+//         [
+//             //{title:'NO', field: 'no'},
+//             {field:"created_by", type:"like", value:value.trim()},
+//             {field:"filename", type:"like", value:value.trim()},
+//             {field:"year", type:"like", value:value.trim()},
+//         ]
+//     ]);
+// }
+function searchreports(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        reports.clearFilter();
+        return;
+    }
+
+    reports.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.created_by.toLowerCase().includes(term) &&
+                !data.filename.toLowerCase().includes(term) &&
+                !data.year.toString().includes(term) // Ensuring 'year' is treated as a string
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
+
 function fetchReport(){
     $.ajax({
         url: '/fetch-annual-report',
