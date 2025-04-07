@@ -14,7 +14,7 @@
                             <input class="form-control mr-sm-2" type="search" oninput="searchreports(value)" placeholder="Search" aria-label="Search">
                         </form>
                     
-                        <div class="ms-auto d-flex">
+                        <div class="form-group ms-2">
                             <button type="button" class="btn btn-outline-info" id="generate-file-report-modal">
                                 <i class="bi bi-printer-fill"></i>
                             </button>

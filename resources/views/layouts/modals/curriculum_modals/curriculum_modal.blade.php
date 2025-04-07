@@ -520,8 +520,7 @@
                         Looks good!
                     </div>
                 </div>
-
-                <div class="row mb-3">
+                <div class="col-md-12">
                     <div class="col-12">
                         <label for="certificate_details" class="form-label">Certificate Details </label>
                         <textarea 
@@ -532,14 +531,12 @@
                             style="resize: none;" 
                             placeholder="ex. Automotive Servicing - (Chassis Repair)
 Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA" 
-                            
                         ></textarea>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                     </div>
                 </div>
-
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Date</label>
                     <input type="date" class="form-control" id="faculty_tvet_date" name="date" required>
@@ -653,8 +650,7 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                         Looks good!
                     </div>
                 </div>
-
-                <div class="row mb-3">
+                <div class="col-md-12">
                     <div class="col-12">
                         <label for="certificate_details" class="form-label">Certificate Details</label>
                         <textarea 
@@ -665,8 +661,7 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                             required
                             style="resize: none;" 
                             placeholder="ex. Automotive Servicing - (Chassis Repair)
-                            Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA">
-                        </textarea>
+Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"></textarea>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
