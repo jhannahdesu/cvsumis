@@ -50,12 +50,15 @@ const enrollmentTable = () => {
         },
         columns:[
             //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
+            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle", download:false},
             {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
             {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
             {title:"ACADEMIC YEAR", field:"school_year", hozAlign:"left", vertAlign:"middle"},
             {title:"NO. OF STUDENT", field:"student_count", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle", download:false},
+        ],
+        initialSort: [
+            { column: "created_at", dir: "desc" }, // Sort by created_at (newest first)
         ]
     }); 
 }
@@ -245,3 +248,8 @@ $('#filter-status').change(function(){
 });
 
 
+$('#download-csv').click(function () {
+    enrollments.download("csv", "Enrollment_Filtered.csv", {
+        columns: ["program", "semester", "school_year", "student_count"] // Specify only the columns you want in the CSV
+    });
+});

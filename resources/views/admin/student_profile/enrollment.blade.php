@@ -12,16 +12,27 @@
                                 <input class="form-control mr-sm-2" type="search" oninput="searchEnrollment(value)" placeholder="Search" aria-label="Search">
                             </form>
                         
-                            <form class="form-inline">
-                                <select class="form-select ml-2" id="filter-status">
+                            <!-- <form class="form-inline"> -->
+                                <!-- <select class="form-select ml-2" id="filter-status">
                                     <option value="" selected>Filter Academic Year</option>
                                     @foreach ($enrollmentYears as $academicYear)
                                         <option value="{{ $academicYear->school_year}}">{{ $academicYear->school_year}}</option>
                                     @endforeach
                                     
                                     
-                                </select>
-                            </form>
+                                </select> -->
+                                <!-- <div class="dropdown">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Filter By Time Period
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                                        <li><a class="dropdown-item" href="#" id="filterMonthly">Monthly</a></li>
+                                        <li><a class="dropdown-item" href="#" id="filterQuarterly">Quarterly</a></li>
+                                        <li><a class="dropdown-item" href="#" id="filterYearly">Yearly</a></li>
+                                    </ul>
+                                </div> -->
+
+                            <!-- </form> -->
                         
                             
                             <div class="ms-auto d-flex">
@@ -30,15 +41,18 @@
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
                             @endif
-                                <form id="graduateCsvDownloadForm" class="form-inline" method="GET" action="{{ route('EnrollmentCSV') }}">
+                                <!-- <form id="graduateCsvDownloadForm" class="form-inline" method="GET" action="{{ route('EnrollmentCSV') }}">
                                     <input type="hidden" name="year" id="graduateCsvYearInput">
-                                    <input type="hidden" name="semester" id="graduateCsvSemesterInput">
+                                    <input type="hidden" name="semester" id="graduateCsvSemesterInput"> -->
                                     @if(Auth::user()->position == 1)
-                                    <button type="submit" class="btn btn-outline-info">
+                                    <!-- <button type="submit" class="btn btn-outline-info">
+                                        <i class="bi bi-printer-fill"> CSV </i>
+                                    </button> -->
+                                    <button id="download-csv" class="btn btn-outline-info">
                                         <i class="bi bi-printer-fill"> CSV </i>
                                     </button>
                                     @endif
-                                </form>
+                                <!-- </form> -->
                             </div>
                         </div>
                         <div id="enrollment-table"></div>

@@ -54,43 +54,43 @@ class EnrollmentController extends Controller
         return $data;
     }
 
-    public function EnrollmentCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function EnrollmentCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Enrollment_List.csv';
+//     $filename = $directory . '/Enrollment_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'PROGRAM', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF STUDENTS']);
+//     fputcsv($fp, ['ADDED BY', 'PROGRAM', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF STUDENTS']);
 
-    $query = Enrollment::latest()->with('created_by_dtls', 'program_dtls');
+//     $query = Enrollment::latest()->with('created_by_dtls', 'program_dtls');
 
-    if ($request->has('year') && !empty($request->year)) {
-        $query->where('school_year', $request->year);
-    }
+//     if ($request->has('year') && !empty($request->year)) {
+//         $query->where('school_year', $request->year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->program_dtls->program),
-            ucwords($row->semester),
-            $row->school_year,
-            $row->number_of_student
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->program_dtls->program),
+//             ucwords($row->semester),
+//             $row->school_year,
+//             $row->number_of_student
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Enrollment_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Enrollment_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeEnrollment(Request $request) {
         try {
