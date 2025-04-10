@@ -163,6 +163,8 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
     });
 
     //CSV 
+    Route::get('/fetch-dates', [EnrollmentController::class, 'fetchDates']);
+
     Route::get('/get-accreditation-years', [\App\Http\Controllers\Admin\CurriculumController::class, 'getAccreditationYears']);
     Route::get('/AccreditationStatusCSV', [\App\Http\Controllers\Admin\CurriculumController::class, 'AccreditationStatusCSV'])->name('AccreditationStatusCSV');
    

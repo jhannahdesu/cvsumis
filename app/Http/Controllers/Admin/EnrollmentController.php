@@ -142,6 +142,7 @@ class EnrollmentController extends Controller
                 'semester' => ucwords($item->semester),
                 'student_count' => $item->number_of_student,
                 'school_year' => $item->school_year,
+                'created_at' => $item->created_at,
                 
                 'action' => $actions['button']
             ];

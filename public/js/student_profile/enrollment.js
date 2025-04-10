@@ -26,42 +26,184 @@ function throwError(xhr, status){
     }
 }
 
+// In your main script file (where the Tabulator table is defined)
 const enrollmentTable = () => {
+    const defaultDateFilter = {
+        column: 'created_at', // Column name to filter on
+        filterType: 'thisYear', // Default filter type (thisMonth, thisQuarter, thisYear)
+    };
+
+    // Function to apply the date filter based on filterType
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // Start of the current month
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0); // End of the current month
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1); // Start of the quarter
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0); // End of the quarter
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1); // Start of the current year
+                endDate = new Date(currentDate.getFullYear(), 11, 31); // End of the current year
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    // Get the date filter based on the default filter type
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
+    // Apply the default filter to the Tabulator table
     enrollments = new Tabulator("#enrollment-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
+            if (true) {
                 dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
+            } else if (selectedRow.safety_stock == selectedRow.qty) {
                 dom.getElement().classList.add("table-warning");
             }
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle", download:false},
-            {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
-            {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACADEMIC YEAR", field:"school_year", hozAlign:"left", vertAlign:"middle"},
-            {title:"NO. OF STUDENT", field:"student_count", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle", download:false},
+        columns: [
+            { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle", download: false },
+            { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
+            { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
+            { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
+            { title: "NO. OF STUDENT", field: "student_count", hozAlign: "left", vertAlign: "middle" },
+            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle", download: false },
         ],
         initialSort: [
             { column: "created_at", dir: "desc" }, // Sort by created_at (newest first)
-        ]
-    }); 
+        ],
+        initialFilter: [
+            { field: defaultDateFilter.column, type: "between", value: [startDate.toISOString(), endDate.toISOString()] },
+        ],
+    });
+};
+
+document.getElementById("filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("filter-value");
+    const filterYearSelect = document.getElementById("filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        enrollments.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = enrollments.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.created_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("filter-value").addEventListener("change", applyFilter);
+document.getElementById("filter-year").addEventListener("change", applyFilter);
+
+function applyFilter() {
+    const type = document.getElementById("filter-type").value;
+    const selectedValue = document.getElementById("filter-value").value;
+    const selectedYear = document.getElementById("filter-year").value;
+
+    enrollments.clearFilter();
+
+    enrollments.setFilter(function(data) {
+        const date = new Date(data.created_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
 }
+
+
 
 function searchEnrollment(value) {
     let searchTerms = value.trim().toLowerCase().split(/\s+/);
@@ -248,8 +390,6 @@ $('#filter-status').change(function(){
 });
 
 
-$('#download-csv').click(function () {
-    enrollments.download("csv", "Enrollment_Filtered.csv", {
-        columns: ["program", "semester", "school_year", "student_count"] // Specify only the columns you want in the CSV
-    });
+document.getElementById("download-csv").addEventListener("click", function() {
+    enrollments.download("csv", "enrollments.csv", { filter: true });
 });

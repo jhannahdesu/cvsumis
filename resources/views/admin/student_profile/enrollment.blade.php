@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<!-- <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script> -->
 
     <div class="container">
         <div class="row">
@@ -11,31 +12,19 @@
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchEnrollment(value)" placeholder="Search" aria-label="Search">
                             </form>
-                        
-                            <!-- <form class="form-inline"> -->
-                                <!-- <select class="form-select ml-2" id="filter-status">
-                                    <option value="" selected>Filter Academic Year</option>
-                                    @foreach ($enrollmentYears as $academicYear)
-                                        <option value="{{ $academicYear->school_year}}">{{ $academicYear->school_year}}</option>
-                                    @endforeach
-                                    
-                                    
-                                </select> -->
-                                <!-- <div class="dropdown">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Filter By Time Period
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                                        <li><a class="dropdown-item" href="#" id="filterMonthly">Monthly</a></li>
-                                        <li><a class="dropdown-item" href="#" id="filterQuarterly">Quarterly</a></li>
-                                        <li><a class="dropdown-item" href="#" id="filterYearly">Yearly</a></li>
-                                    </ul>
-                                </div> -->
+                            <div class="d-flex justify-content-between">
+                                <select id="filter-type" class="form-select ms-2">
+                                    <option value="" disabled selected>Date Filter  </option>
+                                    <option value="all">All</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="yearly">Yearly</option>
+                                </select>
 
-                            <!-- </form> -->
-                        
-                            
-                            <div class="ms-auto d-flex">
+                                <select id="filter-year" style="display:none;" class="form-select"></select>
+                                <select id="filter-value" style="display:none;" class="form-select"></select>
+                            </div>                         
+                            <div class="ms-auto d-flex justify-content-between">
                             @if(Auth::user()->position != 5)
                                 <button type="button" class="btn btn-outline-primary me-2" id="enrollment-modal">
                                     <i class="bi bi-plus-circle-fill"></i>
