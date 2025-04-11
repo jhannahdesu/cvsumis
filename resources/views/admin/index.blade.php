@@ -11,7 +11,7 @@
                 <div class="col-md-6 col-xl-6 mb-4">
                     <div class="card info-card revenue-card">
                         <div class="card-body">
-                            <h5 class="card-title">Total Programs</h5>
+                            <h5 class="card-title">Programs</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-display"></i>
@@ -28,7 +28,7 @@
                 <div class="col-md-6 col-xl-6 mb-4">
                     <div class="card info-card revenue-card">
                         <div class="card-body">
-                            <h5 class="card-title">Total Departments</h5>
+                            <h5 class="card-title">Departments</h5>
                             <div class="d-flex align-items-center">
                                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-building text-warning"></i>
