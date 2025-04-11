@@ -3,64 +3,47 @@
 @section('content')
 <section class="section dashboard">
     {{-- ADMIN DASHBOARD --}}
-   <div class="row">
-      <!-- Left side columns -->
-      <div class="col-lg-12">
-        <div class="row">
-        {{--
-          <!-- USER COUNT -->
-          <div class="col-xxl-4 col-md-6">
-            <div class="card info-card sales-card">             
-              <div class="card-body">
-                <h5 class="card-title">Total Users</h5>
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-people"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>{{ $user_count }}</h6>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!-- End USER COUNT -->
---}} 
-              <!-- Total Programs -->
-    <div class="col-lg-4 col-md-6">
-        <div class="card info-card revenue-card">
-            <div class="card-body">
-                <h5 class="card-title">Total Programs</h5>
-                <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-display"></i>
-                    </div>
-                    <div class="ps-3">
-                        <h6>{{ $program_count }}</h6>
+    <div class="row mb-4">
+        <!-- Left side columns -->
+        <div class="col-lg-12">
+            <div class="row">
+                <!-- Total Programs -->
+                <div class="col-md-6 col-xl-6 mb-4">
+                    <div class="card info-card revenue-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Programs</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-display"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $program_count }}</h6>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Total Departments -->
-    <div class="col-lg-4 col-md-6">
-        <div class="card info-card revenue-card">
-            <div class="card-body">
-                <h5 class="card-title">Total Departments</h5>
-                <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-building text-warning"></i>
-                    </div>
-                    <div class="ps-3">
-                        <h6>{{ $department_count - 1 }}</h6>
+                <!-- Total Departments -->
+                <div class="col-md-6 col-xl-6 mb-4">
+                    <div class="card info-card revenue-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Departments</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-building text-warning"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $department_count - 1 }}</h6>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
     <!-- Number of Faculty -->
-    <div class="col-lg-4 col-md-6">
+    <!-- <div class="col-lg-4 col-md-6">
         <div class="card info-card revenue-card">
             <div class="card-body">
                 <h5 class="card-title">Number of Faculty</h5>
@@ -75,7 +58,8 @@
             </div>
         </div>
     </div>
-</div><!-- End -->
+</div> -->
+<!-- End -->
 
           <!--Enrolees Reports -->
             <div class="col-12">
