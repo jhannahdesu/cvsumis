@@ -1,6 +1,6 @@
 @if(Auth::user()->position != 4)
   <ul class="sidebar-nav" id="sidebar-nav">
-    @if(Auth::user()->position == 1)
+  @if(Auth::user()->position == 1 || Auth::user()->position == 5)
       <li class="nav-item">
       <a class="nav-link collapsed" href="{{ route('admin.index') }}">
         <i class="bi bi-grid"></i>

@@ -110,11 +110,11 @@
                             <div class="ms-auto d-flex">
                                 <form id="graduateCsvDownloadForm" class="from-inline" method="GET" action="{{ route('GraduateCSV') }}">
                                     <input type="hidden" name="year" id="graduateCsvYearInput">
-                                    @if(Auth::user()->position == 1)
+                                    
                                     <button type="submit" class="btn btn-outline-info">
                                         <i class="bi bi-printer-fill"> CSV </i>
                                     </button>
-                                    @endif
+                                    
                                 </form>
                             </div>
 

@@ -66,11 +66,11 @@
                                         <form id="educationalAttainmentCsvDownloadForm" class="form-inline" method="GET" action="{{ route('EducationalAttainmentCSV') }}">
                                             <input type="hidden" name="school_year" id="educationalAttainmentCsvYearInput">
                                             <input type="hidden" name="semester" id="educationalAttainmentCsvSemesterInput">
-                                            @if(Auth::user()->position == 1)
+                                            
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"> CSV </i>
                                             </button>
-                                            @endif
+                                            
                                         </form>
                                     </div>
                                 </div>
@@ -118,11 +118,11 @@
                                             <form id="natureAppointmentCsvDownloadForm" class="form-inline" method="GET" action="{{ route('NatureAppointmentCSV') }}">
                                                 <input type="hidden" name="school_year" id="natureAppointmentCsvYearInput">
                                                 <input type="hidden" name="semester" id="natureAppointmentCsvSemesterInput">
-                                                @if(Auth::user()->position == 1)
+                                                
                                                 <button type="submit" class="btn btn-outline-info">
                                                     <i class="bi bi-printer-fill"> CSV </i>
                                                 </button>
-                                                @endif
+                                                
                                             </form>
                                         </div>
                                     </div>
@@ -171,11 +171,11 @@
                                     <form id="academicRankCsvDownloadForm" class="form-inline" method="GET" action="{{ route('AcademicRankCSV') }}">
                                         <input type="hidden" name="school_year" id="academicRankCsvYearInput">
                                         <input type="hidden" name="semester" id="academicRankCsvSemesterInput">
-                                        @if(Auth::user()->position == 1)
+                                        
                                         <button type="submit" class="btn btn-outline-info">
                                             <i class="bi bi-printer-fill"> CSV </i>
                                         </button>
-                                        @endif
+                                        
                                     </form>
                                 </div>
                                     </div>
@@ -215,11 +215,11 @@
                                             <form id="facultyScholarCsvDownloadForm" class="form-inline" method="GET" action="{{ route('FacultyScholarCSV') }}">
                                                 <input type="hidden" name="school_year" id="facultyScholarCsvYearInput">
                                                 <input type="hidden" name="semester" id="facultyScholarCsvSemesterInput">
-                                                @if(Auth::user()->position == 1)
+                                                
                                                 <button type="submit" class="btn btn-outline-info">
                                                     <i class="bi bi-printer-fill"> CSV </i>
                                                 </button>
-                                                @endif
+                                                
                                             </form>
                                         </div>
                                     </div>
@@ -260,11 +260,11 @@
                                     <form id="facultyGraduateStudiesCsvDownloadForm" class="form-inline" method="GET" action="{{ route('FacultyGraduateStudiesCSV') }}">
                                         <input type="hidden" name="school_year" id="facultyGraduateStudiesCsvYearInput">
                                         <input type="hidden" name="semester" id="facultyGraduateStudiesCsvSemesterInput">
-                                        @if(Auth::user()->position == 1)
+                                        
                                         <button type="submit" class="btn btn-outline-info">
                                             <i class="bi bi-printer-fill"> CSV </i>
                                         </button>
-                                        @endif
+                                        
                                     </form>
                                 </div>
                                     </div>
@@ -305,11 +305,11 @@
                                     <form id="seminarTrainingCsvDownloadForm" class="form-inline" method="GET" action="{{ route('SeminarsAndTrainingCSV') }}">
                                         <input type="hidden" name="school_year" id="seminarTrainingCsvYearInput">
                                         <input type="hidden" name="semester" id="seminarTrainingCsvSemesterInput">
-                                        @if(Auth::user()->position == 1)
+                                        
                                         <button type="submit" class="btn btn-outline-info">
                                             <i class="bi bi-printer-fill"> CSV </i>
                                         </button>
-                                        @endif
+                                        
                                     </form>
                                 </div>
                                     </div>
@@ -350,11 +350,11 @@
                                     <form id="recognitionCsvDownloadForm" class="form-inline" method="GET" action="{{ route('RecognitionAndAwardCSV') }}">
                                         <input type="hidden" name="school_year" id="recognitionCsvYearInput">
                                         <input type="hidden" name="semester" id="recognitionCsvSemesterInput">
-                                        @if(Auth::user()->position == 1)
+                                        
                                         <button type="submit" class="btn btn-outline-info">
                                             <i class="bi bi-printer-fill"> CSV </i>
                                         </button>
-                                        @endif
+                                        
                                     </form>
                                 </div>
                                     </div>
@@ -395,11 +395,11 @@
                                     <form id="presentationCsvDownloadForm" class="form-inline" method="GET" action="{{ route('PresentationCSV') }}">
                                         <input type="hidden" name="school_year" id="presentationCsvYearInput">
                                         <input type="hidden" name="semester" id="presentationCsvSemesterInput">
-                                        @if(Auth::user()->position == 1)
+                                        
                                         <button type="submit" class="btn btn-outline-info">
                                             <i class="bi bi-printer-fill"> CSV </i>
                                         </button>
-                                        @endif
+                                        
                                     </form>
                                 </div>
                                     </div>

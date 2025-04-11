@@ -65,7 +65,7 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Enrolees Report | <span class="enrolees-text"></span></h5>
+                  <h5 class="card-title">Enrollment Report | <span class="enrolees-text"></span></h5>
                   <div class="d-flex justify-content-start mb-2">
                     <div class="form-group me-2">
                       <label for="yearSelect" class="form-label">Academic Year</label>

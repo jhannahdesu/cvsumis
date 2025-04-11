@@ -50,7 +50,7 @@
         <!-- Logo -->
         <a href="{{ 
           Auth::user()->position == 4 ? route('faculty_staff_profile.index') : 
-          (Auth::user()->position == 2 || Auth::user()->position == 5 ? route('curriculum.index') : 
+          (Auth::user()->position == 2 ? route('curriculum.index') : 
           route('admin.index')) 
         }}" class="logo d-flex align-items-center">
             <img src="{{ asset('images/background/ceit.png') }}" alt="">

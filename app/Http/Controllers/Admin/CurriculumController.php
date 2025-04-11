@@ -146,7 +146,7 @@ class CurriculumController extends Controller
             $program = $row->program_dtls ? $row->program_dtls->program : 'N/A';
             $status = $row->status_dtls ? $row->status_dtls->status : 'N/A';
             $copc = $row->copc_number ?: 'N/A';
-            $date = $row->date ? \Carbon\Carbon::parse($row->date)->format('M d, Y') : 'N/A';
+            $date = $row->date ? \Carbon\Carbon::parse($row->date)->format('F d, Y') : 'N/A';
 
             fputcsv($fp, [$program, $status, $copc, "\"$date\""]);
         }
@@ -208,7 +208,7 @@ class CurriculumController extends Controller
             foreach ($data as $row) {
                 fputcsv($fp, [
                     $row->examination_type_dtls ? $row->examination_type_dtls-> type: 'N/A',
-                    $row->exam_date ? \Carbon\Carbon::parse($row->exam_date)->format('M d, Y') : 'N/A',
+                    $row->exam_date ? \Carbon\Carbon::parse($row->exam_date)->format('F d, Y') : 'N/A',
                     $row->cvsu_total_passer ?: 'N/A',
                     $row->cvsu_total_takers ?: 'N/A',
                     $row->cvsu_passing_rate ?: 'N/A',
@@ -264,7 +264,7 @@ class CurriculumController extends Controller
         $data = $query->get();
 
         foreach ($data as $row) {
-            $visitDate = $row->date ? \Carbon\Carbon::parse($row->date)->format('M d, Y') : 'N/A';
+            $visitDate = $row->date ? \Carbon\Carbon::parse($row->date)->format('F d, Y') : 'N/A';
             fputcsv($fp, [
                 $row->certification_type_dtls ? $row->certification_type_dtls-> type: 'N/A',
                 $row->certificate_details,
@@ -306,7 +306,7 @@ class CurriculumController extends Controller
             $row->certification_type_dtls ? $row->certification_type_dtls->type : 'N/A',
             $row->certificate_details,
             $row->student_tvet_location,
-            $row->student_tvet_date ? \Carbon\Carbon::parse($row->student_tvet_date)->format('M d, Y') : 'N/A',
+            $row->student_tvet_date ? \Carbon\Carbon::parse($row->student_tvet_date)->format('F d, Y') : 'N/A',
             $row->number_of_student
         ]);
     }
@@ -381,7 +381,7 @@ class CurriculumController extends Controller
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'program' => ucwords($item->program_dtls->program),
                 'status' => ucwords($item->status_dtls->status),
-                'date' => date('M d, Y', strtotime($item->visit_date)),
+                'date' => date('F d, Y', strtotime($item->visit_date)),
                 'action' => $actions['button']
             ];
         }
@@ -499,7 +499,7 @@ class CurriculumController extends Controller
                 'program' => ucwords($item->program_dtls->program),
                 'status' => ucwords($item->status_dtls->status),
                 'copc' => ucwords($item->copc_number),
-                'date' => date('M d, Y', strtotime($item->date)),
+                'date' => date('F d, Y', strtotime($item->date)),
                 'action' => $actions['button']
             ];
         }
@@ -632,7 +632,7 @@ class CurriculumController extends Controller
                 'examination_type' => ucwords($item->examination_type_dtls->type),
                 'cvsu_overall_passing_rate' => $item->cvsu_overall_passer.'/'.$item->cvsu_overall_taker.'<br>'.$item->cvsu_overall_passing_rate.'%',
                 'national_overall_passing_rate' => $item->national_overall_passer.'/'.$item->national_overall_taker.'<br>'.$item->national_overall_passing_rate.'%',
-                // 'exam_date' => date('M d, Y', strtotime($item->exam_date)),
+                // 'exam_date' => date('F d, Y', strtotime($item->exam_date)),
                 'exam_date' => $item->exam_date,
                 'action' => $actions['button']
             ];
@@ -777,7 +777,7 @@ class CurriculumController extends Controller
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'certificate' => ucwords($item->certification_type_dtls->type),
-                'date' => date('M d, Y', strtotime($item->date)),
+                'date' => date('F d, Y', strtotime($item->date)),
                 'details' =>$item->certificate_details,
                 'holder' => $item->certificate_holder,
                 'action' => $actions['button']

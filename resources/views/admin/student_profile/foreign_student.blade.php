@@ -28,11 +28,11 @@
                                 <form id="foreignStudentCsvDownloadForm" class="form-inline" method="GET" action="{{ route('ForeignStudentCSV') }}">
                                     <input type="hidden" name="year" id="foreignStudentCsvYearInput">
                                     <input type="hidden" name="semester" id="foreignStudentCsvSemesterInput">
-                                    @if(Auth::user()->position == 1)
+                                    
                                     <button type="submit" class="btn btn-outline-info">
                                         <i class="bi bi-printer-fill"> CSV </i>
                                     </button>
-                                    @endif
+                                    
                                 </form>
                             </div>
                         </div>

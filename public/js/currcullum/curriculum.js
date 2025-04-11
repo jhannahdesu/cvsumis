@@ -196,38 +196,42 @@ function throwError(xhr, status){
     }
 }
 let accreditationStatusTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
+        { title: "STATUS", field: "status", hozAlign: "left", vertAlign: "middle" },
+        { title: "VISIT DATE", field: "date", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     accreditationStatus = new Tabulator("#accreditation-status-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        // layout:"fitDataFill",
-        layout:"fitColumns",
-        maxHeight: "1000px",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill", // auto-resize based on content
+        maxHeight: "600px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+        pagination: "local",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        placeholder: "No Data Available",
+        selectable: 1,
+        rowFormatter: function (row) {
+            row.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
-            {title:"STATUS", field:"status", hozAlign:"left", vertAlign:"middle"},
-            {title:"VISIT DATE", field:"date", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
-}
+        columns: columns
+    });
+};
+
+
 $('#accreditation-status-modal').click(function() {
    $('#AddAccreditationStatus').modal('show');
 });
@@ -397,39 +401,48 @@ $(document).on('click', '#remove-accreditation-status-btn', function(){
 
 //Academic programs with Government Recognition (CoPC) 
 let govRecognitionTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
+        { title: "STATUS", field: "status", hozAlign: "left", vertAlign: "middle" },
+        { title: "COPC NUMBER", field: "copc", hozAlign: "left", vertAlign: "middle" },
+        { title: "DATE", field: "date", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    // Add the ACTION column only if userPosition is not 5
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     govRecognitions = new Tabulator("#gov-recognition-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
-        // layout:"fitColumns",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
+            if (true) {
                 dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
+            } else if (selectedRow.safety_stock == selectedRow.qty) {
                 dom.getElement().classList.add("table-warning");
             }
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
-            {title:"STATUS", field:"status", hozAlign:"left", vertAlign:"middle"},
-            {title:"COPC NUMBER", field:"copc", hozAlign:"left", vertAlign:"middle"},
-            {title:"DATE", field:"date", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchRecognition(value){
 //     govRecognitions.setFilter([
@@ -605,41 +618,50 @@ $(document).on('click', '#remove-gov-recognition-btn', function(){
 //Performance in the licensure examination
 
 let licensureExamTable = () => {
-    licensureExams= new Tabulator("#licensure-axam-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
-        // layout:"fitColumns",
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "EXAM TYPE", field: "exam", hozAlign: "left", vertAlign: "middle" },
+        { title: "EXAM DATE", field: "exam_date", hozAlign: "left", vertAlign: "middle" },
+        { title: "CVSU FIRST TIME TAKER", field: "cvsu_rate", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+        { title: "NATIONAL FIRST TIME TAKER", field: "national_rate", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+        { title: "CVSU OVERALL TOTAL", field: "cvsu_overall_passing_rate", formatter: "html", hozAlign: "left", vertAlign: "middle" },
+        { title: "NATIONAL OVERALL TOTAL", field: "national_overall_passing_rate", formatter: "html", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    // Add the ACTION column only if userPosition is not 5
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
+    licensureExams = new Tabulator("#licensure-axam-table", {
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
+            if (true) {
                 dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
+            } else if (selectedRow.safety_stock == selectedRow.qty) {
                 dom.getElement().classList.add("table-warning");
             }
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"EXAM TYPE", field:"exam", hozAlign:"left", vertAlign:"middle"},
-            {title:"EXAM DATE", field:"exam_date", hozAlign:"left", vertAlign:"middle"},
-            {title:"CVSU FIRST TIME TAKER", field:"cvsu_rate", hozAlign:"left", formatter: "html", vertAlign:"middle"},
-            {title:"NATIONAL FIRST TIME TAKER", field:"national_rate", hozAlign:"left", formatter: "html", vertAlign:"middle"},
-            {title:"CVSU OVERALL TOTAL", field:"cvsu_overall_passing_rate", formatter: "html", hozAlign:"left", vertAlign:"middle"},
-            {title:"NATIONAL OVERALL TOTAL", field:"national_overall_passing_rate", formatter: "html", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchlicensureExam(value){
 //     licensureExams.setFilter([
@@ -920,27 +942,51 @@ $('#view_national_overall_passer, #view_national_overall_taker').on('keyup', fun
 // List of faculty members with national TVET qualification and certification 
 
 let facultyTvetTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "CERTIFICATE TYPE", field: "certificate", hozAlign: "left", vertAlign: "middle" },
+        { title: "DATE", field: "date", hozAlign: "left", vertAlign: "middle" },
+        { title: "HOLDER", field: "holder", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    // Add the ACTION column only if userPosition is not 5
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     facultyTvets = new Tabulator("#faculty-tvet-table", {
-        dataTree: true,
-        dataTreeSelectPropagate: true,
-        layout: "fitDataFill",
+        dataTree:true,
+        dataTreeSelectPropagate:true,
+        // layout:"fitDataFill",
+        layout:"fitColumns",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination: "local",
-        placeholder: "No Data Available",
-        paginationSize: 10,
-        paginationSizeSelector: [10, 50, 100],
-        selectable: 1,
-        columns: [
-            //{ title: "NO", field: "no", hozAlign: "center", width: 75, vertAlign: "middle" },
-            { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-            { title: "CERTIFICATE TYPE", field: "certificate", hozAlign: "left", vertAlign: "middle" },
-            { title: "DATE", field: "date", hozAlign: "left", vertAlign: "middle" },
-            { title: "HOLDER", field: "holder", hozAlign: "left", vertAlign: "middle" },
-            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-        ]
+        pagination:"local",
+        placeholder:"No Data Available", 
+        paginationSize:10,  
+        paginationSizeSelector:[10,50,100],
+        selectable:1,
+        rowFormatter:function(dom){
+            var selectedRow = dom.getData();
+            if(true)
+            {
+                dom.getElement().classList.add("table-light");
+            }else if(selectedRow.safety_stock == selectedRow.qty)
+            {
+                dom.getElement().classList.add("table-warning");
+            }
+        },
+        columns: columns
     });
 }
+
+
 
 
 // function searchfacultyTvets(value) {
@@ -1110,6 +1156,22 @@ $(document).on('click', '#remove-faculty-tvet-btn', function(){
 //Number of students with national TVET qualification and certification
 
 let studentTvetTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "CERTIFICATE TYPE", field: "certificate", hozAlign: "left", vertAlign: "middle" },
+        { title: "NUMBER OF STUDENT", field: "number", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    // Add the ACTION column only if userPosition is not 5
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
     studentTvets = new Tabulator("#student-tvet-table", {
         dataTree:true,
         dataTreeSelectPropagate:true,
@@ -1132,14 +1194,8 @@ let studentTvetTable = () => {
                 dom.getElement().classList.add("table-warning");
             }
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"CERTICATE TYPE", field:"certificate", hozAlign:"left", vertAlign:"middle"},
-            {title:"NUMBER OF STUDENT", field:"number", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
 
 // function searchstudentTvets(value){

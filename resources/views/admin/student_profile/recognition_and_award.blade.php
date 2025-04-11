@@ -81,11 +81,11 @@
                                 <form id="recognitionAwardCsvDownloadForm" class="form-inline" method="GET" action="{{ route('RecognitionAndAwardCSV') }}">
                                     <input type="hidden" name="year" id="recognitionAwardCsvYearInput">
                                     <input type="hidden" name="semester" id="recognitionAwardCsvSemesterInput">
-                                    @if(Auth::user()->position == 1)
+                                    
                                     <button type="submit" class="btn btn-outline-info">
                                         <i class="bi bi-printer-fill"> CSV </i>
                                     </button>
-                                    @endif
+                                    
                                 </form>
                             </div>
                         </div>
