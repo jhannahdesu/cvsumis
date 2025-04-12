@@ -91,38 +91,43 @@ function throwError(xhr, status){
 }
 
 let educationalAttainmentTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "EDUCATION ATTAINMENT", field: "education", hozAlign: "left", vertAlign: "middle" },
+        { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
+        { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
+        { title: "NO. OF FACULTY", field: "number_of_faculty", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     educationalAttainments = new Tabulator("#educational-attainment-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"EDUCATION ATTAIMMENT", field:"education", hozAlign:"left", vertAlign:"middle"},
-            {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACADEMIC YEAR", field:"school_year", hozAlign:"left", vertAlign:"middle"},
-            {title:"NO. OF FACULTY", field:"number_of_faculty", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searcheducationalAttainments(value){
 //     educationalAttainments.setFilter([
@@ -298,38 +303,43 @@ $(document).on('click', '#remove-educational-attainment-btn', function(){
 
 //Faculty profile by nature of appointment
 let natureAppointmentTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "NATURE OF APPOINTMENT", field: "apointment_nature", hozAlign: "left", vertAlign: "middle" },
+        { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
+        { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
+        { title: "NO. OF FACULTY", field: "number_of_faculty", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     natureAppointments = new Tabulator("#nature-appointment-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"NATURE OF APPOINTMENT", field:"apointment_nature", hozAlign:"left", vertAlign:"middle"},
-            {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACADEMIC YEAR", field:"school_year", hozAlign:"left", vertAlign:"middle"},
-            {title:"NO. OF FACULTY", field:"number_of_faculty", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchnatureAppointments(value){
 //     natureAppointments.setFilter([
@@ -504,38 +514,43 @@ $(document).on('click', '#remove-nature-appointment-btn', function(){
 //storeAcademicRank
 
 let academicRankTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "ACADEMIC RANK", field: "academic_rank", hozAlign: "left", vertAlign: "middle" },
+        { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
+        { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
+        { title: "NO. OF FACULTY", field: "number_of_faculty", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     academicRanks = new Tabulator("#academic-rank-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACADEMIC RANK", field:"academic_rank", hozAlign:"left", vertAlign:"middle"},
-            {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACADEMIC YEAR", field:"school_year", hozAlign:"left", vertAlign:"middle"},
-            {title:"NO. OF FACULTY", field:"number_of_faculty", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchacademicRanks(value){
 //     academicRanks.setFilter([
@@ -711,38 +726,43 @@ $(document).on('click', '#remove-academic-rank-btn', function(){
 // List of faculty scholars
 
 let facultyScholarTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "FACULTY NAME", field: "faculty_name", hozAlign: "left", vertAlign: "middle" },
+        { title: "SCHOLARSHIP", field: "scholarship", hozAlign: "left", vertAlign: "middle" },
+        { title: "INSTITUTION", field: "institution", hozAlign: "left", vertAlign: "middle" },
+        { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     facultyScholars = new Tabulator("#faculty-scholar-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"FACULTY NAME", field:"faculty_name", hozAlign:"left", vertAlign:"middle"},
-            {title:"SCHOLARSHIP", field:"scholarship", hozAlign:"left", vertAlign:"middle"},
-            {title:"INSTITUTION", field:"institution", hozAlign:"left", vertAlign:"middle"},
-            {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchfacultyScholars(value){
 //     facultyScholars.setFilter([
@@ -914,38 +934,43 @@ $(document).on('click', '#remove-faculty-scholar-btn', function(){
 // List of faculty Members who completed their Graduated Studies 
 
 let facultyGraduateStudiesTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "FACULTY NAME", field: "faculty_name", hozAlign: "left", vertAlign: "middle" },
+        { title: "DEGREE", field: "degree", hozAlign: "left", vertAlign: "middle" },
+        { title: "INSTITUTION", field: "institution", hozAlign: "left", vertAlign: "middle" },
+        { title: "DATE OF GRADUATION", field: "date_of_graduation", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     facultyGraduateStudies = new Tabulator("#faculty-graduate-studies-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"FACULTY NAME", field:"faculty_name", hozAlign:"left", vertAlign:"middle"},
-            {title:"DEGREE", field:"degree", hozAlign:"left", vertAlign:"middle"},
-            {title:"INSTITUTION", field:"institution", hozAlign:"left", vertAlign:"middle"},
-            {title:"DATE OF GRADUATION", field:"date_of_graduation", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchfacultyGraduateStudies(value){
 //     facultyGraduateStudies.setFilter([
@@ -1117,40 +1142,45 @@ $(document).on('click', '#remove-faculty-graduate-studies-btn', function(){
 //List of local seminars and trainings attended by faculty members
 
 let facultySeminarTrainingTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "CONFERENCE CATEGORY", field: "seminar_category", hozAlign: "left", vertAlign: "middle" },
+        { title: "TITLE OF CONFERENCE", field: "conference_title", hozAlign: "left", vertAlign: "middle" },
+        { title: "PARTICIPANTS", field: "participants", hozAlign: "left", vertAlign: "middle" },
+        { title: "SPONSORING AGENCY", field: "sponsoring_agency", hozAlign: "left", vertAlign: "middle" },
+        { title: "VENUE", field: "venue", hozAlign: "left", vertAlign: "middle" },
+        { title: "DATE", field: "date", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     seminarTrainings = new Tabulator("#seminar-training-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"CONFERENCE CATEGORY", field:"seminar_category", hozAlign:"left", vertAlign:"middle"},
-            {title:"TITLE OF CONFERENCE", field:"conference_title", hozAlign:"left", vertAlign:"middle"},
-            {title:"PARTICIPANTS", field:"participants", hozAlign:"left", vertAlign:"middle"},
-            {title:"SPONSORING AGENCY", field:"sponsoring_agency", hozAlign:"left", vertAlign:"middle"},
-            {title:"VENUE", field:"venue", hozAlign:"left", vertAlign:"middle"},
-            {title:"DATE", field:"date", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchseminarTrainings(value){
 //     seminarTrainings.setFilter([
@@ -1328,40 +1358,45 @@ $(document).on('click', '#remove-seminar-training-btn', function(){
 //List of recognition and award received by the faculty members
 
 let recognitionTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "TYPE", field: "award_type", hozAlign: "left", vertAlign: "middle" },
+        { title: "NAME OF AWARDEE", field: "awardee_name", hozAlign: "left", vertAlign: "middle" },
+        { title: "AWARD", field: "award", hozAlign: "left", vertAlign: "middle" },
+        { title: "INSTITUTION", field: "agency", hozAlign: "left", vertAlign: "middle" },
+        { title: "EVENT", field: "event", hozAlign: "left", vertAlign: "middle" },
+        { title: "DATE RECEIVED", field: "date_received", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     recognitions = new Tabulator("#recognition-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"TYPE", field:"award_type", hozAlign:"left", vertAlign:"middle"},
-            {title:"NAME OF AWARDEE ", field:"awardee_name", hozAlign:"left", vertAlign:"middle"},
-            {title:"AWARD", field:"award", hozAlign:"left", vertAlign:"middle"},
-            {title:"INSTITUTION", field:"agency", hozAlign:"left", vertAlign:"middle"},
-            {title:"EVENT", field:"event", hozAlign:"left", vertAlign:"middle"},
-            {title:"DATE RECEIVED", field:"date_received", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchrecognitions(value){
 //     recognitions.setFilter([
@@ -1539,39 +1574,44 @@ $(document).on('click', '#remove-recognition-btn', function(){
 //List of recognition and award received by the faculty members
 
 let presentationTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "TYPE", field: "presentation_type", hozAlign: "left", vertAlign: "middle" },
+        { title: "TITLE OF CONFERENCE", field: "conference_name", hozAlign: "left", vertAlign: "middle" },
+        { title: "TITLE OF PAPER", field: "paper_name", hozAlign: "left", vertAlign: "middle" },
+        { title: "PRESENTER", field: "presenter_name", hozAlign: "left", vertAlign: "middle" },
+        { title: "DATE AND VENUE", field: "date_venue", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     presentations = new Tabulator("#presentation-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"TYPE", field:"presentation_type", hozAlign:"left", vertAlign:"middle"},
-            {title:"TITILE OF CONFERENCE ", field:"conference_name", hozAlign:"left", vertAlign:"middle"},
-            {title:"TITLE OF PAPER/", field:"paper_name", hozAlign:"left", vertAlign:"middle"},
-            {title:"PRESENTER", field:"presenter_name", hozAlign:"left", vertAlign:"middle"},
-            {title:"DATE AND VENUE", field:"date_venue", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchpresentations(value){
 //     presentations.setFilter([

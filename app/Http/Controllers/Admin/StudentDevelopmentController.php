@@ -101,7 +101,7 @@ class StudentDevelopmentController extends Controller
             $response[] = [
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
-                'org_abbrev' => ucwords($item->org_abbrev.' '.$item->program_abbrev. ' '.$item->org_name),
+                'org_abbrev' => ucwords($item->org_abbrev),
                 'program_abbrev' => ucwords($item->program_abbrev),
                 'org_name' => ucwords($item->org_name),
                 'action' => $actions['button']

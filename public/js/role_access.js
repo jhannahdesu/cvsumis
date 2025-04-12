@@ -78,35 +78,59 @@ function searcRoles(value) {
 
 const rolesTable = () => {
     roles = new Tabulator("#roles-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitColumns",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitColumns",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
+        pagination: "local",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
+            const data = dom.getData();
+            const statusText = data.status?.replace(/<[^>]*>/g, '').trim().toLowerCase();
+
+            if (statusText === "inactive") {
+                dom.getElement().classList.add("table-warning"); // yellow background for inactive
+            } else {
+                dom.getElement().classList.add("table-light"); // default for active
             }
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"EMPLOYEE ID", field:"employee_number", hozAlign:"left", vertAlign:"middle"},
-            {title:"FULLNAME", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"POSITION", field:"position", hozAlign:"left", vertAlign:"middle"},
-            {title:"STATUS", field:"status", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+        columns: [
+            { title: "EMPLOYEE ID", field: "employee_number", hozAlign: "left", vertAlign: "middle" },
+            { title: "FULLNAME", field: "name", hozAlign: "left", vertAlign: "middle" },
+            { title: "POSITION", field: "position", hozAlign: "left", vertAlign: "middle" },
+            { title: "STATUS", field: "status", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            
         ]
-    }); 
-}
+    });
+
+    // Default filter: show only Active users on load
+    roles.setFilter((data) => {
+        const cleanStatus = data.status?.replace(/<[^>]*>/g, '').trim().toLowerCase();
+        return cleanStatus === "active";
+    });
+
+    // Default dropdown value if applicable
+    const statusDropdown = document.getElementById('statusFilter');
+    if (statusDropdown) {
+        statusDropdown.value = "Active";
+        statusDropdown.addEventListener('change', function () {
+            const selected = this.value.toLowerCase();
+            if (selected === "active" || selected === "inactive") {
+                roles.setFilter((data) => {
+                    const clean = data.status?.replace(/<[^>]*>/g, '').trim().toLowerCase();
+                    return clean === selected;
+                });
+            } else {
+                roles.clearFilter(true);
+                roles.setSort("status", "dsc");
+            }
+        });
+    }
+};
 
 function fetchRoles(){
     $.ajax({

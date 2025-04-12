@@ -26,14 +26,13 @@ function throwError(xhr, status){
     }
 }
 
-// In your main script file (where the Tabulator table is defined)
+
 const enrollmentTable = () => {
     const defaultDateFilter = {
-        column: 'created_at', // Column name to filter on
-        filterType: 'thisYear', // Default filter type (thisMonth, thisQuarter, thisYear)
+        column: 'created_at',
+        filterType: 'thisYear',
     };
 
-    // Function to apply the date filter based on filterType
     const getDateFilter = (filterType) => {
         const currentDate = new Date();
         let startDate = '';
@@ -41,18 +40,18 @@ const enrollmentTable = () => {
 
         switch (filterType) {
             case 'thisMonth':
-                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1); // Start of the current month
-                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0); // End of the current month
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
                 break;
             case 'thisQuarter':
                 const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
                 const quarterStartMonth = (quarter - 1) * 3;
-                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1); // Start of the quarter
-                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0); // End of the quarter
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
                 break;
             case 'thisYear':
-                startDate = new Date(currentDate.getFullYear(), 0, 1); // Start of the current year
-                endDate = new Date(currentDate.getFullYear(), 11, 31); // End of the current year
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
                 break;
             default:
                 break;
@@ -61,10 +60,27 @@ const enrollmentTable = () => {
         return { startDate, endDate };
     };
 
-    // Get the date filter based on the default filter type
     const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
 
-    // Apply the default filter to the Tabulator table
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle", download: false },
+        { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
+        { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
+        { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
+        { title: "NO. OF STUDENT", field: "student_count", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle",
+            download: false,
+        });
+    }
+
     enrollments = new Tabulator("#enrollment-table", {
         dataTree: true,
         dataTreeSelectPropagate: true,
@@ -78,28 +94,18 @@ const enrollmentTable = () => {
         selectable: 1,
         rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if (true) {
-                dom.getElement().classList.add("table-light");
-            } else if (selectedRow.safety_stock == selectedRow.qty) {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns: [
-            { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle", download: false },
-            { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
-            { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
-            { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
-            { title: "NO. OF STUDENT", field: "student_count", hozAlign: "left", vertAlign: "middle" },
-            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle", download: false },
-        ],
+        columns: columns,
         initialSort: [
-            { column: "created_at", dir: "desc" }, // Sort by created_at (newest first)
+            { column: "created_at", dir: "desc" },
         ],
         initialFilter: [
             { field: defaultDateFilter.column, type: "between", value: [startDate.toISOString(), endDate.toISOString()] },
         ],
     });
 };
+
 
 document.getElementById("filter-type").addEventListener("change", function() {
     const type = this.value;
@@ -391,5 +397,5 @@ $('#filter-status').change(function(){
 
 
 document.getElementById("download-csv").addEventListener("click", function() {
-    enrollments.download("csv", "enrollments.csv", { filter: true });
+    enrollments.download("csv", "Enrollments.csv", { filter: true });
 });

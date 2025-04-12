@@ -6,11 +6,11 @@
 
 <div class="container">
     <div class="row">
-        <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion" id="accordionFlushExample">
 
             {{-- Accordion Item: Accreditation Status --}}
             <div class="accordion-item">
-                <h2 class="accordion-header">
+                <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Accreditation-status-of-academic-programs" aria-expanded="false" aria-controls="Accreditation-status-of-academic-programs">
                         Accreditation status of academic programs 
                     </button>
@@ -209,11 +209,9 @@
                                     @endif
                                         <form id="studentTvetCsvDownloadForm" class="form-inline" method="GET" action="{{ route('StudentTvetCSV') }}">
                                             <input type="hidden" name="year" id="studentTvetCsvYearInput">
-                                            @if(Auth::user()->position == 1)
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"> CSV </i>
                                             </button>
-                                            @endif
                                         </form>
                                     </div>
                                 </div>

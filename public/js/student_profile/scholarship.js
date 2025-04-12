@@ -26,38 +26,42 @@ function throwError(xhr, status){
 }
 
 const scholarshipTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "SCHOLAR TYPE", field: "type", hozAlign: "left", vertAlign: "middle" },
+        { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
+        { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
+        { title: "NO. OF SCHOLARS", field: "number_of_scholars", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     scholarships = new Tabulator("#scholarship-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitColumns",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"SCHOLAR TYPE", field:"type", hozAlign:"left", vertAlign:"middle"},
-            {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACADEMIC YEAR", field:"school_year", hozAlign:"left", vertAlign:"middle"},
-            {title:"NO. OF SCHOLARS", field:"number_of_scholars", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
-}
+        columns: columns
+    });
+};
 
 function searchScholarship(value){
     scholarships.setFilter([

@@ -27,36 +27,41 @@ function throwError(xhr, status){
 }
 
 const infrastractureTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "INFRASTRUCTURE", field: "infrastracture", hozAlign: "left", vertAlign: "middle" },
+        { title: "STATUS", field: "status", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     infrastructures = new Tabulator("#infrastracture-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitColumns",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitColumns",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"INFRASTRUCTURE", field:"infrastracture", hozAlign:"left", vertAlign:"middle"},
-            {title:"STATUS", field:"status", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchinfrastructures(value){
 //     infrastructures.setFilter([

@@ -56,14 +56,14 @@ class RoleAccessController extends Controller
         $user_status = '';
         if ($data->status != 100){
             $button = '
-                <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-user-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+                <button type="button" class="btn btn-outline-info btn-sm px-3 me-2" id="edit-user-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
                 <button type="button" class="btn btn-outline-danger btn-sm px-3" id="deactivate-user-btn" data-id="'.$data->id.'"><i class="bi bi-person-fill-x"></i></button>
            ';
             $user_status = '<span class="badge bg-success">Active</span>';
 
         }else{
             $button = '
-                <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-user-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+                <button type="button" class="btn btn-outline-info btn-sm px-3 me-2" id="edit-user-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
                 <button type="button" class="btn btn-outline-success btn-sm px-3" id="activate-user-btn" data-id="'.$data->id.'"><i class="bi bi-person-fill-check"></i></button>
            ';
            $user_status = '<span class="badge bg-danger">Inactive</span>';

@@ -31,38 +31,43 @@ function throwError(xhr, status){
 }
 
 let universityResearchTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "AGENCY", field: "agency", hozAlign: "left", vertAlign: "middle" },
+        { title: "TITLE", field: "title", hozAlign: "left", vertAlign: "middle" },
+        { title: "RESEARCHER", field: "researcher", hozAlign: "left", vertAlign: "middle" },
+        { title: "STATUS", field: "status_details", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     universityResearchs = new Tabulator("#university-research-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"AGENCY", field:"agency", hozAlign:"left", vertAlign:"middle"},
-            {title:"TITLE", field:"title", hozAlign:"left", vertAlign:"middle"},
-            {title:"RESEARCHER", field:"researcher", hozAlign:"left", vertAlign:"middle"},
-            {title:"STATUS", field:"status_details", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchuniversityResearchs(value){
 //     universityResearchs.setFilter([
@@ -258,38 +263,43 @@ $(document).on('click', '#remove-university-research-btn', function(){
 
 
 let extensionActvitieTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "EXTENSION ACTIVITY", field: "extension_activity", formatter: "html", hozAlign: "left", vertAlign: "middle" },
+        { title: "EXTENSIONIST", field: "extensionist", hozAlign: "left", vertAlign: "middle" },
+        { title: "NO. OF BENEFICIARIES", field: "number_of_beneficiaries", hozAlign: "left", vertAlign: "middle" },
+        { title: "PARTNER AGENCY", field: "partner_agency", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     extensionActvities = new Tabulator("#extension-activity-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"EXTENSION ACTIVITY", field:"extension_activity", formatter: "html", hozAlign:"left", vertAlign:"middle"},
-            {title:"EXTENSIONIST", field:"extensionist", hozAlign:"left", vertAlign:"middle"},
-            {title:"NO. OF BENEFICIARIES", field:"number_of_beneficiaries", hozAlign:"left", vertAlign:"middle"},
-            {title:"PARTNER AGENCY", field:"partner_agency", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 // function searchextensionActvities(value){
 //     extensionActvities.setFilter([

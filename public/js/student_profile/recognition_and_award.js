@@ -27,36 +27,41 @@ function throwError(xhr, status){
 }
 
 const awardHeaderTable = () => {
+    let columns = [
+        { title: "RECOGNITION", field: "award", hozAlign: "left", vertAlign: "middle" },
+        { title: "GRANTING AGENCY", field: "granting_agency", hozAlign: "left", vertAlign: "middle" },
+        { title: "YEAR", field: "year", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     awardsHeader = new Tabulator("#awards-header-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitColumns",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitColumns",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
-            {title:"RECOGNITION", field:"award", hozAlign:"left", vertAlign:"middle"},
-            {title:"GRANTING AGENCY", field:"granting_agency", hozAlign:"left", vertAlign:"middle"},
-            {title:"YEAR", field:"year", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 function searchawardsHeader(value){
     awardsHeader.setFilter([
@@ -69,37 +74,41 @@ function searchawardsHeader(value){
 }
 
 let awardDetailsTable = () => {
+    let columns = [
+        { title: "AWARD DETAILS", field: "award_details", hozAlign: "left", vertAlign: "middle" },
+        { title: "AWARD", field: "game_placement", hozAlign: "left", vertAlign: "middle" },
+        { title: "GRANTEES", field: "grantees_name", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     awardsDetails = new Tabulator("#awards-details-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitColumns",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitColumns",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
-            {title:"AWARD DETAILS", field:"award_details", hozAlign:"left", vertAlign:"middle"},
-            {title:"AWARD", field:"game_placement", hozAlign:"left", vertAlign:"middle"},
-            {title:"GRANTEES", field:"grantees_name", hozAlign:"left", vertAlign:"middle"},
-         
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 
 $('#submit-award-btn').on('click', function(event) {
     var form = $('#award-header-form')[0];

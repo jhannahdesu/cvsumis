@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('content')
+<script>
+    window.userPosition = {{ Auth::user()->position }};
+</script>
 
     <div class="container">
         {{-- List of on-going and completed faculty researches funded by the University  --}}

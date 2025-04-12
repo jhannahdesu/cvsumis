@@ -27,35 +27,44 @@ function throwError(xhr, status){
 }
 
 let organizationTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "ORGANIZATION ABBREVIATION", field: "org_abbrev", hozAlign: "left", vertAlign: "middle" },
+        { title: "ORGANIZATION NAME", field: "org_name", hozAlign: "left", vertAlign: "middle" },
+        { title: "PROGRAM", field: "program_abbrev", hozAlign: "left", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     organizations = new Tabulator("#organization-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"ORGANIZATION", field:"org_abbrev", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
+
+
 
 // function searchorganizations(value){
 //     organizations.setFilter([
@@ -80,7 +89,9 @@ function searchorganizations(value) {
         searchTerms.forEach(term => {
             if (
                 !data.name.toLowerCase().includes(term) &&
-                !data.org_abbrev.toLowerCase().includes(term)
+                !data.org_abbrev.toLowerCase().includes(term) &&
+                !data.org_name.toLowerCase().includes(term) &&
+                !data.program_abbrev.toLowerCase().includes(term)
             ) {
                 matches = false;
             }

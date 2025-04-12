@@ -27,37 +27,42 @@ function throwError(xhr, status){
 }
 
 let accomplishmentTable = () => {
+    let columns = [
+        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+        { title: "FACULTY", field: "faculty", hozAlign: "left", vertAlign: "middle" },
+        { title: "PROGRAM", field: "program_id", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+        { title: "SUC / DATE", field: "university", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            title: "ACTION",
+            field: "action",
+            hozAlign: "left",
+            formatter: "html",
+            vertAlign: "middle"
+        });
+    }
+
     accomplishments = new Tabulator("#accomplishment-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function (dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+            dom.getElement().classList.add("table-light");
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"FACULTY", field:"faculty", hozAlign:"left", vertAlign:"middle"},
-            {title:"PROGRAM", field:"program_id", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-            {title:"SUC / DATE", field:"university", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        columns: columns
+    });
 }
+
 // function searchaccomplishments(value){
 //     accomplishments.setFilter([
 //         [

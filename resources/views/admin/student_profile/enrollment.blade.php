@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('content')
 <!-- <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script> -->
+<script>
+    window.userPosition = {{ Auth::user()->position }};
+</script>
 
     <div class="container">
         <div class="row">
@@ -13,7 +16,7 @@
                                 <input class="form-control mr-sm-2" type="search" oninput="searchEnrollment(value)" placeholder="Search" aria-label="Search">
                             </form>
                             <div class="d-flex justify-content-between">
-                                <select id="filter-type" class="form-select ms-2">
+                                <select id="filter-type" class="form-select ms-2 me-1">
                                     <option value="" disabled selected>Date Filter  </option>
                                     <option value="all">All</option>
                                     <option value="monthly">Monthly</option>
@@ -21,8 +24,8 @@
                                     <option value="yearly">Yearly</option>
                                 </select>
 
-                                <select id="filter-year" style="display:none;" class="form-select"></select>
-                                <select id="filter-value" style="display:none;" class="form-select"></select>
+                                <select id="filter-year" style="display:none;" class="form-select me-1"></select>
+                                <select id="filter-value" style="display:none;" class="form-select me-1"></select>
                             </div>                         
                             <div class="ms-auto d-flex justify-content-between">
                             @if(Auth::user()->position != 5)
@@ -30,18 +33,9 @@
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
                             @endif
-                                <!-- <form id="graduateCsvDownloadForm" class="form-inline" method="GET" action="{{ route('EnrollmentCSV') }}">
-                                    <input type="hidden" name="year" id="graduateCsvYearInput">
-                                    <input type="hidden" name="semester" id="graduateCsvSemesterInput"> -->
-                                    
-                                    <!-- <button type="submit" class="btn btn-outline-info">
-                                        <i class="bi bi-printer-fill"> CSV </i>
-                                    </button> -->
                                     <button id="download-csv" class="btn btn-outline-info">
                                         <i class="bi bi-printer-fill"> CSV </i>
                                     </button>
-                                    
-                                <!-- </form> -->
                             </div>
                         </div>
                         <div id="enrollment-table"></div>

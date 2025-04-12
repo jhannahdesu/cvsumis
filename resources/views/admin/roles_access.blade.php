@@ -10,6 +10,11 @@
                         <h5 class="card-title">Users List</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <div class="ms-auto d-flex">
+                                <select id="statusFilter" class="form-select w-auto me-2">
+                                    <option value="Active" selected>Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                    <option value="">All</option>
+                                </select>
                                 <form class="form-inline me-2">
                                     <input class="form-control" type="search" oninput="searcRoles(value)" placeholder="Search" aria-label="Search">
                                 </form>

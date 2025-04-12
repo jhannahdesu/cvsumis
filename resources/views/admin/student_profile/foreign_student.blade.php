@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('content')
+<script>
+    window.userPosition = {{ Auth::user()->position }};
+</script>
+
     <div class="container">
         <div class="row">
             <section class="col-lg-12">    

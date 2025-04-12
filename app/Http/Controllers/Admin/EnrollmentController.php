@@ -152,7 +152,7 @@ class EnrollmentController extends Controller
 
     public function action($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-modal-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-modal-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-enrollment-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

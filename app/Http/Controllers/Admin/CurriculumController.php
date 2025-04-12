@@ -390,7 +390,7 @@ class CurriculumController extends Controller
 
     public function accreditationStatusAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-accreditation-status-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-accreditation-status-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-accreditation-status-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -508,7 +508,7 @@ class CurriculumController extends Controller
 
     public function govRecognitionAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-gov-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-gov-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-gov-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [
@@ -642,7 +642,7 @@ class CurriculumController extends Controller
 
     public function licensureExamAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-licensure-exam-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-licensure-exam-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-licensure-exam-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [
@@ -788,7 +788,7 @@ class CurriculumController extends Controller
 
     public function FacultyTvetAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-faculty-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-faculty-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-faculty-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [
@@ -910,7 +910,7 @@ class CurriculumController extends Controller
 
     public function StudentTvetAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-student-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-student-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-student-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [

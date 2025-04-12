@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('content')
-
+<script>
+    window.userPosition = {{ Auth::user()->position }};
+</script>
     <div class="container">
     @if(Auth::user()->position != 5)
         <div class="row">
