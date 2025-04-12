@@ -10,7 +10,7 @@
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Enrollment List</h5>
+                        <h5 class="card-title">Enrollment distribution</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchEnrollment(value)" placeholder="Search" aria-label="Search">

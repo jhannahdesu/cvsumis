@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Add Scholarship</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Distribution of scholars by type of scholarship</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -10,12 +10,7 @@
                 @csrf
                 <div class="col-md-12">
                     <label for="scholarship_type" class="form-label">Scholarship</label>
-                    <select class="form-select" id="scholarship_type" name="scholarship_type" required>
-                        <option selected disabled value="">Select scholarship</option>
-                        @foreach ($scholarships as $scholarship)
-                            <option value="{{ $scholarship->id }}">{{ ucwords($scholarship->type) }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text" class="form-control" id="scholarship_type" name="scholarship_type" placeholder="e.g., Leadership Scholarships" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -74,20 +69,15 @@
             <form class="row g-3 needs-validation" id="view-scholarship-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="scholarship_type" class="form-label">Scholarship</label>
-                    <select class="form-select" id="view_scholarship_type" name="scholarship_type" required>
-                        <option selected disabled value="">Select scholarship</option>
-                        @foreach ($scholarships as $scholarship)
-                            <option value="{{ $scholarship->id }}">{{ ucwords($scholarship->type) }}</option>
-                        @endforeach
-                    </select>
+                    <label for="view_scholarship_type" class="form-label">Scholarship</label>
+                    <input type="text" class="form-control" id="view_scholarship_type" name="scholarship_type" placeholder="e.g., Leadership Scholarships" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 
                 <div class="col-md-4">
-                    <label for="number_of_scholars" class="form-label">Number of Scholars</label>
+                    <label for ="view_number_of_scholars" class="form-label">Number of Scholars</label>
                     <input type="number" class="form-control" id="view_number_of_scholars" name="number_of_scholars" required>
                     <div class="valid-feedback">
                         Looks good!
@@ -95,7 +85,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="semester" class="form-label">Semester</label>
+                    <label for="view_semester" class="form-label">Semester</label>
                     <select class="form-select" id="view_semester" name="semester" required>
                         <option selected disabled value="">Select Semester</option>
                         <option value="1st Semester">1st</option>
@@ -107,7 +97,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="school_year" class="form-label">School Year</label>
+                    <label for="view_school_year" class="form-label">School Year</label>
                     <select class="form-select" id="view_school_year" name="school_year" required>
                         <option selected disabled value="">Select Academic Year</option>
                         @foreach ($academicYears as $academicYear)
@@ -127,7 +117,6 @@
       </div>
     </div>
 </div>
-
 
 <script>
     // FOR RESET VALIDATION FOR SCHOLARSHIP FORM :D

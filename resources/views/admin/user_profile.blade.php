@@ -94,6 +94,14 @@
                                     </div>
 
                                     <div class="row mb-3">
+                                        <label for="middle_initial" class="col-md-4 col-lg-3 col-form-label">Middle Initial</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="middle_initial" type="text" class="form-control" id="middle_initial" value="{{ Auth::user()->middle_initial }}">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mb-3">
                                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="lastname" type="text" class="form-control" id="lastname" value="{{ Auth::user()->lastname }}">

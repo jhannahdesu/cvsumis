@@ -10,7 +10,7 @@
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Organzation Form</h5>
+                        <h5 class="card-title">Organization Form</h5>
                         <form class="row g-3 needs-validation" id="organization-form" novalidate>
                             @csrf
                     
@@ -54,7 +54,7 @@
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Organzation List</h5>
+                        <h5 class="card-title">Recognized Student Organizations                         </h5>
                         <div class="d-flex justify-content-between mb-3">
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchorganizations(value)" placeholder="Search" aria-label="Search">

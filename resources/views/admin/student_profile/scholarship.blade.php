@@ -9,7 +9,7 @@
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Scholarship List</h5>
+                        <h5 class="card-title">Distribution of scholars by type of scholarship</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchScholarship(value)" placeholder="Search" aria-label="Search">

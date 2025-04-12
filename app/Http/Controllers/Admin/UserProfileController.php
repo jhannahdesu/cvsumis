@@ -70,4 +70,29 @@ class UserProfileController extends Controller
             'image_url' => asset('images/user_image/' . $imageName),
         ]);
     }
+
+    public function store(Request $request)
+{
+    $request->validate([
+        'firstname' => 'required|string|max:255',
+        'middlename' => 'nullable|string|max:1', // ⬅️ ADD THIS LINE
+        'lastname' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'department' => 'required|exists:departments,id',
+        'position' => 'required|exists:positions,id',
+    ]);
+
+    $user = new User();
+    $user->firstname = $request->firstname;
+    $user->middle_initial = strtoupper($request->middlename); // ⬅️ Store it as uppercase
+    $user->lastname = $request->lastname;
+    $user->email = $request->email;
+    $user->department_id = $request->department;
+    $user->position_id = $request->position;
+    $user->password = bcrypt('default_password'); // or generate one
+    $user->save();
+
+    return response()->json(['message' => 'User created successfully']);
 }
+}
+

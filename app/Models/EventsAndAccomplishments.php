@@ -14,7 +14,8 @@ class EventsAndAccomplishments extends Model
     protected $table = 'accomplishments';
     protected $fillable = [
         'added_by',
-        'faculty',
+        'category',
+        'name_category',
         'program_id',
         'program_dtls',
         'module',

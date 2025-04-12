@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">List of on-going and completed faculty researches funded by the University</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Add on-going and completed faculty researches funded by the University</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -58,7 +58,7 @@
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" id="outside-agency" required>
                       <label class="form-check-label" for="invalidCheck2">
-                        Check if the research is not from the university
+                      Check if the research is externally funded from the university
                       </label>
                     </div>
                 </div>
@@ -165,7 +165,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">List of extension activities conducted </h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Add of extension activities conducted </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -226,7 +226,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Update List of extension activities conducted </h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Update Add of extension activities conducted </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

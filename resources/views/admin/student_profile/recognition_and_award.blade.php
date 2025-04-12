@@ -9,7 +9,7 @@
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Recognition and Award Form</h5>
+                        <h5 class="card-title">Recognition and Award</h5>
                         <form class="row g-3 needs-validation" id="award-header-form" novalidate>
                             @csrf
 
@@ -62,7 +62,7 @@
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Recognition and Award List</h5>
+                        <h5 class="card-title">List of recognitions and awards of students</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchawardsHeader(value)" placeholder="Search" aria-label="Search">

@@ -10,7 +10,7 @@
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Graduate Form</h5>
+                        <h5 class="card-title">Distribution of Graduates by Program</h5>
                         <form class="row g-3 needs-validation" id="graduate-hdr-form" novalidate>
                             @csrf
                     

@@ -4,21 +4,49 @@
     window.userPosition = {{ Auth::user()->position }};
 </script>
 
-<div class="container">
-        <div class="accordion mt-2" id="accordionFlushExample">
-        @if(Auth::user()->position != 4)
-            {{-- Faculty Profile by Educational Attainment --}}
+    <div class="container">
+        {{-- <div class="row">
+            <div class="col-md-6">
+                <label for="semester" class="form-label">Semester</label>
+                <select class="form-select" id="default_semester" name="default_semester" required>
+                    <option selected disabled >Select Semester</option>
+                    <option value="1st Semester">1st</option>
+                    <option value="2nd Semester">2nd</option>
+                </select>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label for="school_year" class="form-label">School Year</label>
+                <select class="form-select" id="default_school_year" name="default_school_year" required>
+                    <option selected disabled >Select Academic Year</option>
+                    @foreach ($academicYears as $academicYear)
+                        <option value="{{ $academicYear->year_start.'-'.$academicYear->year_end }}">{{ $academicYear->year_start.'-'.$academicYear->year_end  }}</option>
+                    @endforeach
+                </select>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+        </div> --}}
+        
+        {{-- Faculty profile by educational attainment  --}}
+@if(Auth::user()->position != 4)
+    <div class="row mt-2">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
             <div class="accordion-item">
-                <h2 class="accordion-header" id="headingEducationalAttainment">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEducationalAttainment" aria-expanded="false" aria-controls="collapseEducationalAttainment">
-                        Faculty profile by educational attainment
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Faculty-profile-by-educational-attainment" aria-expanded="false" aria-controls="Faculty-profile-by-educational-attainment">
+                        Faculty profile by educational attainment 
                     </button>
                 </h2>
                 <div id="collapseEducationalAttainment" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                     <section class="col-lg-12">    
                         <article class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Faculty profile by educational attainment List</h5>
+                                <h5 class="card-title">Faculty profile by educational attainment</h5>
                                 <div class="d-flex justify-content-between mb-3">
                                     <form class="form-inline">
                                         <input class="form-control" type="search" oninput="searcheducationalAttainments(value)" placeholder="Search" aria-label="Search">
@@ -55,25 +83,27 @@
                 </div>
             </div>
 
-            {{-- Faculty Profile by Nature of Appointment --}}
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingNatureAppointment">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNatureAppointment" aria-expanded="false" aria-controls="collapseNatureAppointment">
-                        Faculty profile by nature of appointment
-                    </button>
-                </h2>
-                <div id="collapseNatureAppointment" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <section class="col-lg-12">    
-                        <article class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Faculty profile by nature of appointment List</h5>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <form class="form-inline">
-                                        <input class="form-control" type="search" oninput="searchnatureAppointments(value)" placeholder="Search" aria-label="Search">
-                                    </form>
-
-                                    <form class="form-inline ms-2">
-                                        <select class="form-select" id="nature_default_semester">
+        {{-- Faculty profile by nature of appointment   --}}
+        <div class="row">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Faculty-profile-by-nature-of-appointment" aria-expanded="false" aria-controls="Faculty-profile-by-nature-of-appointment">
+                            Faculty profile by nature of appointment  
+                        </button>
+                    </h2>
+                    <div id="Faculty-profile-by-nature-of-appointment" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <section class="col-lg-12">    
+                            <article class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Faculty profile by nature of appointment List</h5>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <form class="form-inline">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchnatureAppointments(value)" placeholder="Search" aria-label="Search">
+                                        </form>
+                                    
+                                        <form class="form-inline">
+                                        <select class="form-select ml-2" id="nature_default_semester">
                                             <option value="" selected>Select Semester</option>
                                             <option value="1st Semester">1st Semester</option>
                                             <option value="2nd Semester">2nd Semester</option>
@@ -103,22 +133,24 @@
                 </div>
             </div>
 
-            {{-- Faculty Profile by Academic Rank --}}
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingAcademicRank">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAcademicRank" aria-expanded="false" aria-controls="collapseAcademicRank">
-                        Faculty profile by academic rank
-                    </button>
-                </h2>
-                <div id="collapseAcademicRank" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <section class="col-lg-12">
-                        <article class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Faculty profile by academic rank List</h5>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <form class="form-inline">
-                                        <input class="form-control" type="search" oninput="searchacademicRanks(value)" placeholder="Search" aria-label="Search">
-                                    </form>
+        {{--  Faculty profile by academic rank --}}
+        <div class="row">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Faculty-profile-by-academic-rank" aria-expanded="false" aria-controls="Faculty-profile-by-academic-rank">
+                            Faculty profile by academic rank
+                        </button>
+                    </h2>
+                    <div id="Faculty-profile-by-academic-rank" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <section class="col-lg-12">    
+                            <article class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Faculty profile by academic rank List</h5>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <form class="form-inline">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchacademicRanks(value)" placeholder="Search" aria-label="Search">
+                                        </form>
 
                                     <form class="form-inline ms-2">
                                         <select class="form-select" id="academic_rank_semester">
@@ -128,49 +160,51 @@
                                         </select>
                                     </form>
 
-                                    <div class="ms-auto d-flex">
-                                        @if(Auth::user()->position != 5)
-                                            <button type="button" class="btn btn-outline-primary me-2" id="academic-rank-modal">
-                                                <i class="bi bi-plus-circle-fill"></i>
-                                            </button>
+                                <div class="ms-auto d-flex">
+                                @if(Auth::user()->position != 5)
+                                    <button type="button" class="btn btn-outline-primary me-2" id="academic-rank-modal">
+                                        <i class="bi bi-plus-circle-fill"></i>
+                                    </button>
+                                @endif
+                                    <form id="academicRankCsvDownloadForm" class="form-inline" method="GET" action="{{ route('AcademicRankCSV') }}">
+                                        <input type="hidden" name="school_year" id="academicRankCsvYearInput">
+                                        <input type="hidden" name="semester" id="academicRankCsvSemesterInput">
+                                        @if(Auth::user()->position == 1)
+                                        <button type="submit" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
                                         @endif
-                                        <form id="academicRankCsvDownloadForm" method="GET" action="{{ route('AcademicRankCSV') }}">
-                                            <input type="hidden" name="school_year" id="academicRankCsvYearInput">
-                                            <input type="hidden" name="semester" id="academicRankCsvSemesterInput">
-                                            
-                                            <button type="submit" class="btn btn-outline-info">
-                                                <i class="bi bi-printer-fill"></i> CSV
-                                            </button>
-                                        </form>
-                                    </div>
+                                    </form>
                                 </div>
-                                <div id="academic-rank-table"></div>
-                            </div>
-                        </article>
-                    </section>
+                                    </div>
+                                    <div id="academic-rank-table"></div>
+                                </div>
+                            </article>
+                        </section>
+                    </div>
                 </div>
             </div>
-
-        @endif
-
-            {{-- Faculty Scholars --}}
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingFacultyScholars">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFacultyScholars" aria-expanded="false" aria-controls="collapseFacultyScholars">
-                        Faculty scholars
-                    </button>
-                </h2>
-                <div id="collapseFacultyScholars" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <section class="col-lg-12">
-                        <article class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">List of faculty scholars</h5>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <form class="form-inline">
-                                        <input class="form-control" type="search" oninput="searchfacultyScholars(value)" placeholder="Search" aria-label="Search">
-                                    </form>
-                                    
-                                    <div class="ms-auto d-flex">
+        </div>
+    @endif
+        {{--  List of faculty scholars --}}
+        <div class="row">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#List-of-faculty-scholars" aria-expanded="false" aria-controls="List-of-faculty-scholars">
+                            Faculty scholars
+                        </button>
+                    </h2>
+                    <div id="List-of-faculty-scholars" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <section class="col-lg-12">    
+                            <article class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"> List of faculty scholars</h5>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <form class="form-inline">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchfacultyScholars(value)" placeholder="Search" aria-label="Search">
+                                        </form>
+                                        <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
                                             <button type="button" class="btn btn-outline-primary me-2" id="faculty-scholar-modal">
                                                 <i class="bi bi-plus-circle-fill"></i>
@@ -193,45 +227,50 @@
                 </div>
             </div>
 
-            {{-- Accordion Item: Graduated Studies --}}
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingGraduateStudies">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGraduateStudies" aria-expanded="false" aria-controls="collapseGraduateStudies">
-                        Graduated Studies
-                    </button>
-                </h2>
-                <div id="collapseGraduateStudies" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <section class="col-lg-12">
-                        <article class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Graduated Studies</h5>
-                                <div class="d-flex justify-content-between mb-3">
-                                    <form class="form-inline">
-                                        <input class="form-control" type="search" oninput="searchfacultyGraduateStudies(value)" placeholder="Search" aria-label="Search">
-                                    </form>
-
-                                    <div class="ms-auto d-flex">
-                                        @if(Auth::user()->position != 5)
-                                            <button type="button" class="btn btn-outline-primary me-2" id="faculty-graduate-studies-modal">
-                                                <i class="bi bi-plus-circle-fill"></i>
-                                            </button>
-                                        @endif
-                                        <form id="facultyGraduateStudiesCsvDownloadForm" method="GET" action="{{ route('FacultyGraduateStudiesCSV') }}">
-                                            <input type="hidden" name="school_year" id="facultyGraduateStudiesCsvYearInput">
-                                            <input type="hidden" name="semester" id="facultyGraduateStudiesCsvSemesterInput">
-                                            
-                                            <button type="submit" class="btn btn-outline-info">
-                                                <i class="bi bi-printer-fill"></i> CSV
-                                            </button>
+        {{--  List of faculty Members who completed their Graduated Studies  --}}
+        <div class="row">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#List-of-faculty-Members-who-completed-their-Graduated-Studies" aria-expanded="false" aria-controls="List-of-faculty-Members-who-completed-their-Graduated-Studies">
+                            Graduated Studies 
+                        </button>
+                    </h2>
+                    <div id="List-of-faculty-Members-who-completed-their-Graduated-Studies" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <section class="col-lg-12">    
+                            <article class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title"> Graduated Studies </h5>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <form class="form-inline">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchfacultyGraduateStudies(value)" placeholder="Search" aria-label="Search">
                                         </form>
-                                    </div>
+                                
+                                        <div class="ms-auto d-flex">
+                                    @if(Auth::user()->position != 5)
+                                    <button type="button" class="btn btn-outline-primary me-2" id="faculty-graduate-studies-modal">
+                                        <i class="bi bi-plus-circle-fill"></i>
+                                    </button>
+                                    @endif
+                                    <form id="facultyGraduateStudiesCsvDownloadForm" class="form-inline" method="GET" action="{{ route('FacultyGraduateStudiesCSV') }}">
+                                        <input type="hidden" name="school_year" id="facultyGraduateStudiesCsvYearInput">
+                                        <input type="hidden" name="semester" id="facultyGraduateStudiesCsvSemesterInput">
+                                        @if(Auth::user()->position == 1)
+                                        <button type="submit" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                        @endif
+                                    </form>
                                 </div>
-                                <div id="faculty-graduate-studies-table"></div>
-                            </div>
-                        </article>
-                    </section>
+                                    </div>
+                                    <div id="faculty-graduate-studies-table"></div>
+                                </div>
+                            </article>
+                        </section>
+                    </div>
                 </div>
             </div>
+        </div>
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingSeminarsTrainings">
@@ -270,22 +309,26 @@
                 </div>
             </div>
 
-            <div class="accordion-item">
-            <h2 class="accordion-header" id="headingRecognition">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRecognition" aria-expanded="false" aria-controls="collapseRecognition">
-                    Recognition and Award Received
-                </button>
-            </h2>
-            <div id="collapseRecognition" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                <section class="col-lg-12">
-                    <article class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">List of Recognition and Award Received</h5>
-                            <div class="d-flex justify-content-between mb-3">
-                                <form class="form-inline">
-                                    <input class="form-control" type="search" oninput="searchrecognitions(value)" placeholder="Search" aria-label="Search">
-                                </form>
-                                <div class="ms-auto d-flex">
+        {{-- List of recognition and award received by the faculty members --}}
+        <div class="row">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#List-of-recognition-and-award-received-by-the-faculty-members" aria-expanded="false" aria-controls="List-of-recognition-and-award-received-by-the-faculty-members">
+                            Recognition and award received
+                        </button>
+                    </h2>
+                    <div id="List-of-recognition-and-award-received-by-the-faculty-members" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <section class="col-lg-12">    
+                            <article class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">  List of recognition and award received </h5>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <form class="form-inline">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchrecognitions(value)" placeholder="Search" aria-label="Search">
+                                        </form>
+
+                                        <div class="ms-auto d-flex">
                                     @if(Auth::user()->position != 5)
                                         <button type="button" class="btn btn-outline-primary me-2" id="recognition-modal">
                                             <i class="bi bi-plus-circle-fill"></i>
@@ -307,22 +350,26 @@
             </div>
 
 
-            <div class="accordion-item">
-            <h2 class="accordion-header" id="headingPresentations">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePresentations" aria-expanded="false" aria-controls="collapsePresentations">
-                    Paper Presentations
-                </button>
-            </h2>
-            <div id="collapsePresentations" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                <section class="col-lg-12">
-                    <article class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">List of Paper Presentations</h5>
-                            <div class="d-flex justify-content-between mb-3">
-                                <form class="form-inline">
-                                    <input class="form-control" type="search" oninput="searchpresentations(value)" placeholder="Search" aria-label="Search">
-                                </form>
-                                <div class="ms-auto d-flex">
+        {{-- List of paper presentations of the faculty members   --}}
+        <div class="row">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#List-of-paper-presentations-of-the-faculty-members" aria-expanded="false" aria-controls="List-of-paper-presentations-of-the-faculty-members">
+                           Paper presentations
+                        </button>
+                    </h2>
+                    <div id="List-of-paper-presentations-of-the-faculty-members" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <section class="col-lg-12">    
+                            <article class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">  List of paper presentations </h5>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <form class="form-inline">
+                                            <input class="form-control mr-sm-2" type="search" oninput="searchpresentations(value)" placeholder="Search" aria-label="Search">
+                                        </form>
+                                    
+                                        <div class="ms-auto d-flex">
                                     @if(Auth::user()->position != 5)
                                         <button type="button" class="btn btn-outline-primary me-2" id="presentation-modal">
                                             <i class="bi bi-plus-circle-fill"></i>

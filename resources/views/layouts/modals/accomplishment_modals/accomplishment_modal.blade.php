@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Enrollment</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Accomplishment / Events</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -30,7 +30,15 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="university" class="form-label">University</label>
+                    <label for="university" class="form-label">University venue</label>
+                    <input type="text" class="form-control" id="view_university" name="university" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="university" class="form-label">Sponsoring agency</label>
                     <input type="text" class="form-control" id="view_university" name="university" required>
                     <div class="valid-feedback">
                         Looks good!
