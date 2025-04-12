@@ -394,55 +394,58 @@
 
 <div class="modal fade" id="AddFacultyScholarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel"> List of faculty scholars</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form class="row g-3 needs-validation" id="faculty-scholar-form" novalidate>
-                @csrf
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">List of faculty scholars</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row g-3 needs-validation" id="faculty-scholar-form" novalidate>
+                    @csrf
+
 
                 <div class="col-md-12">
                     <label for="fs_faculty_name" class="form-label">Name of Faculty</label>
-                    <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name" placeholder="Surname, Firstname MiddleInitial." required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    @if(Auth::user()->position == 4)
+                        {{-- Faculty Staff: Prefilled and Readonly --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
+                            required readonly>
+                    @else
+                        {{-- Other Roles: Editable --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            placeholder="e.x. LastName, First Name MiddleInitial." required>
+                    @endif
+                    <div class="valid-feedback">Looks good!</div>
                     <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
-                
-                <div class="col-md-12">
-                    <label for="sholarship" class="form-label">Scholarship</label>
-                    <input type="text" class="form-control" id="fs_scholarship" name="scholarship" placeholder="ex.CHED Scholarships for Instructors’ Knowledge Advancement Program (SIKAP)" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
 
 
-                <div class="col-md-12">
-                    <label for="institution" class="form-label">Institution</label>
-                    <input type="text" class="form-control" id="fs_institution" name="institution" placeholder="ex.University of the East – Manila"required>
-                    <div class="valid-feedback">
-                        Looks good!
+                    
+                    <div class="col-md-12">
+                        <label for="sholarship" class="form-label">Scholarship</label>
+                        <input type="text" class="form-control" id="fs_scholarship" name="scholarship" placeholder="ex.CHED Scholarships for Instructors’ Knowledge Advancement Program (SIKAP)" required>
+                        <div class="valid-feedback">Looks good!</div>
                     </div>
-                </div>
 
-                <div class="col-md-12">
-                    <label for="program" class="form-label">Program</label>
-                    <input type="text" class="form-control" id="fs_program" name="program" placeholder="ex.Doctor in Information Technology"required>
-                    <div class="valid-feedback">
-                        Looks good!
+                    <div class="col-md-12">
+                        <label for="institution" class="form-label">Institution</label>
+                        <input type="text" class="form-control" id="fs_institution" name="institution" placeholder="ex.University of the East – Manila" required>
+                        <div class="valid-feedback">Looks good!</div>
                     </div>
-                </div>
-            </form>
+
+                    <div class="col-md-12">
+                        <label for="program" class="form-label">Program</label>
+                        <input type="text" class="form-control" id="fs_program" name="program" placeholder="ex.Doctor in Information Technology" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm px-3" id="submit-faculty-scholar-btn">Submit</button>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary btn-sm px-3" id="submit-faculty-scholar-btn">Submit</button>
-        </div>
-      </div>
     </div>
 </div>
 
@@ -507,14 +510,24 @@
         <div class="modal-body">
             <form class="row g-3 needs-validation" id="faculty-graduate-studies-form" novalidate>
                 @csrf
+
+
                 <div class="col-md-12">
-                    <label for="fgs_faculty_name" class="form-label">Name of Faculty</label>
-                    <input type="text" class="form-control" id="fgs_faculty_name" name="faculty_name" placeholder="Surname, First Name Middle Initial." required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
+                    <label for="fs_faculty_name" class="form-label">Name of Faculty</label>
+                    @if(Auth::user()->position == 4)
+                        {{-- Faculty Staff: Prefilled and Readonly --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
+                            required readonly>
+                    @else
+                        {{-- Other Roles: Editable --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            placeholder="e.x. LastName, First Name MiddleInitial." required>
+                    @endif
+                    <div class="valid-feedback">Looks good!</div>
                     <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
+
                 
                 <div class="col-md-12">
                     <label for="sholarship" class="form-label">Degree</label>
@@ -604,7 +617,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">List of seminars and trainings attended by faculty members</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Add seminars and trainings attended</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -634,12 +647,19 @@
                 </div>
                 
                 <div class="col-md-12">
-                    <label for="st_participants" class="form-label">Participants</label>
-                    <input type="text" class="form-control" id="st_participants" name="participants" placeholder="Surname, First Name Middle Initial." required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback" id="participants-error-message" style="display:none;">Please enter a valid name.</div>
+                    <label for="fs_faculty_name" class="form-label">Participants</label>
+                    @if(Auth::user()->position == 4)
+                        {{-- Faculty Staff: Prefilled and Readonly --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
+                            required readonly>
+                    @else
+                        {{-- Other Roles: Editable --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            placeholder="e.x. LastName, First Name MiddleInitial." required>
+                    @endif
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
 
                 <div class="col-md-12">
@@ -679,7 +699,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">List of seminars and trainings attended by faculty members</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Add seminars and trainings attended</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -775,12 +795,19 @@
                 </div>
                 
                 <div class="col-md-12">
-                    <label for="ra_awardee_name" class="form-label">Name of Awardee</label>
-                    <input type="text" class="form-control" id="ra_awardee_name" name="awardee_name" placeholder="Surname, First Name Middle Initial." required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback" id="awardee-error-message" style="display:none;">Please enter a valid name.</div>
+                    <label for="fs_faculty_name" class="form-label">Name of awardee</label>
+                    @if(Auth::user()->position == 4)
+                        {{-- Faculty Staff: Prefilled and Readonly --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
+                            required readonly>
+                    @else
+                        {{-- Other Roles: Editable --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            placeholder="e.x. LastName, First Name MiddleInitial." required>
+                    @endif
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
                 
                 <div class="col-md-12">
@@ -943,14 +970,21 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="pp_presenter_name" class="form-label">Presenter</label>
-                    <input type="text" class="form-control" id="pp_presenter_name" name="presenter_name" placeholder="Surname, First Name Middle Initial." required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback" id="presenter-error-message" style="display:none;">Please enter a valid name.</div>
+                    <label for="fs_faculty_name" class="form-label">Presenter</label>
+                    @if(Auth::user()->position == 4)
+                        {{-- Faculty Staff: Prefilled and Readonly --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
+                            required readonly>
+                    @else
+                        {{-- Other Roles: Editable --}}
+                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                            placeholder="e.x. LastName, First Name MiddleInitial." required>
+                    @endif
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
-
+                
                 <div class="col-md-12">
                     <label for="date" class="form-label">Date</label>
                     <input type="date" class="form-control" id="pp_date" name="date" required>
@@ -1080,6 +1114,7 @@
             { formId: "faculty-scholar-form", modalId: "EditFacultyScholarModal" },
             { formId: "view-faculty-scholar-form", modalId: "AddFacultyScholarModal" },
             { formId: "view-faculty-scholar-form", modalId: "EditFacultyScholarModal" },
+            
             
             // Faculty Graduate Studies
             { formId: "faculty-graduate-studies-form", modalId: "AddFacultyGraduateStudiesModal" },

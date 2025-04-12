@@ -28,36 +28,37 @@ function throwError(xhr, status){
 
 let accomplishmentTable = () => {
     accomplishments = new Tabulator("#accomplishment-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
-        pagination:"local",
-        placeholder:"No Data Available", 
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        rowFormatter: function(dom) {
             var selectedRow = dom.getData();
-            if(true)
-            {
+            if (true) {
                 dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
+            } else if (selectedRow.safety_stock == selectedRow.qty) {
                 dom.getElement().classList.add("table-warning");
             }
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"FACULTY", field:"faculty", hozAlign:"left", vertAlign:"middle"},
-            {title:"PROGRAM", field:"program_id", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-            {title:"SUC / DATE", field:"university", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+        columns: [
+            { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
+            { title: "CATEGORY", field: "category", hozAlign: "left", vertAlign: "middle" },
+            { title: "CATEGORY NAME", field: "name_category", hozAlign: "left", vertAlign: "middle" },
+            { title: "PROGRAM", field: "program_id", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            { title: "PROGRAM DETAILS", field: "program_dtls", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            { title: "UNIVERSITY VENUE", field: "university", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            { title: "SPONSORING AGENCY", field: "sponsoring", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            { title: "DATE", field: "university", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle" },
         ]
-    }); 
-}
+    });
+};
 // function searchaccomplishments(value){
 //     accomplishments.setFilter([
 //         [
@@ -98,47 +99,55 @@ function searchaccomplishments(value) {
 //accomplishment
 
 $('#submit-accomplishment-btn').on('click', function(event) {
+    event.preventDefault(); // Prevent the default form submission
     var form = $('#accomplishment-form')[0];
-    if (form.checkValidity() === false) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
     form.classList.add('was-validated');
-    
+
+    // Check if the form is valid
+    if (!form.checkValidity()) {
+        event.stopPropagation();
+        return;
+    }
+
+    // Manually add the CSRF token from the meta tag
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Submit the form data via AJAX
     $.ajax({
-        url: '/store-accomplishment',
+        url: '/store-accomplishment', // The route to handle the form submission
         type: 'POST',
-        data: $('#accomplishment-form').serialize(),
+        data: $('#accomplishment-form').serialize(), // Serialize the form data
         success: function(response) {
             Swal.fire({
                 title: "Success!",
                 text: response.message,
                 icon: "success"
             });
-            $('#accomplishment-form')[0].reset();
-            fetchaccomplishment();
+            $('#accomplishment-form')[0].reset(); // Reset the form
+            form.classList.remove('was-validated'); // Reset validation state
+            fetchaccomplishment(); // Refresh the table
         },
-        error: function (xhr, status) {
+        error: function(xhr, status) {
             throwError(xhr, status);
         }
     });
 });
-
-function fetchaccomplishment(){
+function fetchaccomplishment() {
     $.ajax({
-        url: '/fetch-accomplishment',
+        url: '/fetch-accomplishment', // The route to fetch the data
         type: 'GET',
         success: function(response) {
-            // console.log(response);
-            accomplishments.setData(response);
-            
+            accomplishments.setData(response); // Update the table with the new data
         },
-        error: function (xhr, status) {
+        error: function(xhr, status) {
             console.log("Error:", xhr.responseText);
         }
     });
 }
-
 $(document).on('click', '#edit-accomplishment-btn', function(e) {
     var id = $(this).attr('data-id');
     $('#EditAccomplishmentModal').attr('data-id', id);
@@ -230,4 +239,30 @@ $('#eventsAccomplishmentsCsvSemesterInput').change(function() {
 $('#default_school_year').change(function() {
     var yearValue = $(this).val();
     document.getElementById('eventsAccomplishmentsCsvYearInput').value = yearValue;
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('st_seminar_category');
+    const facultyLabel = document.getElementById('faculty-label');
+
+    categorySelect.addEventListener('change', function() {
+        const selectedCategory = this.value;
+
+        // Update the label based on the selected category
+        switch (selectedCategory) {
+            case 'Faculty':
+                facultyLabel.textContent = 'Faculty';
+                break;
+            case 'Department':
+                facultyLabel.textContent = 'Department';
+                break;
+            case 'College':
+                facultyLabel.textContent = 'College';
+                break;
+            default:
+                facultyLabel.textContent = 'Faculty'; // Default to Faculty if no category is selected
+                break;
+        }
+    });
 });

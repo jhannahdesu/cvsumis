@@ -65,7 +65,7 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Enrolees Report | <span class="enrolees-text"></span></h5>
+                  <h5 class="card-title">Enrollees Report | <span class="enrolees-text"></span></h5>
                   <div class="d-flex justify-content-start mb-2">
                     <div class="form-group me-2">
                       <label for="yearSelect" class="form-label">Academic Year</label>
@@ -132,7 +132,7 @@
     <div class="col-lg-6 col-md-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Extension Chart | <span class="extension_year_text"> All data</span></h5>
+                <h5 class="card-title">Extension Report | <span class="extension_year_text"> All data</span></h5>
                 <div class="d-flex justify-content-between align-items-end">
                     <div class="form-group me-2">
                         <label for="extension-year" class="form-label">Extension Year</label>

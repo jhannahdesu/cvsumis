@@ -271,3 +271,34 @@ $(document).on('click', '#activate-user-btn', function(){
         }
     });
 });
+
+$('#submit-user-btn').click(function () {
+    let form = $('#add-user-form');
+    if (form[0].checkValidity()) {
+        let data = {
+            firstname: $('#firstname').val(),
+            middlename: $('#middlename').val(), // ⬅️ ADD THIS LINE
+            lastname: $('#lastname').val(),
+            email: $('#email').val(),
+            department: $('#department').val(),
+            position: $('#position').val(),
+            _token: $('input[name="_token"]').val()
+        };
+
+        $.ajax({
+            url: '{{ route("your-user-create-route") }}', // Palitan ng tamang route
+            type: 'POST',
+            data: data,
+            success: function (response) {
+                Swal.fire('Success', 'Account created!', 'success');
+                $('#AddAccountModal').modal('hide');
+                form[0].reset();
+            },
+            error: function (xhr) {
+                Swal.fire('Error', 'Something went wrong.', 'error');
+            }
+        });
+    } else {
+        form.addClass('was-validated');
+    }
+});

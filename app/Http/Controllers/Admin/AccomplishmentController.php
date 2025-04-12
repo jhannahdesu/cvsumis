@@ -37,7 +37,7 @@ class AccomplishmentController extends Controller
 
     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'FACULTY', 'PROGRAM', 'PROGRAM DETAILS', 'UNIVERSITY', 'START DATE', 'END DATE']);
+    fputcsv($fp, ['ADDED BY', 'CATEGORY', 'CATEGORY NAME ','PROGRAM', 'PROGRAM DETAILS', 'UNIVERSITY VENUE', 'SPONSORING AGENCY ', 'START DATE', 'END DATE']);
 
     $query = EventsAndAccomplishments::latest()->with('created_by_dtls', 'program_details');
 
@@ -65,38 +65,39 @@ class AccomplishmentController extends Controller
     return response()->download($filename, 'Events_And_Accomplishments_List.csv', $headers)->deleteFileAfterSend(true);
 }
 
-    public function storeEventsAndAccomplishments(Request $request) {
-        try {
-            $validatedData = $request->validate([
-                'faculty' => 'required',
-                'program_id' => 'required|integer',
-                'program_dtls' => 'required',
-                'university' => 'required',
-                'start_date' => 'required',
-                'end_date' => 'required',
-            ]);
-    
-            try {
-                $validatedData['module'] = 2;
-                $validatedData['added_by'] = auth()->user()->id;
-                EventsAndAccomplishments::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Other Events/Accomplishments',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Other Events/Accomplishments',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
-            }
-        }catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
-        }
+public function storeEventsAndAccomplishments(Request $request) {
+    try {
+        $validatedData = $request->validate([
+            'seminar_category' => 'required', // Ensure this matches the form field name
+            'faculty' => 'required',
+            'program_id' => 'required|integer',
+            'program_dtls' => 'required',
+            'university' => 'required',
+            'sponsoring' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $validatedData['module'] = 2;
+        $validatedData['added_by'] = auth()->user()->id;
+        EventsAndAccomplishments::create($validatedData);
+
+        Helper::storeNotifications(
+            Auth::id(),
+            'You Added Data in Other Events/Accomplishments',
+            Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Other Events/Accomplishments',
+        );
+
+        DB::commit();
+        return response()->json(['message' => 'Data added successfully'], 200);
+    } catch (ValidationException $e) {
+        DB::rollBack();
+        return response()->json(['errors' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
     }
+}
 
     public function fetchEventsAndAccomplishmentsData(){
         $response = [];
@@ -113,7 +114,7 @@ class AccomplishmentController extends Controller
             $response[] = [
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
-                'faculty' => ucwords($item->faculty),
+                'category' => ucwords($item->faculty),
                 'program_id' => ucwords($item->program_details->program.'<br>'.$item->program_dtls),
                 'university' =>  ucwords($item->university).'<br>'.date('M d, Y', strtotime($item->start_date)).'-'.date('M d, Y', strtotime($item->end_date)),
                 'action' => $actions['button']
@@ -137,12 +138,14 @@ class AccomplishmentController extends Controller
         $data = EventsAndAccomplishments::where('id', $id)->first();
 
         return response()->json([
-            'faculty' => $data->faculty,
+            'category' => $data->category,
+            'name_category' => $data->name,
             'program_id' => $data->program_id,
             'program_dtls' => $data->program_dtls,
             'start_date' => date('Y-m-d', strtotime($data->start_date)),
             'end_date' => date('Y-m-d', strtotime($data->end_date)),
             'university' => $data->university,
+            'sponsoring' => $data->sponsoring,
          
         ]);
     }
@@ -151,10 +154,12 @@ class AccomplishmentController extends Controller
     public function updateEventsAndAccomplishments(Request $request, $id) {
         try {
             $validatedData = $request->validate([
-                'faculty' => 'required',
+                'category' => 'required',
+                'name_category' => 'required',
                 'program_id' => 'required|integer',
                 'program_dtls' => 'required',
                 'university' => 'required',
+                'sponsoring' => 'required',
                 'start_date' => 'required',
                 'end_date' => 'required',
             ]);

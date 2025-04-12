@@ -17,6 +17,13 @@
                 </div>
 
                 <div class="col-md-12">
+                    <label for="middlename" class="form-label">Middle Initial <small class="text-muted">(optional)</small></label>
+                    <input type="text" class="form-control" id="middlename" name="middlename" maxlength="1" pattern="[A-Za-z]" placeholder="e.g. A">
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Only one letter is allowed.</div>
+                </div>
+
+                <div class="col-md-12">
                     <label for="lastname" class="form-label">Lastname</label>
                     <input type="text" class="form-control" id="lastname" name="lastname" required>
                     <div class="valid-feedback">
@@ -187,3 +194,10 @@
         });
     });
 </script>
+
+<script>
+    document.getElementById('middlename').addEventListener('input', function () {
+        this.value = this.value.replace(/[^A-Za-z]/g, '').toUpperCase().charAt(0);
+    });
+</script>
+    
