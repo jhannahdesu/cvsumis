@@ -56,6 +56,7 @@ let accomplishmentTable = () => {
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
 <<<<<<< HEAD
+<<<<<<< HEAD
         rowFormatter: function (dom) {
             var selectedRow = dom.getData();
             dom.getElement().classList.add("table-light");
@@ -67,6 +68,10 @@ let accomplishmentTable = () => {
 =======
         rowFormatter: function(dom) {
             var selectedRow = dom.getData();
+=======
+        rowFormatter: function(dom) {
+            var selectedRow = dom.getData();
+>>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
             if (true) {
                 dom.getElement().classList.add("table-light");
             } else if (selectedRow.safety_stock == selectedRow.qty) {
@@ -86,7 +91,10 @@ let accomplishmentTable = () => {
         ]
     });
 };
+<<<<<<< HEAD
 >>>>>>> 454afcf (updt-13)
+=======
+>>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
 // function searchaccomplishments(value){
 //     accomplishments.setFilter([
 //         [

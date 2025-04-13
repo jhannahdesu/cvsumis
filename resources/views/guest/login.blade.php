@@ -370,7 +370,11 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="pt-2 pb-4 text-center">
+<<<<<<< HEAD
                                 <h5 class="card-title text-center pb-0 fs-4">Welcome!</h5>
+=======
+                                <h5 class="card-title text-center pb-0 fs-4">Welcome Back</h5>
+>>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
                                 <p class="text-center text-muted">Sign in to access your account</p>
                             </div>
 

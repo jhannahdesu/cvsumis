@@ -526,6 +526,7 @@
                     @endif
                     <div class="valid-feedback">Looks good!</div>
                     <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
+<<<<<<< HEAD
                 </div>
 
                 
@@ -541,6 +542,14 @@
                 <div class="col-md-2">
                     <label for="school_year" class="form-label">Units earned</label>
                     <input type="number" class="form-control" id="fgs_units" name="units" required>
+=======
+                </div>
+
+                
+                <div class="col-md-12">
+                    <label for="sholarship" class="form-label">Degree</label>
+                    <input type="text" class="form-control" id="fgs_degree" name="degree" placeholder="ex.MS Computer Science" required>
+>>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
                     <div class="valid-feedback">
                         Looks good!
                     </div>
