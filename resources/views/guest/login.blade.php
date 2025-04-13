@@ -370,7 +370,7 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="pt-2 pb-4 text-center">
-                                <h5 class="card-title text-center pb-0 fs-4">Welcome Back</h5>
+                                <h5 class="card-title text-center pb-0 fs-4">Welcome!</h5>
                                 <p class="text-center text-muted">Sign in to access your account</p>
                             </div>
 

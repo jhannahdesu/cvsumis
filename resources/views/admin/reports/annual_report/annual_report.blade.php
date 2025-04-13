@@ -33,8 +33,50 @@
         }
 
     </style>
+
+<style>
+        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        .container { text-align: center; margin: 50px; }
+        h1 { font-size: 24px; margin-bottom: 20px; }
+        h2 { font-size: 20px; margin-bottom: 15px; }
+        p { margin: 10px 0; }
+        .mission-vision { margin-top: 30px; }
+        .mission, .vision { border: 1px solid #000; padding: 15px; margin: 10px; }
+        footer {
+            position: fixed;
+            bottom: 10px;
+            left: 0px;
+            right: 0px;
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+        <h1>Annual Report</h1>
+        <h2>Cavite State University</h2>
+        <h2>College of Engineering and Information Technology</h2>
+        <h2>{{ $year }}</h2>
+
+        <div class="mission-vision">
+
+        <div class="vision">
+                <h3>Vision</h3>
+                <p>To be the center of excellence in the fields of engineering, industrial, and information technology.</p>
+            </div>
+            
+            <div class="mission">
+                <h3>Mission</h3>
+                <p>The College of Engineering and Information Technology was established to provide quality and affordable education through relevant instruction, research, and extension in the fields of engineering, information technology, and allied technologies towards the development of globally competent and morally upright individuals.</p>
+            </div>
+            
+        </div>
+    </div>
+
+    <footer>
+        <p>College of Engineering and Information Technology - ANNUAL REPORT {{ $year }}</p>
+    </footer>
     <center>
         <h2>ANNUAL REPORT {{ $year }} COLLEGE OF ENGINEERING AND INFORMATION TECHNOLOGY</h2>
     </center>

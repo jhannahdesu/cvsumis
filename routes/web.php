@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 Route::get('/home', function () {
     return view('welcome');
 });
@@ -286,6 +287,7 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
         Route::post('/update-faculty-scholar/{id}', [\App\Http\Controllers\Admin\FacultyStaffProfileController::class, 'updateFacultyScholar'])->name('faculty_scholar.update');
         Route::post('/remove-faculty-scholar/{id}', [\App\Http\Controllers\Admin\FacultyStaffProfileController::class, 'removeFacultyScholar'])->name('faculty_scholar.remove');
 
+        Route::post('/store-faculty-graduate-studies', [\App\Http\Controllers\Admin\FacultyStaffProfileController::class, 'storeFacultyGraduateStudies'])->name('store.faculty.graduate.studies');
         Route::post('/store-faculty-graduate-studies', [\App\Http\Controllers\Admin\FacultyStaffProfileController::class, 'storeFacultyGraduateStudies'])->name('faculty_graduate_studies.store');
         Route::get('/view-faculty-graduate-studies/{id}', [\App\Http\Controllers\Admin\FacultyStaffProfileController::class, 'viewFacultyGraduateStudies'])->name('faculty_graduate_studies.view');
         Route::post('/update-faculty-graduate-studies/{id}', [\App\Http\Controllers\Admin\FacultyStaffProfileController::class, 'updateFacultyGraduateStudies'])->name('faculty_graduate_studies.update');

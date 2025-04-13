@@ -14,6 +14,7 @@ class FacultyGraduteStudies extends Model
         'added_by',
         'faculty_name',
         'degree',
+        'units',
         'institution',
         'module',
         'date_of_graduation'

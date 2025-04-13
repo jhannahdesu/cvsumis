@@ -938,6 +938,7 @@ let facultyGraduateStudiesTable = () => {
         { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
         { title: "FACULTY NAME", field: "faculty_name", hozAlign: "left", vertAlign: "middle" },
         { title: "DEGREE", field: "degree", hozAlign: "left", vertAlign: "middle" },
+        { title: "UNITS", field: "units", hozAlign: "left", vertAlign: "middle" },
         { title: "INSTITUTION", field: "institution", hozAlign: "left", vertAlign: "middle" },
         { title: "DATE OF GRADUATION", field: "date_of_graduation", hozAlign: "left", vertAlign: "middle" },
     ];
@@ -999,6 +1000,7 @@ function searchfacultyGraduateStudies(value) {
                 !data.name.toLowerCase().includes(term) &&
                 !data.faculty_name.toLowerCase().includes(term) &&
                 !data.degree.toLowerCase().includes(term) &&
+                !data.units.toLowerCase().includes(term) &&
                 !data.institution.toLowerCase().includes(term) &&
                 !data.date_of_graduation.toLowerCase().includes(term)
             ) {
@@ -1015,33 +1017,38 @@ $('#faculty-graduate-studies-modal').click(function () {
 });
 //store-faculty-graduate-studies
 
-$('#submit-faculty-graduate-studies-btn').on('click', function(event) {
-    var form = $('#faculty-graduate-studies-form')[0];
-    if (form.checkValidity() === false) {
+$('#submit-faculty-graduate-studies-btn').on('click', function () {
+    let form = $('#faculty-graduate-studies-form');
+
+    if (form[0].checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
+        form.addClass('was-validated');
+        return;
     }
-    form.classList.add('was-validated');
-    
+
     $.ajax({
-        url: '/store-faculty-graduate-studies',
-        type: 'POST',
-        data: $('#faculty-graduate-studies-form').serialize(),
-        success: function(response) {
-            Swal.fire({
-                title: "Success!",
-                text: response.message,
-                icon: "success"
-            });
-            $('#faculty-graduate-studies-form')[0].reset();
+        url: "/storeFacultyGraduateStudies",
+        method: "POST",
+        data: form.serialize(),
+        success: function (response) {
+            toastr.success(response.message);
             $('#AddFacultyGraduateStudiesModal').modal('hide');
-           
+            form[0].reset();
+            facultyGraduateStudies.setData("/fetchFacultyGraduateStudies");
         },
-        error: function (xhr, status) {
-            throwError(xhr, status);
+        error: function (xhr) {
+            if (xhr.status === 422) {
+                toastr.error("Please fill in all required fields correctly.");
+            } else {
+                toastr.error("An error occurred while submitting.");
+            }
         }
     });
 });
+
+
+
 
 function fetchfacultyGraduateStudies(){
     $.ajax({
@@ -1069,6 +1076,7 @@ $(document).on('click','#edit-faculty-graduate-studies-btn', function(event){
         success: function(response) {
             $('#view_fgs_faculty_name').val(response.faculty_name);
             $('#view_fgs_degree').val(response.degree);
+            $('#view_fgs_units').val(response.units);
             $('#view_fgs_institution').val(response.institution);
             $('#view_fgs_date_of_graduation').val(response.date_of_graduation);
             

@@ -22,6 +22,9 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+
+
 class FacultyStaffProfileController extends Controller
 {
     public function index(){
@@ -772,7 +775,7 @@ class FacultyStaffProfileController extends Controller
 
     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'DEGREE', 'INSTITUTION', 'DATE OF GRADUATION']);
+    fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'DEGREE', 'UNITS', 'INSTITUTION', 'DATE OF GRADUATION']);
 
     $query = FacultyGraduteStudies::latest()->with('created_by_dtls');
 
@@ -792,6 +795,7 @@ class FacultyStaffProfileController extends Controller
             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
             ucwords($row->faculty_name),
             ucwords($row->degree),
+            $row->units,
             ucwords($row->institution),
             date('M d, Y', strtotime($row->date_of_graduation))
         ]);
@@ -804,36 +808,41 @@ class FacultyStaffProfileController extends Controller
     return response()->download($filename, 'Faculty_Graduate_Studies_List.csv', $headers)->deleteFileAfterSend(true);
 }
 
-    public function storeFacultyGraduateStudies(Request $request) {
-        try {
-            $validatedData = $request->validate([
-                'faculty_name' => 'required',
-                'degree' => 'required',
-                'institution' => 'required',
-                'date_of_graduation' => 'required',
-            ]);
-    
-            try {
-                $validatedData['module'] = 3;
-                $validatedData['added_by'] = auth()->user()->id;
-                FacultyGraduteStudies::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Faculty Staff List of faculty Members who completed their Graduated Studies',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Faculty Staff List of faculty Members who completed their Graduated Studies',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
-            }
-        }catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
-        }
+public function storeFacultyGraduateStudies(Request $request)
+{
+    // Validate the incoming request
+    $validatedData = $request->validate([
+        'faculty_name' => 'required',
+        'degree' => 'required',
+        'units' => 'required|numeric',
+        'institution' => 'required',
+        'date_of_graduation' => 'required|date',
+    ]);
+
+    // Start transaction
+    DB::beginTransaction();
+
+    try {
+        $validatedData['module'] = 3;
+        $validatedData['added_by'] = auth()->id();
+
+        FacultyGraduteStudies::create($validatedData);
+
+        Helper::storeNotifications(
+            auth()->id(),
+            'You Added Data in Faculty Staff List of faculty Members who completed their Graduated Studies',
+            auth()->user()->firstname . ' ' . auth()->user()->lastname . ' added data in Faculty Staff List of faculty Members who completed their Graduated Studies'
+        );
+
+        DB::commit();
+
+        return response()->json(['message' => 'Data added successfully'], 200);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
     }
+}
 
     public function fetchFacultyGraduateStudies(){
         $response = [];
@@ -857,6 +866,7 @@ class FacultyStaffProfileController extends Controller
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'faculty_name' => ucwords($item->faculty_name),
                 'degree' => ucwords($item->degree),
+                'units' => ucwords($item->units),
                 'institution' => ucwords($item->institution),
                 'date_of_graduation' => date('M d, Y', strtotime($item->date_of_graduation)),
                 'action' => $actions['button']
@@ -882,6 +892,7 @@ class FacultyStaffProfileController extends Controller
         return response()->json([
             'faculty_name' => $data->faculty_name,
             'degree' => $data->degree,
+            'units' => $data->units,
             'institution' => $data->institution,
             'date_of_graduation' => date('Y-m-d', strtotime($data->date_of_graduation)),
         ]);
@@ -892,6 +903,7 @@ class FacultyStaffProfileController extends Controller
             $validatedData = $request->validate([
                 'faculty_name' => 'required',
                 'degree' => 'required',
+                'units' => 'required',
                 'institution' => 'required',
                 'date_of_graduation' => 'required',
             ]);

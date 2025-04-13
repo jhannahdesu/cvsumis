@@ -529,9 +529,18 @@
                 </div>
 
                 
-                <div class="col-md-12">
+                <div class="col-md-10">
                     <label for="sholarship" class="form-label">Degree</label>
                     <input type="text" class="form-control" id="fgs_degree" name="degree" placeholder="ex.MS Computer Science" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+            
+                <div class="col-md-2">
+                    <label for="school_year" class="form-label">Units earned</label>
+                    <input type="number" class="form-control" id="fgs_units" name="units" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -566,7 +575,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">List of faculty Members who completed their Graduated Studies </h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Updated List of faculty Members who completed their Graduated Studies </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -580,9 +589,17 @@
                     </div>
                 </div>
                 
-                <div class="col-md-12">
+                <div class="col-md-10">
                     <label for="sholarship" class="form-label">Degree</label>
                     <input type="text" class="form-control" id="view_fgs_degree" name="degree" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="units_earned" class="form-label">Units earned</label>
+                    <input type="number" class="form-control" id="view_fgs_units" name="units" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>

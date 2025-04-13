@@ -37,15 +37,15 @@
 
 <body class="{{ Auth::user()->position == 4 ? 'no-sidebar' : '' }}" >
   <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center" style="background:rgb(244, 152, 59); color-font:black;">
+  <header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #D98324; height: 60px;">
   <!-- NAVIGATION (BURGER) AND LOGO -->
   {{-- FACULTY NAVIGATION --}}
-  <div class="d-flex align-items-center justify-content-between w-100">
+  <div class="d-flex align-items-center justify-content-between w-100 position-relative">
 
     @if(Auth::user()->position != 4)
       <div class="d-flex align-items-center">
         <!-- Hamburger Button with margin -->
-        <i class="bi bi-list toggle-sidebar-btn" style="margin-right: 15px;"></i>
+        <i class="bi bi-list toggle-sidebar-btn" style="margin-right: 20px; color: #000000;"></i>
 
         <!-- Logo -->
         <a href="{{ 
@@ -53,17 +53,34 @@
           (Auth::user()->position == 2 ? route('curriculum.index') : 
           route('admin.index')) 
         }}" class="logo d-flex align-items-center">
-            <img src="{{ asset('images/background/ceit.png') }}" alt="">
-            <span class="d-none d-lg-block ">CEIT</span>
+            <img src="{{ asset('images/background/ceit.png') }}" alt="Logo" style="width: 40px;" >
+            <div class="position-absolute top-50 start-50 translate-middle text-center">
+            <div class="fw-bold" style="font-size: 20px; line-height: 1.2; color: #000000;">
+              MANAGEMENT INFORMATION SYSTEM <br>
+              <span style="font-size: 13px; color: #000000;">for College of Engineering and Information Technology</span>
+            </div>
+          </div>
         </a>
       </div>
     @else
-      <!-- Logo only for faculty (no sidebar) -->
-      <a href="{{ route('faculty_staff_profile.index') }}" class="logo d-flex align-items-center">
-          <img src="{{ asset('images/background/ceit.png') }}" alt="">
-          <span class="d-none d-lg-block">CEIT</span>
-      </a>
+<!-- Logo only for faculty (no sidebar) -->
+<a href="{{ route('faculty_staff_profile.index') }}" class="logo d-flex align-items-center" style="position: relative;">
+    <img src="{{ asset('images/background/ceit.png') }}" alt="Logo" style="height: 60px; margin-right: 15px;">
+    
+</a>
+<div class="position-absolute top-50 start-50 translate-middle text-center">
+        <div class="fw-bold" style="font-size: 20px; line-height: 1.2; color: #000000;">
+            MANAGEMENT INFORMATION SYSTEM <br>
+            <span style="font-size: 13px; color: #000000;">
+                for College of Engineering and Information Technology
+            </span>
+        </div>
+    </div>
+
+      
     @endif
+
+
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -74,13 +91,13 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number notification-count">0</span>
+            <span class="badge bg-primary badge-number notification-count color: #000000;">0</span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" >
             <li class="dropdown-header">
-              You have <a href="#" class="notification-count">0</a> new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2 read-all-btn">Read all</span></a>
+              You have <a href="#" class="notification-count color: #000000;">0</a> new notifications
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2 read-all-btn color: #000000;">Read all</span></a>
               </li>
               <div id="notification_drop" style="max-height: 300px; overflow-y: auto;">
                 
@@ -96,9 +113,9 @@
             <span class="d-none d-md-block dropdown-toggle ps-2">{{ strtoupper(auth()->user()->firstname).' '.strtoupper(auth()->user()->lastname) }}</span>
           </a><!-- End Profile Iamge Icon -->
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-            <li class="dropdown-header">
-              <h6>{{ strtoupper(auth()->user()->firstname.' '.auth()->user()->lastname) }}</h6>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile ">
+            <li class="dropdown-header color: #000000;">
+              <h6 class="color: #000000;">{{ strtoupper(auth()->user()->firstname.' '.auth()->user()->lastname) }}</h6>
               <span>{{ ucwords(auth()->user()->department_dtls->department.' - '.auth()->user()->position_dtls->position)}}</span>
             </li>
             <li>
@@ -162,7 +179,7 @@
     margin-left: 0 !important;
     transition: none !important;">
     <div class="copyright">
-      &copy; Copyright <strong><span>Project Thesis</span></strong>. All Rights Reserved
+      &copy; Copyright <strong><span>Project Thesis</span></strong>. All Rights Reserved 2025
     </div>
     <div class="credits">
       Designed by Our Group</a>
