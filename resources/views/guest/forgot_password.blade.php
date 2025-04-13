@@ -237,21 +237,19 @@
                 <!-- Left logo -->
                 <img src="{{ asset('images/background/cvsu1.png') }}" alt="Cavite State University Logo" class="logo-left">
 
-                <!-- Center title -->
-                <div class="title-container">
-                    <div class="system-title">MANAGEMENT INFORMATION SYSTEM</div>
-                    <div class="login-divider"></div>
-                    <div class="system-subtitle">for College of Engineering and Information Technology</div>
+                <div class="title-container" style="display: flex; justify-content: center; align-items: center; margin-top: -200px; margin-bottom: 5px;">
+                    <img src="{{ asset('images/logo/titlelogo.png') }}" alt="System Title Logo" style="max-width: 450px; width: 100%; height: auto;">
                 </div>
+
 
                 <!-- Right logo -->
                 <img src="{{ asset('images/background/ceit.png') }}" alt="CEIT Logo" class="logo-right">
             </div>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-5 col-md-8 d-flex flex-column align-items-center justify-content-center">
-                    <div class="card mb-4">
-                        <div class="card-body">
+            <div class="row justify-content-center mt-5"> <!-- Add small top margin -->
+                        <div class="col-lg-4 col-md-2 d-flex flex-column align-items-center justify-content-start" style="margin-top: -80px;"> <!-- Adjust width & position -->
+                            <div class="card mb-1" style="width: 120%;"> 
+                                <div class="card-body p-4">
                             <div class="pt-2 pb-4 text-center">
                                 <h5 class="card-title text-center pb-0 fs-4">Reset Password</h5>
                                 <p class="text-center text-muted">Enter your email to receive password reset instructions</p>

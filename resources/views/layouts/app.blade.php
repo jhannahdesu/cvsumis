@@ -53,25 +53,30 @@
           (Auth::user()->position == 2 ? route('curriculum.index') : 
           route('admin.index')) 
         }}" class="logo d-flex align-items-center">
-            <img src="{{ asset('images/background/ceit.png') }}" alt="Logo" style="width: 40px;" >
+        <div style="height: 65px; display: flex; align-items: center;">
+          <img src="{{ asset('images/logo/titlelogo.png') }}" alt="Logo" style="max-height: 100%; width: auto; margin-right: -10px;">
+      </div>
             <div class="position-absolute top-50 start-50 translate-middle text-center">
-            <div class="fw-bold" style="font-size: 20px; line-height: 1.2; color: #000000;">
+            <div class="fw-bold" style="font-size: 15px; line-height: 1.2; color: #000000;">
               MANAGEMENT INFORMATION SYSTEM <br>
-              <span style="font-size: 13px; color: #000000;">for College of Engineering and Information Technology</span>
+              <span style="font-size: 10px; color: #000000;">for College of Engineering and Information Technology</span>
             </div>
           </div>
         </a>
       </div>
     @else
+
+
 <!-- Logo only for faculty (no sidebar) -->
 <a href="{{ route('faculty_staff_profile.index') }}" class="logo d-flex align-items-center" style="position: relative;">
-    <img src="{{ asset('images/background/ceit.png') }}" alt="Logo" style="height: 60px; margin-right: 15px;">
-    
+<div style="height: 65px; display: flex; align-items: center;">
+          <img src="{{ asset('images/logo/titlelogo.png') }}" alt="Logo" style="max-height: 100%; width: auto; margin-right: -10px;">
+      </div> 
 </a>
 <div class="position-absolute top-50 start-50 translate-middle text-center">
-        <div class="fw-bold" style="font-size: 20px; line-height: 1.2; color: #000000;">
+        <div class="fw-bold" style="font-size: 15px; line-height: 1.2; color: #000000;">
             MANAGEMENT INFORMATION SYSTEM <br>
-            <span style="font-size: 13px; color: #000000;">
+            <span style="font-size: 10px; color: #000000;">
                 for College of Engineering and Information Technology
             </span>
         </div>

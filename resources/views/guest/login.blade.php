@@ -416,7 +416,7 @@
                                         <p class="text-center text-muted">Sign in to access your account</p>
                         </div>
 
-                            <form class="row g-3 needs-validation" id="login_form">
+                            <form class="row g-1 needs-validation" id="login_form">
                                 <div class="col-12">
                                     <label for="yourUsername" class="form-label">Email Address</label>
                                     <div class="input-group has-validation">
