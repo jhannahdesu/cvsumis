@@ -38,15 +38,9 @@
         <div class="accordion accordion-flush" id="accordionFlushExample">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-<<<<<<< HEAD
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEducationalAttainment" aria-expanded="false" aria-controls="collapseEducationalAttainment">
                     Educational attainment 
                 </button>
-=======
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Faculty-profile-by-educational-attainment" aria-expanded="false" aria-controls="Faculty-profile-by-educational-attainment">
-                        Educational attainment 
-                    </button>
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
                 </h2>
                 <div id="collapseEducationalAttainment" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                     <section class="col-lg-12">    
@@ -95,11 +89,7 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Faculty-profile-by-nature-of-appointment" aria-expanded="false" aria-controls="Faculty-profile-by-nature-of-appointment">
-<<<<<<< HEAD
                            Nature of appointment  
-=======
-                            Nature of appointment  
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
                         </button>
                     </h2>
                     <div id="Faculty-profile-by-nature-of-appointment" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -250,11 +240,7 @@
                         <section class="col-lg-12">    
                             <article class="card">
                                 <div class="card-body">
-<<<<<<< HEAD
                                     <h5 class="card-title">  List of faculty Members who completed their Graduated Studies </h5>
-=======
-                                    <h5 class="card-title"> List of faculty Members who completed their Graduated Studies </h5>
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
                                     <div class="d-flex justify-content-between mb-3">
                                         <form class="form-inline">
                                             <input class="form-control mr-sm-2" type="search" oninput="searchfacultyGraduateStudies(value)" placeholder="Search" aria-label="Search">
@@ -329,11 +315,7 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#List-of-recognition-and-award-received-by-the-faculty-members" aria-expanded="false" aria-controls="List-of-recognition-and-award-received-by-the-faculty-members">
-<<<<<<< HEAD
                             Awards and recognition received
-=======
-                            Awards and Recognition received
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
                         </button>
                     </h2>
                     <div id="List-of-recognition-and-award-received-by-the-faculty-members" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -381,11 +363,7 @@
                         <section class="col-lg-12">    
                             <article class="card">
                                 <div class="card-body">
-<<<<<<< HEAD
                                     <h5 class="card-title">   List of paper presentations of the faculty members </h5>
-=======
-                                    <h5 class="card-title">  List of paper presentations of the faculty members  </h5>
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
                                     <div class="d-flex justify-content-between mb-3">
                                         <form class="form-inline">
                                             <input class="form-control mr-sm-2" type="search" oninput="searchpresentations(value)" placeholder="Search" aria-label="Search">

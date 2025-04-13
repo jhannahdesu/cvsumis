@@ -339,6 +339,38 @@
             width: 95%;
             max-height: 85vh;
         }
+
+        .title-container {
+        margin-top: -20px; /* Adjust this value to move logo higher */
+        margin-bottom: 15px; /* Add some space between logo and form */
+        }
+
+.title-logo {
+    max-width: 200px; /* reasonable width for desktops */
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 576px) {
+    .title-logo {
+        max-width: 150px; /* smaller on mobile */
+    }
+}
+
+.col-lg-4 {
+  max-width: 380px; /* Slightly reduce width */
+}
+
+.card {
+  transform: scale(0.95); /* Slightly reduce overall size */
+  transform-origin: top center;
+}
+
+/* Ensure form is positioned properly */
+.row.justify-content-center {
+  margin-top: -10px; /* Move form up slightly */
+}
+
     }
 </style>
 
@@ -353,30 +385,36 @@
             <div class="header-container">
                 <!-- Left logo -->
                 <img src="{{ asset('images/background/cvsu1.png') }}" alt="Cavite State University Logo" class="logo-left">
-
+            </div>
                 <!-- Center title -->
-                <div class="title-container">
+                <!-- <div class="title-container">
                     <div class="system-title">MANAGEMENT INFORMATION SYSTEM</div>
                     <div class="login-divider"></div>
                     <div class="system-subtitle">for College of Engineering and Information Technology</div>
+                </div> -->
+<!-- Title logo -->
+                               
+                <div class="title-container" style="display: flex; justify-content: center; align-items: center; margin-top: -200px; margin-bottom: 5px;">
+                    <img src="{{ asset('images/logo/titlelogo.png') }}" alt="System Title Logo" style="max-width: 450px; width: 100%; height: auto;">
                 </div>
 
-                <!-- Right logo -->
-                <img src="{{ asset('images/background/ceit.png') }}" alt="CEIT Logo" class="logo-right">
-            </div>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-5 col-md-8 d-flex flex-column align-items-center justify-content-center">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div class="pt-2 pb-4 text-center">
-<<<<<<< HEAD
-                                <h5 class="card-title text-center pb-0 fs-4">Welcome!</h5>
-=======
-                                <h5 class="card-title text-center pb-0 fs-4">Welcome Back</h5>
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
-                                <p class="text-center text-muted">Sign in to access your account</p>
-                            </div>
+
+
+                <!-- Right logo -->
+                <div class="header-container">
+                    <img src="{{ asset('images/background/ceit.png') }}" alt="CEIT Logo" class="logo-right">
+                </div>
+
+                <div class="row justify-content-center mt-5"> <!-- Add small top margin -->
+                        <div class="col-lg-3 col-md-2 d-flex flex-column align-items-center justify-content-start" style="margin-top: -103px;"> <!-- Adjust width & position -->
+                            <div class="card mb-1" style="width: 120%;"> 
+                                <div class="card-body p-4">
+                                
+                                    <div class="pt: -2px pb-1 text-center">
+                                        <h5 class="card-title text-center pb-0 fs-4">Welcome!</h5>
+                                        <p class="text-center text-muted">Sign in to access your account</p>
+                        </div>
 
                             <form class="row g-3 needs-validation" id="login_form">
                                 <div class="col-12">
