@@ -78,7 +78,7 @@ class GraduateController extends Controller
             ucwords($row->semester),
             $row->school_year,
             $row->number_of_student,
-            date('M d, Y', strtotime($row->graduate_date))
+            date('F d, Y', strtotime($row->graduate_date))
         ]);
     }
 
@@ -174,7 +174,8 @@ class GraduateController extends Controller
                 'school_year' => $item->school_year,
                 'number_of_student' => $item->number_of_student,
                 'program_id' => ucwords($item->program_dtls->program),
-                'date' => date('M d, Y', strtotime($item->graduate_date)),
+                'date' => date('F d, Y', strtotime($item->graduate_date)),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -183,7 +184,7 @@ class GraduateController extends Controller
 
     public function headerAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-hdr-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn-outline-dark-orange btn-sm px-3 me-1" id="edit-hdr-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-graduate-hdr-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -213,7 +214,7 @@ class GraduateController extends Controller
     public function detailsAction($data){
 
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-dlts-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-dlts-modal" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-graduate-dtls-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

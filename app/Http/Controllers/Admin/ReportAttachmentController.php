@@ -75,7 +75,7 @@ class ReportAttachmentController extends Controller
                 'module_id' => ucwords(strtolower($item->module_dtls->module)),
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'attachment_detail' => $item->attachment_detail,
-                'created_at' => $item->created_at->format('M d, Y'),
+                'created_at' => $item->created_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -84,8 +84,8 @@ class ReportAttachmentController extends Controller
 
     public function header_action($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-attachment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
-            <button type="button" class="btn btn-outline-warning btn-sm px-3" id="view-attachment-btn" data-id="'.$data->id.'"><i class="bi bi-file-image"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-attachment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-warning btn-sm px-3 me-1" id="view-attachment-btn" data-id="'.$data->id.'"><i class="bi bi-file-image"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-header-attachment-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

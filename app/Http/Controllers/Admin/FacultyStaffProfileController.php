@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-
 class FacultyStaffProfileController extends Controller
 {
     public function index(){
@@ -68,53 +67,53 @@ class FacultyStaffProfileController extends Controller
         return $data;
     }
 
-    public function EducationalAttainmentCSV(Request $request)
-    {
-        $directory = public_path('reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
+    // public function EducationalAttainmentCSV(Request $request)
+    // {
+    //     $directory = public_path('reports');
+    //     if (!file_exists($directory)) {
+    //         mkdir($directory, 0755, true);
+    //     }
     
-        $filename = $directory . '/Faculty_Educational_Attainment_List.csv';
+    //     $filename = $directory . '/Faculty_Educational_Attainment_List.csv';
     
-        $fp = fopen($filename, "w+");
+    //     $fp = fopen($filename, "w+");
     
-        fputcsv($fp, ['ADDED BY', 'EDUCATION ATTAINMENT', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
+    //     fputcsv($fp, ['ADDED BY', 'EDUCATION ATTAINMENT', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
     
-        $query = EducationalAttainment::latest()->with('created_by_dtls', 'education_dtls');
+    //     $query = EducationalAttainment::latest()->with('created_by_dtls', 'education_dtls');
     
-        // Apply filters if provided
-        if ($request->has('semester') && !empty($request->semester)) {
-            $query->where('semester', $request->semester);
-        }
+    //     // Apply filters if provided
+    //     if ($request->has('semester') && !empty($request->semester)) {
+    //         $query->where('semester', $request->semester);
+    //     }
     
-        if ($request->has('school_year') && !empty($request->school_year)) {
-            $query->where('school_year', $request->school_year);
-        }
+    //     if ($request->has('school_year') && !empty($request->school_year)) {
+    //         $query->where('school_year', $request->school_year);
+    //     }
     
-        $data = $query->get();
+    //     $data = $query->get();
     
-        foreach ($data as $row) {
-            if ($row->created_by_dtls && $row->education_dtls) {
-                fputcsv($fp, [
-                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-                    ucwords($row->education_dtls->type),
-                    ucwords($row->semester),
-                    $row->school_year,
-                    $row->number_of_faculty
-                ]);
-            } else {
-                // You can either skip this record or add a default value
-                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
-            }
-        }
+    //     foreach ($data as $row) {
+    //         if ($row->created_by_dtls && $row->education_dtls) {
+    //             fputcsv($fp, [
+    //                 ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+    //                 ucwords($row->education_dtls->type),
+    //                 ucwords($row->semester),
+    //                 $row->school_year,
+    //                 $row->number_of_faculty
+    //             ]);
+    //         } else {
+    //             // You can either skip this record or add a default value
+    //             // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
+    //         }
+    //     }
     
-        fclose($fp);
+    //     fclose($fp);
     
-        $headers = ['Content-Type' => 'text/csv'];
+    //     $headers = ['Content-Type' => 'text/csv'];
     
-        return response()->download($filename, 'Faculty_Educational_Attainment_List.csv', $headers)->deleteFileAfterSend(true);
-    }
+    //     return response()->download($filename, 'Faculty_Educational_Attainment_List.csv', $headers)->deleteFileAfterSend(true);
+    // }
 
     public function storeEducationalAttainment(Request $request) {
         try {
@@ -177,6 +176,7 @@ class FacultyStaffProfileController extends Controller
                     'semester' => ucwords($item->semester),
                     'number_of_faculty' => $item->number_of_faculty,
                     'school_year' => $item->school_year,
+                    'updated_at' => $item->updated_at->format('F d, Y'),
                     'action' => $actions['button']
                 ];
             }
@@ -186,7 +186,7 @@ class FacultyStaffProfileController extends Controller
 
     public function educationalAttainmentAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-education-attainment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-education-attainment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-educational-attainment-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -361,6 +361,7 @@ class FacultyStaffProfileController extends Controller
                     'semester' => ucwords($item->semester),
                     'number_of_faculty' => $item->number_of_faculty,
                     'school_year' => $item->school_year,
+                    'updated_at' => $item->updated_at->format('F d, Y'),
                     'action' => $actions['button']
                 ];
             }
@@ -370,7 +371,7 @@ class FacultyStaffProfileController extends Controller
 
     public function NatureAppointmentAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-nature-appointment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-nature-appointment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-nature-appointment-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -544,6 +545,7 @@ class FacultyStaffProfileController extends Controller
                     'semester' => ucwords($item->semester),
                     'number_of_faculty' => $item->number_of_faculty,
                     'school_year' => $item->school_year,
+                    'updated_at' => $item->updated_at->format('F d, Y'),
                     'action' => $actions['button']
                 ];
             }
@@ -553,7 +555,7 @@ class FacultyStaffProfileController extends Controller
 
     public function AcademicRankAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-academic-rank-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-academic-rank-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-academic-rank-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -609,54 +611,48 @@ class FacultyStaffProfileController extends Controller
     }
 
     // List of faculty scholars
-
     public function FacultyScholarCSV(Request $request)
-    {
-        $directory = public_path('reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
-    
-        $filename = $directory . '/Faculty_Scholars_List.csv';
-    
-        $fp = fopen($filename, "w+");
-    
-        fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'SCHOLARSHIP', 'INSTITUTION', 'PROGRAM']);
-    
-        $query = FacultyScholars::latest()->with('created_by_dtls');
-    
-        // Apply filters if provided
-        if ($request->has('semester') && !empty($request->semester)) {
-            $query->where('semester', $request->semester);
-        }
-    
-        if ($request->has('school_year') && !empty($request->school_year)) {
-            $query->where('school_year', $request->school_year);
-        }
-    
-        $data = $query->get();
-    
-        foreach ($data as $row) {
-            if ($row->created_by_dtls) {
-                fputcsv($fp, [
-                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-                    ucwords($row->faculty_name),
-                    ucwords($row->scholarship),
-                    ucwords($row->institution),
-                    ucwords($row->program)
-                ]);
-            } else {
-                // You can either skip this record or add a default value
-                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
-            }
-        }
-    
-        fclose($fp);
-    
-        $headers = ['Content-Type' => 'text/csv'];
-    
-        return response()->download($filename, 'Faculty_Scholars_List.csv', $headers)->deleteFileAfterSend(true);
+{
+    $directory = public_path('reports');
+    if (!file_exists($directory)) {
+        mkdir($directory, 0755, true);
     }
+
+    $filename = $directory . '/Faculty_Scholars_List.csv';
+
+    $fp = fopen($filename, "w+");
+
+    fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'SCHOLARSHIP', 'INSTITUTION', 'PROGRAM']);
+
+    $query = FacultyScholars::latest()->with('created_by_dtls');
+
+    // Apply filters if provided
+    if ($request->has('semester') && !empty($request->semester)) {
+        $query->where('semester', $request->semester);
+    }
+
+    if ($request->has('school_year') && !empty($request->school_year)) {
+        $query->where('school_year', $request->school_year);
+    }
+
+    $data = $query->get();
+
+    foreach ($data as $row) {
+        fputcsv($fp, [
+            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+            ucwords($row->faculty_name),
+            ucwords($row->scholarship),
+            ucwords($row->institution),
+            ucwords($row->program)
+        ]);
+    }
+
+    fclose($fp);
+
+    $headers = ['Content-Type' => 'text/csv'];
+
+    return response()->download($filename, 'Faculty_Scholars_List.csv', $headers)->deleteFileAfterSend(true);
+}
 
     public function storeFacultyScholar(Request $request) {
         try {
@@ -693,34 +689,50 @@ class FacultyStaffProfileController extends Controller
         $response = [];
         
         if(Auth::user()->position == 1 || Auth::user()->position == 5){
-            $data = FacultyScholars::with('created_by_dtls')->orderBy('created_at', 'desc')->get();
+            $data = FacultyScholars::orderBy('created_at', 'desc')->get();
         }else{
             if(Auth::user()->position != 4){
                 $data = FacultyScholars::whereHas('created_by_dtls', function ($query) {
                     $query->where('department', Auth::user()->department);
-                })->with('created_by_dtls')->orderBy('created_at', 'desc')->get();
+                })->orderBy('created_at', 'desc')->get();
             }else{
-                $data = FacultyScholars::where('added_by', Auth::id())->with('created_by_dtls')->get();
+                $data = FacultyScholars::where('added_by', Auth::id())->get();
             }
-    
+
         }
         foreach ($data as $key=>$item) {
-            if ($item->created_by_dtls) {
-                $actions = $this->FacultyScholarAction($item);
-                $response[] = [
-                    'no' => ++$key,
-                    'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
-                    'faculty_name' => ucwords($item->faculty_name),
-                    'scholarship' => ucwords($item->scholarship),
-                    'institution' => ucwords($item->institution),
-                    'program' => ucwords($item->program),
-                    'action' => $actions['button']
-                ];
-            }
+            $actions = $this->FacultyScholarAction($item);
+            $response[] = [
+                'no' => ++$key,
+                'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
+                'faculty_name' => ucwords($item->faculty_name),
+                'scholarship' => ucwords($item->scholarship),
+                'institution' => ucwords($item->institution),
+                'program' => ucwords($item->program),
+                'updated_at' => $item->updated_at->format('F d, Y'),
+                'action' => $actions['button']
+            ];
         }
         return response()->json($response);
     }
-    
+
+    public function FacultyScholarAction($data){
+        $button = '
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-faculty-scholar-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-faculty-scholar-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
+        ';
+
+        return [
+            'button' => $button,
+        ];
+    }
+
+    public function viewFacultyScholar($id){
+        $data = FacultyScholars::where('id', $id)->first();
+
+        return response()->json($data);
+    }
+
     public function updateFacultyScholar(Request $request, $id) {
         try {
             $validatedData = $request->validate([
@@ -797,7 +809,7 @@ class FacultyStaffProfileController extends Controller
             ucwords($row->degree),
             $row->units,
             ucwords($row->institution),
-            date('M d, Y', strtotime($row->date_of_graduation))
+            date('F d, Y', strtotime($row->date_of_graduation))
         ]);
     }
 
@@ -868,7 +880,8 @@ public function storeFacultyGraduateStudies(Request $request)
                 'degree' => ucwords($item->degree),
                 'units' => ucwords($item->units),
                 'institution' => ucwords($item->institution),
-                'date_of_graduation' => date('M d, Y', strtotime($item->date_of_graduation)),
+                'date_of_graduation' => date('F d, Y', strtotime($item->date_of_graduation)),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -877,7 +890,7 @@ public function storeFacultyGraduateStudies(Request $request)
 
     public function FacultyGraduateStudiesAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-faculty-graduate-studies-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-faculty-graduate-studies-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-faculty-graduate-studies-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -972,7 +985,7 @@ public function storeFacultyGraduateStudies(Request $request)
             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
             ucwords($row->conference_title),
             ucwords($row->participants),
-            date('M d, Y', strtotime($row->date)),
+            date('F d, Y', strtotime($row->date)),
             ucwords($row->venue),
             ucwords($row->seminar_category),
             ucwords($row->sponsoring_agency)
@@ -1041,10 +1054,11 @@ public function storeFacultyGraduateStudies(Request $request)
                 'conference_title' => ucwords($item->conference_title),
                 'participants' => ucwords($item->participants),
                 'venue' => ucwords($item->venue),
-                // 'date' => date('M d, Y', strtotime($item->date)),
+                // 'date' => date('F d, Y', strtotime($item->date)),
                 'date' => $item->date,
                 'seminar_category' => ucwords($item->seminar_category),
                 'sponsoring_agency' => ucwords($item->sponsoring_agency),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -1053,7 +1067,7 @@ public function storeFacultyGraduateStudies(Request $request)
 
     public function SeminarTrainingAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-seminar-training-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-seminar-training-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-seminar-training-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -1154,7 +1168,7 @@ public function storeFacultyGraduateStudies(Request $request)
             ucwords($row->awardee_name),
             ucwords($row->award),
             ucwords($row->agency),
-            date('M d, Y', strtotime($row->date_received)),
+            date('F d, Y', strtotime($row->date_received)),
             ucwords($row->event)
         ]);
     }
@@ -1221,9 +1235,10 @@ public function storeFacultyGraduateStudies(Request $request)
                 'award_type' => ucwords($item->award_type),
                 'awardee_name' => ucwords($item->awardee_name),
                 'award' => ucwords($item->award),
-                'date_received' => date('M d, Y', strtotime($item->date_received)),
+                'date_received' => date('F d, Y', strtotime($item->date_received)),
                 'agency' => ucwords($item->agency),
                 'event' => ucwords($item->event),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -1232,7 +1247,7 @@ public function storeFacultyGraduateStudies(Request $request)
 
     public function RecognitionAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -1333,7 +1348,7 @@ public function storeFacultyGraduateStudies(Request $request)
             ucwords($row->conference_name),
             ucwords($row->paper_name),
             ucwords($row->presenter_name),
-            date('M d, Y', strtotime($row->date)),
+            date('F d, Y', strtotime($row->date)),
             ucwords($row->venue)
         ]);
     }
@@ -1403,7 +1418,8 @@ public function storeFacultyGraduateStudies(Request $request)
                 'conference_name' => ucwords($item->conference_name),
                 'paper_name' => ucwords($item->paper_name),
                 'presenter_name' => ucwords($item->presenter_name),
-                'date_venue' => date('M d, Y', strtotime($item->date)).' / '.ucwords($item->venue),
+                'date_venue' => date('F d, Y', strtotime($item->date)).' / '.ucwords($item->venue),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -1412,7 +1428,7 @@ public function storeFacultyGraduateStudies(Request $request)
 
     public function PresentationAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-presentation-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-presentation-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-presentation-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

@@ -32,20 +32,109 @@ function throwError(xhr, status){
 
 let universityResearchTable = () => {
     let columns = [
-        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-        { title: "AGENCY", field: "agency", hozAlign: "left", vertAlign: "middle" },
-        { title: "TITLE", field: "title", hozAlign: "left", vertAlign: "middle" },
-        { title: "RESEARCHER", field: "researcher", hozAlign: "left", vertAlign: "middle" },
-        { title: "STATUS", field: "status_details", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+        {
+            titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.2;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            ADDED BY
+                        </strong><br>
+                        <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                    </div>
+                `;
+            },
+            field: "name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+            formatter: function (cell) {
+                let data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
+            }
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    
+                </strong>
+            </div>`,
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    AGENCY
+                </strong>
+            </div>`,
+            field: "agency", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    TITLE
+                </strong>
+            </div>`,
+            field: "title", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    RESEARCHER
+                </strong>
+            </div>`,
+            field: "researcher", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    STATUS
+                </strong>
+            </div>`,
+            field: "status_details", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
+        },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
-            formatter: "html",
-            vertAlign: "middle"
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
         });
     }
 
@@ -60,9 +149,14 @@ let universityResearchTable = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
+        initialSort: [
+            { column: "updated_at", dir: "asc" }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns: columns
     });
@@ -264,20 +358,109 @@ $(document).on('click', '#remove-university-research-btn', function(){
 
 let extensionActvitieTable = () => {
     let columns = [
-        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-        { title: "EXTENSION ACTIVITY", field: "extension_activity", formatter: "html", hozAlign: "left", vertAlign: "middle" },
-        { title: "EXTENSIONIST", field: "extensionist", hozAlign: "left", vertAlign: "middle" },
-        { title: "NO. OF BENEFICIARIES", field: "number_of_beneficiaries", hozAlign: "left", vertAlign: "middle" },
-        { title: "PARTNER AGENCY", field: "partner_agency", hozAlign: "left", vertAlign: "middle" },
+        {
+            titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.2;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            ADDED BY
+                        </strong><br>
+                        <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                    </div>
+                `;
+            },
+            field: "name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+            formatter: function (cell) {
+                let data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
+            }
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    
+                </strong>
+            </div>`,
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    EXTENSION ACTIVITY
+                </strong>
+            </div>`,
+            field: "extension_activity",
+            formatter: "html",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    EXTENSIONIST
+                </strong>
+            </div>`,
+            field: "extensionist",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    NO. OF BENEFICIARIES
+                </strong>
+            </div>`,
+            field: "number_of_beneficiaries", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    PARTNER AGENCY
+                </strong>
+            </div>`,
+            field: "partner_agency",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
-            formatter: "html",
-            vertAlign: "middle"
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
         });
     }
 
@@ -292,9 +475,14 @@ let extensionActvitieTable = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
+        initialSort: [
+            { column: "updated_at", dir: "asc" }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns: columns
     });

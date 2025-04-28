@@ -28,19 +28,87 @@ function throwError(xhr, status){
 
 let accomplishmentTable = () => {
     let columns = [
-        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-        { title: "FACULTY", field: "faculty", hozAlign: "left", vertAlign: "middle" },
-        { title: "PROGRAM", field: "program_id", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-        { title: "SUC / DATE", field: "university", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+        {
+            titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.2;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            ADDED BY
+                        </strong><br>
+                        <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                    </div>
+                `;
+            },
+            field: "name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+            formatter: function (cell) {
+                let data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
+            }
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    FACULTY
+                </strong>
+            </div>`,
+            field: "faculty",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    PROGRAM
+                </strong>
+            </div>`,
+            field: "program_id", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    SUC / DATE
+                </strong>
+            </div>`,
+             field: "university",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
+        },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
-            formatter: "html",
-            vertAlign: "middle"
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
         });
     }
 
@@ -55,46 +123,19 @@ let accomplishmentTable = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
-<<<<<<< HEAD
-<<<<<<< HEAD
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
+        initialSort: [
+            { column: "updated_at", dir: "asc" }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns: columns
     });
 }
 
-=======
-        rowFormatter: function(dom) {
-            var selectedRow = dom.getData();
-=======
-        rowFormatter: function(dom) {
-            var selectedRow = dom.getData();
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
-            if (true) {
-                dom.getElement().classList.add("table-light");
-            } else if (selectedRow.safety_stock == selectedRow.qty) {
-                dom.getElement().classList.add("table-warning");
-            }
-        },
-        columns: [
-            { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-            { title: "CATEGORY", field: "category", hozAlign: "left", vertAlign: "middle" },
-            { title: "CATEGORY NAME", field: "name_category", hozAlign: "left", vertAlign: "middle" },
-            { title: "PROGRAM", field: "program_id", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-            { title: "PROGRAM DETAILS", field: "program_dtls", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-            { title: "UNIVERSITY VENUE", field: "university", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-            { title: "SPONSORING AGENCY", field: "sponsoring", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-            { title: "DATE", field: "university", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-        ]
-    });
-};
-<<<<<<< HEAD
->>>>>>> 454afcf (updt-13)
-=======
->>>>>>> 454afcf06fcc35e03427b716300fa4460de3be36
 // function searchaccomplishments(value){
 //     accomplishments.setFilter([
 //         [
@@ -135,55 +176,47 @@ function searchaccomplishments(value) {
 //accomplishment
 
 $('#submit-accomplishment-btn').on('click', function(event) {
-    event.preventDefault(); // Prevent the default form submission
     var form = $('#accomplishment-form')[0];
-    form.classList.add('was-validated');
-
-    // Check if the form is valid
-    if (!form.checkValidity()) {
+    if (form.checkValidity() === false) {
+        event.preventDefault();
         event.stopPropagation();
-        return;
     }
-
-    // Manually add the CSRF token from the meta tag
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-    // Submit the form data via AJAX
+    form.classList.add('was-validated');
+    
     $.ajax({
-        url: '/store-accomplishment', // The route to handle the form submission
+        url: '/store-accomplishment',
         type: 'POST',
-        data: $('#accomplishment-form').serialize(), // Serialize the form data
+        data: $('#accomplishment-form').serialize(),
         success: function(response) {
             Swal.fire({
                 title: "Success!",
                 text: response.message,
                 icon: "success"
             });
-            $('#accomplishment-form')[0].reset(); // Reset the form
-            form.classList.remove('was-validated'); // Reset validation state
-            fetchaccomplishment(); // Refresh the table
+            $('#accomplishment-form')[0].reset();
+            fetchaccomplishment();
         },
-        error: function(xhr, status) {
+        error: function (xhr, status) {
             throwError(xhr, status);
         }
     });
 });
-function fetchaccomplishment() {
+
+function fetchaccomplishment(){
     $.ajax({
-        url: '/fetch-accomplishment', // The route to fetch the data
+        url: '/fetch-accomplishment',
         type: 'GET',
         success: function(response) {
-            accomplishments.setData(response); // Update the table with the new data
+            // console.log(response);
+            accomplishments.setData(response);
+            
         },
-        error: function(xhr, status) {
+        error: function (xhr, status) {
             console.log("Error:", xhr.responseText);
         }
     });
 }
+
 $(document).on('click', '#edit-accomplishment-btn', function(e) {
     var id = $(this).attr('data-id');
     $('#EditAccomplishmentModal').attr('data-id', id);
@@ -275,30 +308,4 @@ $('#eventsAccomplishmentsCsvSemesterInput').change(function() {
 $('#default_school_year').change(function() {
     var yearValue = $(this).val();
     document.getElementById('eventsAccomplishmentsCsvYearInput').value = yearValue;
-});
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const categorySelect = document.getElementById('st_seminar_category');
-    const facultyLabel = document.getElementById('faculty-label');
-
-    categorySelect.addEventListener('change', function() {
-        const selectedCategory = this.value;
-
-        // Update the label based on the selected category
-        switch (selectedCategory) {
-            case 'Faculty':
-                facultyLabel.textContent = 'Faculty';
-                break;
-            case 'Department':
-                facultyLabel.textContent = 'Department';
-                break;
-            case 'College':
-                facultyLabel.textContent = 'College';
-                break;
-            default:
-                facultyLabel.textContent = 'Faculty'; // Default to Faculty if no category is selected
-                break;
-        }
-    });
 });

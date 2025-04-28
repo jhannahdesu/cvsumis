@@ -109,6 +109,7 @@
     }
 
     .card {
+        margin-top: 5px;
         border: none;
         border-radius: 12px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -346,7 +347,7 @@
         }
 
 .title-logo {
-    max-width: 200px; /* reasonable width for desktops */
+    max-width: 150px; /* reasonable width for desktops */
     width: 100%;
     height: auto;
 }
@@ -375,87 +376,79 @@
 </style>
 
 <div class="bg-slideshow">
-    <!-- Background images will be added via JavaScript -->
+    <!-- Background images via JS -->
 </div>
 
 <div class="content-container">
-    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-20">
         <div class="container">
-            <!-- HEADER TITLE + LOGOS -->
-            <div class="header-container">
-                <!-- Left logo -->
-                <img src="{{ asset('images/background/cvsu1.png') }}" alt="Cavite State University Logo" class="logo-left">
+
+           <!-- Header section: CVSU + Title logo centered -->
+            <div class="d-flex flex-column align-items-center justify-content-center mb-10">
+                <div class="d-flex align-items-center justify-content-center gap-30 flex-wrap">
+                    <!-- CVSU logo -->
+                    <!-- <img src="{{ asset('images/background/cvsu1.png') }}" alt="Cavite State University Logo"
+                        class="img-fluid" style="height: 180px; width: 200px;"> -->
+
+                    <!-- Title logo -->
+                    <img src="{{ asset('images/logo/titlelogo.png') }}" alt="System Title Logo"
+                        class="img-fluid" style="height: 200px; width: 400px;">
+                </div>
             </div>
-                <!-- Center title -->
-                <!-- <div class="title-container">
-                    <div class="system-title">MANAGEMENT INFORMATION SYSTEM</div>
-                    <div class="login-divider"></div>
-                    <div class="system-subtitle">for College of Engineering and Information Technology</div>
-                </div> -->
-<!-- Title logo -->
-                               
-                <div class="title-container" style="display: flex; justify-content: center; align-items: center; margin-top: -200px; margin-bottom: 5px;">
-                    <img src="{{ asset('images/logo/titlelogo.png') }}" alt="System Title Logo" style="max-width: 450px; width: 100%; height: auto;">
-                </div>
 
+            <!-- Login Card -->
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-5 col-sm-15">
+                    <div class="card shadow-lg rounded-6 border-0">
+                        <div class="card-body p-3">
 
+                            <div class="text-center mb-2">
+                                <h5 class="card-title fs-4">Welcome!</h5>
+                                <p class="text-muted">Sign in to access your account</p>
+                            </div>
 
-
-                <!-- Right logo -->
-                <div class="header-container">
-                    <img src="{{ asset('images/background/ceit.png') }}" alt="CEIT Logo" class="logo-right">
-                </div>
-
-                <div class="row justify-content-center mt-5"> <!-- Add small top margin -->
-                        <div class="col-lg-3 col-md-2 d-flex flex-column align-items-center justify-content-start" style="margin-top: -103px;"> <!-- Adjust width & position -->
-                            <div class="card mb-1" style="width: 120%;"> 
-                                <div class="card-body p-4">
-                                
-                                    <div class="pt: -2px pb-1 text-center">
-                                        <h5 class="card-title text-center pb-0 fs-4">Welcome!</h5>
-                                        <p class="text-center text-muted">Sign in to access your account</p>
-                        </div>
-
-                            <form class="row g-1 needs-validation" id="login_form">
+                            <form class="row g-2 needs-validation" id="login_form" novalidate>
                                 <div class="col-12">
-                                    <label for="yourUsername" class="form-label">Email Address</label>
-                                    <div class="input-group has-validation">
-                                        <input type="email" name="email" class="form-control" placeholder="Enter your email address">
-                                        <div class="invalid-feedback">Please enter a valid email.</div>
-                                    </div>
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                                    <div class="invalid-feedback">Please enter a valid email.</div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="yourPassword" class="form-label">Password</label>
+                                    <label for="password" class="form-label">Password</label>
                                     <div class="input-group has-validation">
-                                        <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password">
+                                        <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required>
                                         <span class="input-group-text" id="show-password">
                                             <i class="bi bi-eye" id="eye-icon"></i>
                                         </span>
                                         <div class="invalid-feedback">Please enter your password!</div>
                                     </div>
                                 </div>
+
                                 <div class="col-12 d-flex justify-content-between align-items-center">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
                                         <label class="form-check-label" for="rememberMe">Remember me</label>
                                     </div>
-                                    <a href="{{ route('forgot_password.index') }}" class="text-end">Forgot Password?</a>
+                                    <a href="{{ route('forgot_password.index') }}">Forgot Password?</a>
                                 </div>
 
                                 <div class="col-12">
-                                    <button class="btn btn-primary w-100 login-btn" type="button" id="show-privacy-btn">
-                                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                                    <button class="btn btn-primary w-100 login-btn" type="submit">
+                                        <i class="bi bi-box-arrow-in-right me-3"></i>Sign In
                                     </button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 </div>
+
 
 <!-- Data Privacy Modal -->
 <div class="modal-privacy" id="privacyModal">

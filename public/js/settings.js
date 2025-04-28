@@ -32,7 +32,7 @@ let programTable = () => {
     programs = new Tabulator("#program-table", {
         dataTree:true,
         dataTreeSelectPropagate:true,
-        layout:"fitColumns",
+        layout: "fitDataFill", 
         maxHeight: "1000px",
         scrollToColumnPosition: "center",
         pagination:"local",
@@ -40,22 +40,50 @@ let programTable = () => {
         paginationSize:10,  
         paginationSizeSelector:[10,50,100],
         selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            //{title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
-            {title:"ABBREVIATION", field:"abbreviation", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+            { titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        PROGRAM
+                    </strong>
+                </div>`,
+                field:"program", 
+                headerHozAlign: "left",
+                headerSort: false,
+                hozAlign: "left",
+                vertAlign: "middle"
+            },
+            { titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ABBREVIATION
+                    </strong>
+                </div>`,
+                field:"abbreviation",
+                headerHozAlign: "left",
+                headerSort: false,
+                hozAlign: "left",
+                vertAlign: "middle"
+            },
+            { titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
+                field:"action",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+                formatter:"html"
+            },
         ]
     }); 
 }
@@ -231,20 +259,38 @@ let academicYearTable = () => {
         paginationSize:10,  
         paginationSizeSelector:[10,50,100],
         selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns:[
-            //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ACADEMIC YEAR", field:"academic_year", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+            { titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACADEMIC YEAR
+                    </strong>
+                </div>`,
+                field:"academic_year",
+                headerHozAlign: "left",
+                headerSort: false,
+                hozAlign: "left",
+                vertAlign: "middle"
+            },
+            { titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
+                field:"action",
+                headerHozAlign: "left",
+                headerSort: false,
+                hozAlign: "left",
+                vertAlign: "middle",
+                formatter:"html"
+            },
         ]
     }); 
 }

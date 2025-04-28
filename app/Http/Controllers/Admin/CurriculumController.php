@@ -73,267 +73,6 @@ class CurriculumController extends Controller
         return response()->json($years);
     }
 
-    //CSV
-    public function AccreditationStatusCSV(Request $request)
-    {
-        $directory = public_path('reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
-    
-        $filename = $directory . '/Accreditation Status.csv';
-    
-        $fp = fopen($filename, "w+");
-    
-        fputcsv($fp, ['PROGRAM', 'STATUS', 'VISIT DATE']);
-    
-        $query = AccreditationStatus::latest()->with('program_dtls', 'status_dtls');
-    
-        if ($request->has('year') && !empty($request->year)) {
-            $query->whereYear('visit_date', $request->year);
-        }
-    
-        $data = $query->get();
-    
-        foreach ($data as $row) {
-            $program = $row->program_dtls ? $row->program_dtls->program : 'N/A';
-            $status = $row->status_dtls ? $row->status_dtls->status : 'N/A';
-            $visitDate = $row->visit_date ? \Carbon\Carbon::parse($row->visit_date)->format('F d, Y') : 'N/A';
-    
-            fputcsv($fp, [$program, $status, "\"$visitDate\""]);
-        }
-    
-        fclose($fp);
-    
-        $headers = ['Content-Type' => 'text/csv'];
-    
-        return response()->download($filename, 'Accreditation Status.csv', $headers)->deleteFileAfterSend(true);
-    }
-
-    public function getGovRecognitionYears()
-    {
-        $years = ProgramsWithGovntRecognition::selectRaw('YEAR(date) as year')
-            ->whereNotNull('date')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
-
-        return response()->json($years);
-    }
-
-    public function GovRecognitionCSV(Request $request)
-    {
-        $directory = public_path('reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
-        $filename = $directory . '/Government Recognition.csv';
-
-        $fp = fopen($filename, "w+");
-
-        fputcsv($fp, ['PROGRAM', 'STATUS', 'COPC NUMBER', 'DATE']);
-
-        $query = ProgramsWithGovntRecognition::latest()->with('program_dtls', 'status_dtls', 'created_by_dtls');
-
-        if ($request->has('year') && !empty($request->year)) {
-            $query->whereYear('date', $request->year);
-        }
-
-        $data = $query->get();
-
-        foreach ($data as $row) {
-            $program = $row->program_dtls ? $row->program_dtls->program : 'N/A';
-            $status = $row->status_dtls ? $row->status_dtls->status : 'N/A';
-            $copc = $row->copc_number ?: 'N/A';
-            $date = $row->date ? \Carbon\Carbon::parse($row->date)->format('F d, Y') : 'N/A';
-
-            fputcsv($fp, [$program, $status, $copc, "\"$date\""]);
-        }
-
-        fclose($fp);
-
-        $headers = ['Content-Type' => 'text/csv'];
-
-        return response()->download($filename, 'Government Recognition.csv', $headers)->deleteFileAfterSend(true);
-    }
-
-    public function getLicensureExamYears()
-    {
-        $years = LicensureExamnination::selectRaw('YEAR(exam_date) as year')
-            ->whereNotNull('exam_date')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
-
-        return response()->json($years);
-    }
-
-    public function LicensureExamCSV(Request $request)
-    {
-            $directory = public_path('reports');
-            if (!file_exists($directory)) {
-                mkdir($directory, 0755, true);
-            }
-        
-            $filename = $directory . '/Licensure Examination Data.csv';
-        
-            $fp = fopen($filename, "w+");
-        
-            fputcsv($fp, [
-                'Examination Type',
-                'Exam Date',
-                'CvSU Passer',
-                'CvSU Total Takers',
-                'CvSU Passing Rate',
-                'National Total Passer',
-                'National Total Takers',
-                'National Passing Rate',
-                'CvSU Overall Taker',
-                'CvSU Overall Passer',
-                'CvSU Overall Passing Rate',
-                'National Overall Passer',
-                'National Overall Taker',
-                'National Overall Passing Rate',
-            ]);
-        
-            $query = LicensureExamnination::latest()->with('examination_type_dtls');
-        
-            if ($request->has('year') && !empty($request->year)) {
-                $query->whereYear('exam_date', $request->year);
-            }
-        
-            $data = $query->get();
-        
-            foreach ($data as $row) {
-                fputcsv($fp, [
-                    $row->examination_type_dtls ? $row->examination_type_dtls-> type: 'N/A',
-                    $row->exam_date ? \Carbon\Carbon::parse($row->exam_date)->format('F d, Y') : 'N/A',
-                    $row->cvsu_total_passer ?: 'N/A',
-                    $row->cvsu_total_takers ?: 'N/A',
-                    $row->cvsu_passing_rate ?: 'N/A',
-                    $row->national_total_passer ?: 'N/A',
-                    $row->national_total_takers ?: 'N/A',
-                    $row->national_passing_rate ?: 'N/A',
-                    $row->cvsu_overall_taker ?: 'N/A',
-                    $row->cvsu_overall_passer ?: 'N/A',
-                    $row->cvsu_overall_passing_rate ?: 'N/A',
-                    $row->national_overall_passer ?: 'N/A',
-                    $row->national_overall_taker ?: 'N/A',
-                    $row->national_overall_passing_rate ?: 'N/A',
-                ]);
-            }
-        
-            fclose($fp);
-        
-            $headers = ['Content-Type' => 'text/csv'];
-        
-            return response()->download($filename, 'Licensure Examination Data.csv', $headers)->deleteFileAfterSend(true);
-    }
-
-    public function getFacultyTvetYears()
-    {
-        $years = FacultyTVET::selectRaw('YEAR(date) as year')
-            ->whereNotNull('date')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year');
-
-        return response()->json($years);
-    }
-
-    public function FacultyTvetCSV(Request $request)
-    {
-        $directory = public_path('reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
-        $filename = $directory . '/Faculty_Tvet.csv';
-
-        $fp = fopen($filename, "w+");
-
-        fputcsv($fp, ['CERTIFICATION TYPE', 'CERTIFICATE DETAILS', 'CERTIFICATE HOLDER', 'DATE']);
-
-        $query = FacultyTVET::latest();
-
-        if ($request->has('year') && !empty($request->year)) {
-            $query->whereYear('date', $request->year);
-        }
-
-        $data = $query->get();
-
-        foreach ($data as $row) {
-            $visitDate = $row->date ? \Carbon\Carbon::parse($row->date)->format('F d, Y') : 'N/A';
-            fputcsv($fp, [
-                $row->certification_type_dtls ? $row->certification_type_dtls-> type: 'N/A',
-                $row->certificate_details,
-                $row->certificate_holder, 
-                "\"$visitDate\""
-            ]);
-        }
-
-        fclose($fp);
-
-        $headers = ['Content-Type' => 'text/csv'];
-
-        return response()->download($filename, 'Faculty_Tvet.csv', $headers)->deleteFileAfterSend(true);
-    }
-
-    public function StudentTvetCSV(Request $request)
-    {
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
-
-    $filename = $directory . '/Number_of_Students_with_National_TVET_Qualification.csv';
-
-    $fp = fopen($filename, "w+");
-
-    fputcsv($fp, ['CERTIFICATION TYPE', 'CERTIFICATE DETAILS', 'LOCATION', 'DATE', 'NUMBER OF STUDENTS']);
-
-    $query = StudentsTVET::latest();
-
-    if ($request->has('year') && !empty($request->year)) {
-        $query->whereYear('student_tvet_date', $request->year);
-    }
-
-    $data = $query->get();
-
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            $row->certification_type_dtls ? $row->certification_type_dtls->type : 'N/A',
-            $row->certificate_details,
-            $row->student_tvet_location,
-            $row->student_tvet_date ? \Carbon\Carbon::parse($row->student_tvet_date)->format('F d, Y') : 'N/A',
-            $row->number_of_student
-        ]);
-    }
-
-    fclose($fp);
-
-    $headers = ['Content-Type' => 'text/csv'];
-
-    return response()->download($filename, 'Number of Students with National TVET Qualification.csv', $headers)->deleteFileAfterSend(true);
-    }
-
-    public function getStudentTvetYears()
-    {
-    $years = StudentsTVET::selectRaw('YEAR(student_tvet_date) as year')
-        ->whereNotNull('student_tvet_date')
-        ->distinct()
-        ->orderBy('year', 'desc')
-        ->pluck('year');
-
-    return response()->json($years);
-    }
-
-
-
-    //-------------------------------------------------------------------------------------
-
-    
     public function storeAccreditationStatus(Request $request) {
         try {
             $validatedData = $request->validate([
@@ -382,6 +121,7 @@ class CurriculumController extends Controller
                 'program' => ucwords($item->program_dtls->program),
                 'status' => ucwords($item->status_dtls->status),
                 'date' => date('F d, Y', strtotime($item->visit_date)),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -390,7 +130,7 @@ class CurriculumController extends Controller
 
     public function accreditationStatusAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-accreditation-status-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn-outline-dark-orange btn-sm px-3 me-1" id="edit-accreditation-status-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-accreditation-status-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -500,6 +240,7 @@ class CurriculumController extends Controller
                 'status' => ucwords($item->status_dtls->status),
                 'copc' => ucwords($item->copc_number),
                 'date' => date('F d, Y', strtotime($item->date)),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -508,7 +249,7 @@ class CurriculumController extends Controller
 
     public function govRecognitionAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-gov-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn-outline-dark-orange btn-sm px-3 me-1" id="edit-gov-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-gov-recognition-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [
@@ -568,7 +309,7 @@ class CurriculumController extends Controller
         return response()->json(['message' => 'Data removed successfully'], 200);
     }
 
-    //Performance in the licensure examination (first time takers only) 
+    //Performance in the licensure examination
 
     public function storeLicensureExam(Request $request) {
         try {
@@ -634,7 +375,9 @@ class CurriculumController extends Controller
                 'national_overall_passing_rate' => $item->national_overall_passer.'/'.$item->national_overall_taker.'<br>'.$item->national_overall_passing_rate.'%',
                 // 'exam_date' => date('F d, Y', strtotime($item->exam_date)),
                 'exam_date' => $item->exam_date,
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
+
             ];
         }
         return response()->json($response);
@@ -642,7 +385,7 @@ class CurriculumController extends Controller
 
     public function licensureExamAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-licensure-exam-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn-outline-dark-orange btn-sm px-3 me-1" id="edit-licensure-exam-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-licensure-exam-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [
@@ -778,6 +521,7 @@ class CurriculumController extends Controller
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'certificate' => ucwords($item->certification_type_dtls->type),
                 'date' => date('F d, Y', strtotime($item->date)),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'details' =>$item->certificate_details,
                 'holder' => $item->certificate_holder,
                 'action' => $actions['button']
@@ -788,7 +532,7 @@ class CurriculumController extends Controller
 
     public function FacultyTvetAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-faculty-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn-outline-dark-orange btn-sm px-3 me-1" id="edit-faculty-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-faculty-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [
@@ -902,6 +646,8 @@ class CurriculumController extends Controller
                 'certificate' => ucwords($item->certification_type_dtls->type),
                 'details' =>$item->certificate_details,
                 'number' => $item->number_of_student,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -910,7 +656,7 @@ class CurriculumController extends Controller
 
     public function StudentTvetAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-student-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn-outline-dark-orange btn-sm px-3 me-1" id="edit-student-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-student-tvet-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
         return [

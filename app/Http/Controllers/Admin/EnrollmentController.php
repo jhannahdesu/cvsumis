@@ -143,7 +143,7 @@ class EnrollmentController extends Controller
                 'student_count' => $item->number_of_student,
                 'school_year' => $item->school_year,
                 'created_at' => $item->created_at,
-                
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -152,7 +152,7 @@ class EnrollmentController extends Controller
 
     public function action($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-modal-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn btn-outline-dark-orange btn-sm px-3 me-1" id="edit-modal-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-enrollment-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

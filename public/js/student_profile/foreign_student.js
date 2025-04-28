@@ -27,22 +27,132 @@ function throwError(xhr, status){
 }
 
 const foreignStudents = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '', endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3);
+                const startMonth = quarter * 3;
+                startDate = new Date(currentDate.getFullYear(), startMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), startMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
-        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-        { title: "COUNTRY", field: "country", hozAlign: "left", vertAlign: "middle" },
-        { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
-        { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
-        { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
-        { title: "NO. OF STUDENT", field: "student_count", hozAlign: "left", vertAlign: "middle" },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 1.2;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ADDED BY
+                    </strong><br>
+                    <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                </div>`,
+            field: "name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+            formatter: function (cell) {
+                let data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
+            }
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">COUNTRY</strong>
+                </div>`,
+            field: "country",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">PROGRAM</strong>
+                </div>`,
+            field: "program",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">SEMESTER</strong>
+                </div>`,
+            field: "semester",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">ACADEMIC YEAR</strong>
+                </div>`,
+            field: "school_year",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">NO. OF STUDENT</strong>
+                </div>`,
+            field: "student_count",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        }
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">ACTION</strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
             formatter: "html",
-            vertAlign: "middle"
+            vertAlign: "middle",
+            download: false
         });
     }
 
@@ -57,13 +167,119 @@ const foreignStudents = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
+        initialSort: [
+            { column: "updated_at", dir: "asc" }
+        ],
+        initialFilter: [
+            {
+                field: defaultDateFilter.column,
+                type: "between",
+                value: [startDate.toISOString(), endDate.toISOString()]
+            }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns: columns
     });
+};
+document.getElementById("foreign-student-filter-type").addEventListener("change", function () {
+    const type = this.value;
+    const valueSelect = document.getElementById("foreign-student-filter-value");
+    const yearSelect = document.getElementById("foreign-student-filter-year");
+
+    valueSelect.innerHTML = "";
+    yearSelect.innerHTML = "";
+
+    if (type === "all") {
+        studentTvets.clearFilter();
+        valueSelect.style.display = "none";
+        yearSelect.style.display = "none";
+        return;
+    }
+
+    valueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    yearSelect.style.display = "inline-block";
+
+    const data = studentTvets.getData();
+    const months = new Set();
+    const quarters = new Set();
+    const years = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        years.add(year);
+
+        if (type === "monthly") {
+            months.add(date.toLocaleString('default', { month: 'long' }));
+        } else if (type === "quarterly") {
+            quarters.add(`Q${Math.floor(date.getMonth() / 3) + 1}`);
+        }
+    });
+
+    if (type === "monthly") {
+        ["December","November","October","September","August","July","June","May","April","March","February","January"]
+        .forEach(month => {
+            if (months.has(month)) {
+                let opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                valueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quarters.has(q)) {
+                let opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                valueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    [...years].sort((a, b) => b - a).forEach(year => {
+        let opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        yearSelect.appendChild(opt);
+    });
+});
+document.getElementById("foreign-student-filter-value").addEventListener("change", applyStudentTvetFilter);
+document.getElementById("foreign-student-filter-year").addEventListener("change", applyStudentTvetFilter);
+
+function applyStudentTvetFilter() {
+    const type = document.getElementById("foreign-student-filter-type").value;
+    const selectedValue = document.getElementById("foreign-student-filter-value").value;
+    const selectedYear = document.getElementById("foreign-student-filter-year").value;
+
+    studentTvets.clearFilter();
+
+    studentTvets.setFilter(function (data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
 }
+document.getElementById("foreign-student-download-csv").addEventListener("click", function () {
+    studentTvets.download("csv", "Foreign Student.csv", { filter: true });
+});
 
 function searchForeignStudent(value){
     foreign_students.setFilter([
@@ -218,14 +434,14 @@ $(document).on('click', '#remove-foreign-student-btn', function(){
     });
 }); 
 
-$('#filter-status').change(function(){
-    var semesterValue = $('#filter-status').val();
-    foreign_students.setFilter([
-        [
-            {field:"semester", type:"like", value:semesterValue.trim()},
-        ]
-    ]);
+// $('#filter-status').change(function(){
+//     var semesterValue = $('#filter-status').val();
+//     foreign_students.setFilter([
+//         [
+//             {field:"semester", type:"like", value:semesterValue.trim()},
+//         ]
+//     ]);
     
-    // Set the value for the CSV download
-    document.getElementById('foreignStudentCsvSemesterInput').value = semesterValue;
-});
+//     // Set the value for the CSV download
+//     document.getElementById('foreignStudentCsvSemesterInput').value = semesterValue;
+// });

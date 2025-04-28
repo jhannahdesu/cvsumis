@@ -28,18 +28,75 @@ function throwError(xhr, status){
 
 const awardHeaderTable = () => {
     let columns = [
-        { title: "RECOGNITION", field: "award", hozAlign: "left", vertAlign: "middle" },
-        { title: "GRANTING AGENCY", field: "granting_agency", hozAlign: "left", vertAlign: "middle" },
-        { title: "YEAR", field: "year", hozAlign: "left", vertAlign: "middle" },
+        {
+            titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.2;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            UPDATED ON
+                        </strong>
+                    </div>
+                `;
+            },
+            field: "updated_at",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 1.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    RECOGNITION
+                </strong>
+            </div>`,
+            field: "award", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 1.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    GRANTING AGENCY
+                </strong>
+            </div>`,
+            field: "granting_agency", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 1.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    YEAR
+                </strong>
+            </div>`,
+            field: "year",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 1.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
             formatter: "html",
-            vertAlign: "middle"
         });
     }
 
@@ -54,11 +111,27 @@ const awardHeaderTable = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
-        },
-        columns: columns
+        initialSort: [
+            { column: "upadated_at", dir: "asc" }
+        ],
+        // initialFilter: [
+        //     {
+        //         field: defaultDateFilter.column,
+        //         type: "between",
+        //         value: [startDate.toISOString(), endDate.toISOString()]
+        //     }
+        // ],
+        columns: columns,
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            if (index % 2 === 0) {
+                element.style.backgroundColor = "#FFF1D1";
+            } else {
+                element.style.backgroundColor = "#ffffff";
+            }
+        }
     });
 }
 
@@ -75,18 +148,59 @@ function searchawardsHeader(value){
 
 let awardDetailsTable = () => {
     let columns = [
-        { title: "AWARD DETAILS", field: "award_details", hozAlign: "left", vertAlign: "middle" },
-        { title: "AWARD", field: "game_placement", hozAlign: "left", vertAlign: "middle" },
-        { title: "GRANTEES", field: "grantees_name", hozAlign: "left", vertAlign: "middle" },
+        
+        { titleFormatter: () =>
+            `<div style="line-height: 1.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    AWARD DETAILS
+                </strong>
+            </div>`,
+            field: "award_details",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 1.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    AWARDS
+                </strong>
+            </div>`,
+            field: "game_placement",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 1.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    GRANTEES
+                </strong>
+            </div>`,
+            field: "grantees_name", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 1.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
             formatter: "html",
-            vertAlign: "middle"
         });
     }
 

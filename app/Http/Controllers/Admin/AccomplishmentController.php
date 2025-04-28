@@ -125,7 +125,7 @@ public function storeEventsAndAccomplishments(Request $request) {
 
     public function EventsAndAccomplishmentsaction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-accomplishment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-accomplishment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-accomplishment-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -146,7 +146,7 @@ public function storeEventsAndAccomplishments(Request $request) {
             'end_date' => date('Y-m-d', strtotime($data->end_date)),
             'university' => $data->university,
             'sponsoring' => $data->sponsoring,
-         
+            'updated_at' => $item->updated_at->format('F d, Y'),
         ]);
     }
 

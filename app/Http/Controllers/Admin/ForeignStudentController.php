@@ -153,6 +153,7 @@ class ForeignStudentController extends Controller
                 'country' => ucwords($item->country),
                 'student_count' => $item->number_of_student,
                 'school_year' => $item->school_year,
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -161,7 +162,7 @@ class ForeignStudentController extends Controller
 
     public function action($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-modal-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-modal-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-foreign-student-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

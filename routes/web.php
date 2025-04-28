@@ -53,7 +53,7 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
     Route::get('/research-report', [\App\Http\Controllers\Admin\IndexController::class, 'researchCountReportData'])->name('admin.researchReport');
     Route::get('/extension-report', [\App\Http\Controllers\Admin\IndexController::class, 'extensionCountReportData'])->name('admin.extensionReport');
     Route::get('/licensure-exam-report', [\App\Http\Controllers\Admin\IndexController::class, 'licensureExamReport'])->name('admin.licensureExamReport');
-
+    Route::get('/educational-attainment-report', [\App\Http\Controllers\Admin\IndexController::class, 'educationalAttainmentReport'])->name('admin.educationalAttainmentReport');
 
     Route::get('/view-file/{filename}', [\App\Http\Controllers\ReportController\ManageReportController::class, 'index'])->name('manage_report.view');
     
@@ -162,7 +162,6 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
         Route::post('/update-scholarship/{id}', [\App\Http\Controllers\Admin\ScholarshipController::class, 'updateScholarship'])->name('scholarship.update');
         Route::post('/remove-scholarship/{id}', [\App\Http\Controllers\Admin\ScholarshipController::class, 'removeScholarship'])->name('scholarship.remove');
     });
-
     //CSV 
     Route::get('/fetch-dates', [EnrollmentController::class, 'fetchDates']);
 

@@ -107,7 +107,7 @@ class InfrastractureDevelopmentController extends Controller
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'infrastracture' => ucwords($item->infrastracture),
                 'status' => ucwords($item->status),
-                
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -116,7 +116,7 @@ class InfrastractureDevelopmentController extends Controller
 
     public function Infrastructureaction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-infrastructure-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-infrastructure-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-infrastructure-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

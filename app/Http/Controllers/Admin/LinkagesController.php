@@ -122,6 +122,7 @@ class LinkagesController extends Controller
                 'date_venue' =>  date('M d, Y', strtotime($item->date)).'/'.ucwords($item->venue),
                 'attendees' => ucwords($item->attendees),
                 'facilitators' => ucwords($item->facilitators),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -130,7 +131,7 @@ class LinkagesController extends Controller
 
     public function Linkagesaction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-linkages-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-linkages-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-linkages-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

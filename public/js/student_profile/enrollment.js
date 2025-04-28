@@ -29,7 +29,7 @@ function throwError(xhr, status){
 
 const enrollmentTable = () => {
     const defaultDateFilter = {
-        column: 'created_at',
+        column: 'updated_at',
         filterType: 'thisYear',
     };
 
@@ -63,18 +63,80 @@ const enrollmentTable = () => {
     const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
 
     let columns = [
-        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle", download: false },
-        { title: "PROGRAM", field: "program", hozAlign: "left", vertAlign: "middle" },
-        { title: "SEMESTER", field: "semester", hozAlign: "left", vertAlign: "middle" },
-        { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
-        { title: "NO. OF STUDENT", field: "student_count", hozAlign: "left", vertAlign: "middle" },
+        {
+            titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.2;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            ADDED BY
+                        </strong><br>
+                        <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                    </div>
+                `;
+            },
+            field: "name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+            formatter: function (cell) {
+                let data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
+            }
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">PROGRAM</strong>
+            </div>`,
+            field: "program",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "left",
+            vertAlign: "middle" },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">SEMESTER</strong>
+            </div>`, 
+            field: "semester",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle" },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">ACADEMIC YEAR</strong>
+            </div>`,
+            field: "school_year",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle" },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">NO. OF STUDENT</strong>
+            </div>`,
+            field: "student_count",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center", vertAlign: "middle" },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">ACTION</strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
             formatter: "html",
             vertAlign: "middle",
             download: false,
@@ -85,25 +147,29 @@ const enrollmentTable = () => {
         dataTree: true,
         dataTreeSelectPropagate: true,
         layout: "fitDataFill",
-        maxHeight: "1000px",
+        maxHeight: "800px",
         scrollToColumnPosition: "center",
         pagination: "local",
-        placeholder: "No Data Available",
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
+        placeholder: "No Data Available",
         selectable: 1,
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
-        },
-        columns: columns,
-        initialSort: [
-            { column: "created_at", dir: "desc" },
-        ],
+        initialSort: [{ column: "date", dir: "desc" }],
         initialFilter: [
             { field: defaultDateFilter.column, type: "between", value: [startDate.toISOString(), endDate.toISOString()] },
         ],
-    });
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            if (index % 2 === 0) {
+                element.style.backgroundColor = "#FFF1D1";
+            } else {
+                element.style.backgroundColor = "#ffffff";
+            }
+        },
+        columns: columns,
+    });  
 };
 
 
@@ -131,7 +197,7 @@ document.getElementById("filter-type").addEventListener("change", function() {
     const yearsSet = new Set();
 
     data.forEach(row => {
-        const date = new Date(row.created_at);
+        const date = new Date(row.updated_at);
         const year = date.getFullYear();
         yearsSet.add(year);
 
@@ -193,7 +259,7 @@ function applyFilter() {
     enrollments.clearFilter();
 
     enrollments.setFilter(function(data) {
-        const date = new Date(data.created_at);
+        const date = new Date(data.updated_at);
         const month = date.toLocaleString('default', { month: 'long' });
         const quarter = Math.floor(date.getMonth() / 3) + 1;
         const year = date.getFullYear();
@@ -227,6 +293,7 @@ function searchEnrollment(value) {
                 !data.name.toLowerCase().includes(term) &&
                 !data.semester.toLowerCase().includes(term) &&
                 !data.school_year.toLowerCase().includes(term) &&
+                // !data.student_count.toLowerCase().includes(term) &&
                 !data.program.toLowerCase().includes(term)
             ) {
                 matches = false;

@@ -41,15 +41,14 @@ const reportTable = () => {
         paginationSize:10,  
         paginationSizeSelector:[10,50,100],
         selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
-            }
+        initialSort: [
+            { column: "uploaded_at", dir: "asc" }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns:[
             {
@@ -59,16 +58,93 @@ const reportTable = () => {
                 vertAlign: "middle", 
                 sortable: false,  // Disable sorting for this column
                 formatter: function(cell, formatterParams, onRendered) {
-                    return '<input type="checkbox" class="form-check-input" id="file-'+cell.getData().id+'" value="'+cell.getData().filename+'">';
+                    return `
+                    <div style="line-height: 1.4;">
+                        <input type="checkbox" class="form-check-input" id="file-'+cell.getData().id+'" value="'+cell.getData().filename+'">
+                    </div>
+                    `;
                 },
                 headerSort: false  // Disable sorting header interaction (this hides the sorting arrows)
             },
             //{title:"NO", field:"no", hozAlign:"center",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"created_by", hozAlign:"left", vertAlign:"middle"},
-            {title:"REPORT TYPE ", field:"report_type", hozAlign:"left", vertAlign:"middle"},
-            {title:"FILES", field:"filename", hozAlign:"left", vertAlign:"middle"},
-            {title:"UPLOADED DATE", field:"uploaded_at", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+            {
+                titleFormatter: function () {
+                    return `
+                        <div style="line-height: 1.4;">
+                            <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                                ADDED BY
+                            </strong><br>
+                        </div>
+                    `;
+                },
+                field: "created_by",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+                download: false
+            },
+            { titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.4;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            REPORT TYPE
+                        </strong><br>
+                    </div>
+                `;
+            },
+                field:"report_type",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+            },
+            { titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.4;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            FILE NAME
+                        </strong><br>
+                    </div>
+                `;
+            },
+                field:"filename",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+            },
+            { titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.4;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            UPLOADED DATE
+                        </strong><br>
+                    </div>
+                `;
+            },
+                field:"uploaded_at",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+            },
+            { titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.4;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            ACTION
+                        </strong><br>
+                    </div>
+                `;
+            },
+                field:"action", 
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+                formatter:"html"
+            },
         ]
     }); 
 }

@@ -28,22 +28,121 @@ function throwError(xhr, status){
 
 let linkagesTable = () => {
     let columns = [
-        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-        { title: "AGENCY", field: "agency", hozAlign: "left", vertAlign: "middle" },
-        { title: "NATURE OF LINKAGE", field: "linkage_nature", hozAlign: "left", vertAlign: "middle" },
-        { title: "ACTIVITY TITLE", field: "activity_title", hozAlign: "left", vertAlign: "middle" },
-        { title: "DATE AND VENUE", field: "date_venue", hozAlign: "left", vertAlign: "middle" },
-        { title: "ATTENDEES", field: "attendees", hozAlign: "left", vertAlign: "middle" },
-        { title: "FACILITATORS", field: "facilitators", hozAlign: "left", vertAlign: "middle" },
+        {
+            titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.2;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            ADDED BY
+                        </strong><br>
+                        <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                    </div>
+                `;
+            },
+            field: "name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+            formatter: function (cell) {
+                let data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
+            }
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    AGENCY
+                </strong>
+            </div>`,
+            field: "agency", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    NATURE OF LINAKGES
+                </strong>
+            </div>`,
+            field: "linkage_nature",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    ACTIVITY TITLE
+                </strong>
+            </div>`,
+            field: "activity_title", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    DATE AND VENUE
+                </strong>
+            </div>`,
+            field: "date_venue",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    ATTENDEES
+                </strong>
+            </div>`,
+            field: "attendees", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    FACILITATORS
+                </strong>
+            </div>`,
+            field: "facilitators", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
-            formatter: "html",
-            vertAlign: "middle"
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
         });
     }
 
@@ -58,9 +157,14 @@ let linkagesTable = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
+        initialSort: [
+            { column: "updated_at", dir: "asc" }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns: columns
     });

@@ -68,7 +68,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <button type="button" class="btn btn-outline-info btn-sm px-4" id="submit-graduate-hdr-btn">
+                                <button type="button" class="btn btn-outline-dark-orange btn-sm px-4" id="submit-graduate-hdr-btn">
                                     Submit
                                 </button>
                             </div>
@@ -102,13 +102,14 @@
                                 </button>
                             </div> -->
                             <form class="form-inline ms-2">
-                                <select class="form-select" id="graduate-years" aria-label="Filter Academic Year">
-                                    <option value="" selected>Filter Academic Year</option>
-                                    @foreach ($academicYears as $defaultAcademicYears)
-                                        <option value="{{ $academicYear->school_year }}">{{ $academicYear->school_year }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
+    <select class="form-select" id="graduate-years" aria-label="Filter Academic Year">
+        <option value="" selected>Filter Academic Year</option>
+        @foreach ($academicYears as $defaultAcademicYear) <!-- Use $defaultAcademicYear here -->
+            <option value="{{ $defaultAcademicYear->school_year }}">{{ $defaultAcademicYear->school_year }}</option>
+        @endforeach
+    </select>
+</form>
+
 
                             <div class="ms-auto d-flex">
                                 <form id="graduateCsvDownloadForm" class="from-inline" method="GET" action="{{ route('GraduateCSV') }}">
@@ -140,7 +141,6 @@
         });
     });
 </script>
-
 
 
 @include('layouts.modals.student_profile_modals.graduate_modal')

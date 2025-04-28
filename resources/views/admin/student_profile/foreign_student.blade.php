@@ -14,30 +14,28 @@
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchForeignStudent(value)" placeholder="Search" aria-label="Search">
                             </form>
-                        
-                            <form class="form-inline">
-                                <select class="form-select ml-2" id="filter-status">
-                                    <option value="" selected>Filter Semester</option>
-                                    <option value="1st Semester">1st Semester</option>
-                                    <option value="2nd Semester">2nd Semester</option>
+                            <div class="d-flex">
+                                <select id="foreign-student-filter-type" class="form-select ms-2 me-1">
+                                    <option value="all" disabled selected>Date Filter</option>
+                                    <option value="all">All</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="yearly">Yearly</option>
                                 </select>
-                            </form>
-                        
+
+                                <select id="foreign-student-filter-year" style="display:none;" class="form-select me-1"></select>
+                                <select id="foreign-student-filter-value" style="display:none;" class="form-select me-1"></select>
+                            </div>
+
                             <div class="ms-auto d-flex">
-                            @if(Auth::user()->position != 5)
-                                <button type="button" class="btn btn-outline-primary me-2" id="add-foreign-student-modal">
+                                @if(Auth::user()->position != 5)
+                                <button type="button" class="btn btn-outline-dark-orange me-2" id="add-foreign-student-modal">
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
-                            @endif
-                                <form id="foreignStudentCsvDownloadForm" class="form-inline" method="GET" action="{{ route('ForeignStudentCSV') }}">
-                                    <input type="hidden" name="year" id="foreignStudentCsvYearInput">
-                                    <input type="hidden" name="semester" id="foreignStudentCsvSemesterInput">
-                                    
-                                    <button type="submit" class="btn btn-outline-info">
-                                        <i class="bi bi-printer-fill"> CSV </i>
-                                    </button>
-                                    
-                                </form>
+                                @endif
+                                <button type="button" id="foreign-student-download-csv" class="btn btn-outline-info">
+                                    <i class="bi bi-printer-fill"> CSV </i>
+                                </button>
                             </div>
                         </div>
                         <div id="foreign-students-table"></div>

@@ -28,19 +28,85 @@ function throwError(xhr, status){
 
 let organizationTable = () => {
     let columns = [
-        { title: "ADDED BY", field: "name", hozAlign: "left", vertAlign: "middle" },
-        { title: "ORGANIZATION ABBREVIATION", field: "org_abbrev", hozAlign: "left", vertAlign: "middle" },
-        { title: "ORGANIZATION NAME", field: "org_name", hozAlign: "left", vertAlign: "middle" },
-        { title: "PROGRAM", field: "program_abbrev", hozAlign: "left", vertAlign: "middle" },
+        {
+            titleFormatter: function () {
+                return `
+                    <div style="line-height: 1.2;">
+                        <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                            ADDED BY
+                        </strong><br>
+                        <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                    </div>
+                `;
+            },
+            field: "name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            download: false,
+            formatter: function (cell) {
+                let data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
+            }
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    ORGANIZATION ABBREVIATION
+                </strong>
+            </div>`,
+            field: "org_abbrev",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    ORGANNIZATION NAME
+                </strong>
+            </div>`,
+            field: "org_name",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    PROGRAM
+                </strong>
+            </div>`,
+            field: "program_abbrev", 
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
     ];
 
     if (window.userPosition != 5) {
         columns.push({
-            title: "ACTION",
+            titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
             field: "action",
-            hozAlign: "left",
-            formatter: "html",
-            vertAlign: "middle"
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: "html"
         });
     }
 

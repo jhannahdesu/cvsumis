@@ -104,6 +104,7 @@ class StudentDevelopmentController extends Controller
                 'org_abbrev' => ucwords($item->org_abbrev),
                 'program_abbrev' => ucwords($item->program_abbrev),
                 'org_name' => ucwords($item->org_name),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -112,7 +113,7 @@ class StudentDevelopmentController extends Controller
 
     public function studentOrganizationAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-organization-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-organization-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-organization-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

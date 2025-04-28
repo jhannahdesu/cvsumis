@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <section class="section dashboard">
     {{-- ADMIN DASHBOARD --}}
     <div class="row mb-4">
@@ -190,6 +191,33 @@
               </div>
             </div>
           </div><!-- End Reports -->
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Educational Attainment Report</h5>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <select name="school_year" id="school_year" class="form-select" data-default-year="{{ $defaultAcademicYears->school_year }}">
+                            @foreach($educational_attainment_years as $year)
+                                <option value="{{ $year->school_year }}"
+                                    {{ $year->school_year == $defaultAcademicYears->school_year ? 'selected' : '' }}>
+                                    {{ $year->school_year }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="semester" class="form-select" data-default-semester="{{ $defaultAcademicYears->semester }}">
+                            <option value="1st Semester" {{ $defaultAcademicYears->semester == '1st Semester' ? 'selected' : '' }}>1st Semester</option>
+                            <option value="2nd Semester" {{ $defaultAcademicYears->semester == '2nd Semester' ? 'selected' : '' }}>2nd Semester</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="max-width: 500px; margin: auto;">
+                    <canvas id="educationPieChart" width="300" height="300"></canvas>
+                </div>
+            </div>
+        </div>
 
         </div>
       </div><!-- End Left side columns -->

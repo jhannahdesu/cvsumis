@@ -92,7 +92,7 @@ class FileArchiveController extends Controller
                 'no' => ++$key,
                 'filename' => $item->filename,
                 'report_type' => $item->module_dtls->module,
-                'uploaded_at' => $item->created_at->format('M d, Y'),
+                'uploaded_at' => $item->created_at->format('F d, Y'),
                 'action' => $actions['button'],
                 'created_by' => $item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname,
             ];

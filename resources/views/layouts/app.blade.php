@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>myMIS System</title>
+  <title>CEIT - MIS</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta content="" name="description">
   <meta content="" name="keywords">
@@ -37,29 +37,29 @@
 
 <body class="{{ Auth::user()->position == 4 ? 'no-sidebar' : '' }}" >
   <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center" style="background-color: #D98324; height: 60px;">
+  <header id="header" class="header fixed-top d-flex align-items-center" style="background: linear-gradient(to right,rgb(228, 130, 24),rgb(255, 194, 73)); height: 60px;">
   <!-- NAVIGATION (BURGER) AND LOGO -->
   {{-- FACULTY NAVIGATION --}}
   <div class="d-flex align-items-center justify-content-between w-100 position-relative">
 
-    @if(Auth::user()->position != 4)
+    @if(Auth::user()->position != 4 )
       <div class="d-flex align-items-center">
         <!-- Hamburger Button with margin -->
         <i class="bi bi-list toggle-sidebar-btn" style="margin-right: 20px; color: #000000;"></i>
 
         <!-- Logo -->
         <a href="{{ 
-          Auth::user()->position == 4 ? route('faculty_staff_profile.index') : 
-          (Auth::user()->position == 2 ? route('curriculum.index') : 
+          Auth::user()->position == 5 ? route('faculty_staff_profile.index') : 
+          (Auth::user()->position == 5 ? route('curriculum.index') : 
           route('admin.index')) 
         }}" class="logo d-flex align-items-center">
         <div style="height: 65px; display: flex; align-items: center;">
           <img src="{{ asset('images/logo/titlelogo.png') }}" alt="Logo" style="max-height: 100%; width: auto; margin-right: -10px;">
       </div>
             <div class="position-absolute top-50 start-50 translate-middle text-center">
-            <div class="fw-bold" style="font-size: 15px; line-height: 1.2; color: #000000;">
+            <div class="fw-bold" style="font-size: 15px; line-height: 1.2; color:rgb(255, 255, 255);">
               MANAGEMENT INFORMATION SYSTEM <br>
-              <span style="font-size: 10px; color: #000000;">for College of Engineering and Information Technology</span>
+              <span style="font-size: 10px; color:rgb(255, 255, 255);">for College of Engineering and Information Technology</span>
             </div>
           </div>
         </a>
@@ -74,9 +74,9 @@
       </div> 
 </a>
 <div class="position-absolute top-50 start-50 translate-middle text-center">
-        <div class="fw-bold" style="font-size: 15px; line-height: 1.2; color: #000000;">
+        <div class="fw-bold" style="font-size: 15px; line-height: 1.2; color:rgb(255, 255, 255);">
             MANAGEMENT INFORMATION SYSTEM <br>
-            <span style="font-size: 10px; color: #000000;">
+            <span style="font-size: 10px; color:rgb(255, 255, 255);">
                 for College of Engineering and Information Technology
             </span>
         </div>
@@ -96,7 +96,7 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number notification-count color: #000000;">0</span>
+            <span class="badge bg-primary badge-number notification-count color:rgb(0, 0, 0);">0</span>
           </a><!-- End Notification Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" >

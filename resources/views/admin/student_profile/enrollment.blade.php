@@ -17,7 +17,7 @@
                             </form>
                             <div class="d-flex justify-content-between">
                                 <select id="filter-type" class="form-select ms-2 me-1">
-                                    <option value="" disabled selected>Date Filter  </option>
+                                    <option value="all" disabled selected>Date Filter  </option>
                                     <option value="all">All</option>
                                     <option value="monthly">Monthly</option>
                                     <option value="quarterly">Quarterly</option>
@@ -29,7 +29,7 @@
                             </div>                         
                             <div class="ms-auto d-flex justify-content-between">
                             @if(Auth::user()->position != 5)
-                                <button type="button" class="btn btn-outline-primary me-2" id="enrollment-modal">
+                                <button type="button" class="btn btn-outline-dark-orange me-2" id="enrollment-modal">
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
                             @endif

@@ -18,6 +18,7 @@
       </li><!-- End F.A.Q Page Nav -->  
     @endif
   
+
     <li class="nav-item">
       <a class="nav-link collapsed" 
         href="{{ route('curriculum.index') }}"
@@ -28,10 +29,10 @@
         <span>Curriculum</span>
       </a>
     </li><!-- End Curriculum Nav -->
-
-  
+    
+   
     <li class="nav-item">
-    <a class="nav-link collapsed" 
+    <a class="nav-link {{ request()->is('enrollment*') || request()->is('graduate*') || request()->is('foreign*') || request()->is('scholarship*') || request()->is('award*') ? '' : 'collapsed' }}" 
       id="studentProfileTooltip"
       data-bs-target="#student-profile-nav" 
       data-bs-toggle="collapse" 
@@ -43,35 +44,35 @@
       <i class="bi bi-chevron-down ms-auto"></i>
     </a>
 
-
-  <ul id="student-profile-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-    <li>
-      <a href="{{ route('enrollment.index') }}">
-        <i class="bi bi-circle"></i>Enrollment
-      </a>
-    </li>
-    <li>
-      <a href="{{ route('graduate.index') }}">
-        <i class="bi bi-circle"></i>Graduates
-      </a>
-    </li>
-    <li>
-      <a href="{{ route('foreign.index') }}">
-        <i class="bi bi-circle"></i>Foreign Students
-      </a>
-    </li>
-    <li>
-      <a href="{{ route('scholarship.index') }}">
-        <i class="bi bi-circle"></i>Scholarship
-      </a>
-    </li>
-    <li>
-      <a href="{{ route('award.index') }}">
-        <i class="bi bi-circle"></i>Recognition and Awards
-      </a>
-    </li>
-  </ul>
+    <ul id="student-profile-nav" class="nav-content collapse {{ request()->is('enrollment*') || request()->is('graduate*') || request()->is('foreign*') || request()->is('scholarship*') || request()->is('award*') ? 'show' : '' }}">
+      <li>
+        <a href="{{ route('enrollment.index') }}">
+          <i class="bi bi-circle"></i>Enrollment
+        </a>
+      </li>
+      <li>
+        <a href="{{ route('graduate.index') }}">
+          <i class="bi bi-circle"></i>Graduates
+        </a>
+      </li>
+      <li>
+        <a href="{{ route('foreign.index') }}">
+          <i class="bi bi-circle"></i>Foreign Students
+        </a>
+      </li>
+      <li>
+        <a href="{{ route('scholarship.index') }}">
+          <i class="bi bi-circle"></i>Scholarship
+        </a>
+      </li>
+      <li>
+        <a href="{{ route('award.index') }}">
+          <i class="bi bi-circle"></i>Recognition and Awards
+        </a>
+      </li>
+    </ul>
 </li>
+
 
   
     <li class="nav-item">
@@ -181,7 +182,18 @@
 
 {{-- FACULTY NAVIGATION --}}
 @if(Auth::user()->position == 4)
-  <ul class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-nav" id="sidebar-nav">
+<li class="nav-item">
+      <a class="nav-link collapsed" 
+        href="{{ route('curriculum.index') }}"
+        data-bs-toggle="tooltip" 
+        data-bs-placement="right"
+        title="Tracks academic programs, accreditation status, licensure exam performance, and certifications of students and faculty.">
+        <i class="bi bi-journal-bookmark"></i>
+        <span>Curriculum</span>
+      </a>
+    </li><!-- End Curriculum Nav -->
+
     <li class="nav-item">
       <a class="nav-link collapsed" href="{{ route('faculty_staff_profile.index') }}">
         <i class="bi bi-people"></i>

@@ -119,6 +119,7 @@ class ExtensionAndResearchController extends Controller
                 'year' => date('Y', strtotime($item->year)),
                 'agency' => empty($item->agency) ? 'CvSU' : ucwords($item->agency),
                 'budget' => $item->budget,
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -127,7 +128,7 @@ class ExtensionAndResearchController extends Controller
 
     public function UniversityResearchaction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-university-research-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-university-research-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-university-research-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -281,7 +282,7 @@ class ExtensionAndResearchController extends Controller
                 'extensionist' => ucwords($item->extensionist),
                 'number_of_beneficiaries' => $item->number_of_beneficiaries,
                 'partner_agency' => ucwords($item->partner_agency),
-                
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -290,7 +291,7 @@ class ExtensionAndResearchController extends Controller
 
     public function ExtensionActivityaction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-extension-activity-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-extension-activity-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-extension-activity-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

@@ -27,40 +27,177 @@ function throwError(xhr, status){
 }
 
 const graduateHeaderTable = () => {
-    graduatesHeader = new Tabulator("#graduate-header-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        layout:"fitDataFill",
-        // layout:"fitColumns",
-        maxHeight: "1000px",
-        placeholder:"No Data Available", 
-        scrollToColumnPosition: "center",
-        pagination:"local",
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
+    const defaultDateFilter = {
+        column: 'date',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '', endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3);
+                startDate = new Date(currentDate.getFullYear(), quarter * 3, 1);
+                endDate = new Date(currentDate.getFullYear(), (quarter + 1) * 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
+    let columns = [
+        {
+            titleFormatter: () => `
+                <div style="line-height: 1.2;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ADDED BY
+                    </strong><br>
+                    <span style="font-size: 0.75em; color: #888;">Updated on</span>
+                </div>`,
+            field: "name",
+            headerHozAlign: "center",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: function (cell) {
+                const data = cell.getData();
+                return `
+                    <div>
+                        <div>${data.name}</div>
+                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                    </div>
+                `;
             }
         },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
-            {title:"ADDED BY", field:"name", hozAlign:"left", vertAlign:"middle"},
-            {title:"PROGRAM", field:"program_id", hozAlign:"left", vertAlign:"middle"},
-            {title:"SEMESTER", field:"semester", hozAlign:"left", vertAlign:"middle"},
-            { title: "ACADEMIC YEAR", field: "school_year", hozAlign: "left", vertAlign: "middle" },
-            {title:"NO. OF STUDENT", field:"number_of_student", hozAlign:"left", vertAlign:"middle"},
-            {title:"DATE", field:"date", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
-}
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        PROGRAM
+                    </strong>
+                </div>`,
+            field: "program_id",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        SEMESTER
+                    </strong>
+                </div>`,
+            field: "semester",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACADEMIC YEAR
+                    </strong>
+                </div>`,
+            field: "school_year",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        NO. OF STUDENTS
+                    </strong>
+                </div>`,
+            field: "number_of_student",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+        },
+        {
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        DATE
+                    </strong>
+                </div>`,
+            field: "date",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+        }
+    ];
+
+    if (window.userPosition != 5) {
+        columns.push({
+            titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
+            field: "action",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            formatter: "html",
+            vertAlign: "middle",
+            download: false,
+        });
+    }
+
+    graduatesHeader = new Tabulator("#graduate-header-table", {
+        dataTree: true,
+        dataTreeSelectPropagate: true,
+        layout: "fitDataFill",
+        maxHeight: "1000px",
+        scrollToColumnPosition: "center",
+        pagination: "local",
+        placeholder: "No Data Available",
+        paginationSize: 10,
+        paginationSizeSelector: [10, 50, 100],
+        selectable: 1,
+        initialSort: [
+            { column: "updated_at", dir: "asc" }
+        ],
+        initialFilter: [
+            {
+                field: defaultDateFilter.column,
+                type: "between",
+                value: [startDate.toISOString(), endDate.toISOString()]
+            }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
+        },
+        columns: columns
+    });
+};
+
 
 let graduateDetailsTable = () => {
     graduatesDetails = new Tabulator("#graduate-details-table", {

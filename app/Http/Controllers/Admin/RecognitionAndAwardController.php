@@ -119,6 +119,7 @@ class RecognitionAndAwardController extends Controller
                 'granting_agency' => $item->granting_agency,
                 'award' => $item->award,
                 'year' => date('Y', strtotime($item->start_year)).'-'.date('Y', strtotime($item->end_year)),
+                'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
         }
@@ -127,8 +128,8 @@ class RecognitionAndAwardController extends Controller
 
     public function headerAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-warning btn-sm px-3" id="view-modal-hdr-btn" data-id="'.$data->id.'"><i class="bi bi-eye"></i></button>
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-modal-hdr-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-warning btn-sm px-3 me-1" id="view-modal-hdr-btn" data-id="'.$data->id.'"><i class="bi bi-eye"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-modal-hdr-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-award-header-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 
@@ -237,7 +238,7 @@ class RecognitionAndAwardController extends Controller
 
     public function detailsAction($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-modal-dtls-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-modal-dtls-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-award-dtls-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
         ';
 

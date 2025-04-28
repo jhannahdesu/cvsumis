@@ -10,8 +10,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Award Details</h5>
                     <div class="d-flex justify-content-between">
-                        <div class="ms-auto d-flex">
-                            <button type="button" class="btn btn-outline-primary me-2" id="add-award-dtls-modal">
+                        <div class="ms-auto d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-primary me-2 mr-2 ms-2 mb-2" id="add-award-dtls-modal">
                                 <i class="bi bi-plus-circle-fill"></i>
                             </button>
             

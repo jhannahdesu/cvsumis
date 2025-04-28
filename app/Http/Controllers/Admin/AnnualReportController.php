@@ -59,7 +59,7 @@ class AnnualReportController extends Controller
 
     public function action($data){
         $button = '
-            <button type="button" class="btn btn-outline-info btn-sm px-3" id="view-file-btn" data-name="'.$data->filename.'"><i class="bi bi-eye"></i></button>
+            <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="view-file-btn" data-name="'.$data->filename.'"><i class="bi bi-eye"></i></button>
             <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-sp-file-btn" data-id="'.$data->id.'" data-name="'.$data->filename.'"><i class="bi bi-trash"></i></button>
         ';
 

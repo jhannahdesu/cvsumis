@@ -67,29 +67,23 @@
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchawardsHeader(value)" placeholder="Search" aria-label="Search">
                             </form>
-                        
-                            <form class="form-inline">
-                                <select class="form-select ml-2" id="filter-status">
-                                    <option value="" selected>Filter Semester</option>
-                                    <option value="1st Semester">1st Semester</option>
-                                    <option value="2nd Semester">2nd Semester</option>
+                            <div class="d-flex justify-content-between">
+                                <select id="RecogAwards-filter-type" class="form-select ms-2 me-1">
+                                    <option value="all" disabled selected>Date Filter</option>
+                                    <option value="all">All</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="yearly">Yearly</option>
                                 </select>
-                            </form>
-                        
-                            <div class="ms-auto d-flex">
-                            @if(Auth::user()->position != 5)
-                                
-                            @endif
-                                <form id="recognitionAwardCsvDownloadForm" class="form-inline" method="GET" action="{{ route('RecognitionAndAwardCSV') }}">
-                                    <input type="hidden" name="year" id="recognitionAwardCsvYearInput">
-                                    <input type="hidden" name="semester" id="recognitionAwardCsvSemesterInput">
-                                    
-                                    <button type="submit" class="btn btn-outline-info">
+                            </div>
+                                <select id="RecogAwards-filter-year" style="display:none;" class="form-select me-1"></select>
+                                <select id="RecogAwards-filter-value" style="display:none;" class="form-select me-1"></select>
+
+                                <div class="ms-auto d-flex justify-content-between">
+                                    <button id="RecogAwards-csv" class="btn btn-outline-info">
                                         <i class="bi bi-printer-fill"> CSV </i>
                                     </button>
-                                    
-                                </form>
-                            </div>
+                                </div>
                         </div>
                         <div id="awards-header-table"></div>
                     </div>

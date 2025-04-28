@@ -476,3 +476,104 @@ $('#update-user-btn').click( function(event) {
     });
 });
 
+
+$(document).ready(function () {
+    const defaultYear = $('#educational-attainment-year').val();
+    loadEducationalAttainmentChart(defaultYear);
+
+    $('#educational-attainment-year').change(function () {
+        const selectedYear = $(this).val();
+        loadEducationalAttainmentChart(selectedYear);
+    });
+});
+
+let educationPieChart = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Hardcoded values
+    const schoolYear = '2024-2025';
+    const semester = '2nd Semester';
+
+    loadEducationChart(schoolYear, semester);
+});
+
+function loadEducationChart(schoolYear, semester) {
+    fetch(`/educational-attainment-report?school_year=${encodeURIComponent(schoolYear)}&semester=${encodeURIComponent(semester)}`)
+        .then(response => {
+            if (!response.ok) throw new Error("No data available");
+            return response.json();
+        })
+        .then(data => {
+            const labels = data.map(item => item.label);
+            const values = data.map(item => item.value);
+            const total = values.reduce((sum, val) => sum + val, 0);
+
+            const ctx = document.getElementById('educationPieChart').getContext('2d');
+
+            if (educationPieChart) {
+                educationPieChart.destroy();
+            }
+
+            educationPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#8AFFC1', '#FFA07A']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Educational Attainment (${schoolYear} - ${semester})`, // Dynamic title
+                            align: 'center',
+                            font: {
+                                weight: 'bold',
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                generateLabels: function (chart) {
+                                    return chart.data.labels.map((label, i) => {
+                                        const value = chart.data.datasets[0].data[i];
+                                        const percentage = ((value / total) * 100).toFixed(2);
+                                        return {
+                                            text: `${label}: ${value} (${percentage}%)`,
+                                            fillStyle: chart.data.datasets[0].backgroundColor[i],
+                                            strokeStyle: chart.data.datasets[0].backgroundColor[i],
+                                            lineWidth: 1,
+                                            hidden: chart.getDatasetMeta(0).data[i].hidden,
+                                            index: i
+                                        };
+                                    });
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    const value = tooltipItem.raw;
+                                    const percentage = ((value / total) * 100).toFixed(2);
+                                    return `${tooltipItem.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading chart:', error);
+            const canvas = document.getElementById('educationPieChart');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('No data available for SY 2024-2025, 2nd Semester.', canvas.width / 2, canvas.height / 2);
+        });
+}

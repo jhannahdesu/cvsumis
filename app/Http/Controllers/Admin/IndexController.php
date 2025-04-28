@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\Departments;
 use App\Models\DefaultAcademicModel;
+use App\Models\EducationalAttainment;
 use App\Models\Enrollment;
 use App\Models\ExaminationType;
 use App\Models\ExtensionActivity;
@@ -35,9 +36,12 @@ class IndexController extends Controller
         $exam_types = $this->examTypeList();
         $academicYears = $this->academicYearList();
         $defaultAcademicYears = $this->defaultAcademicYearList();
+        $educational_attainment_years = $this->getEducationalAttainmentYears();
+
         return view('admin.index', compact('main_title', 'nav', 'schoolYears', 'user_count', 
-        'program_count', 'research_year', 'extension_year', 'department_count', 'licensure_year', 'exam_types', 'faculty_count',
-        'academicYears', 'defaultAcademicYears'));
+        'program_count', 'research_year', 'extension_year', 'department_count', 'licensure_year', 
+        'exam_types', 'faculty_count', 'academicYears', 'defaultAcademicYears', 'educational_attainment_years'));
+
     }
 
     public function defaultAcademicYearList(){
@@ -94,6 +98,16 @@ class IndexController extends Controller
         return $data;
     }   
     
+    public function getEducationalAttainmentYears() {
+        $years = EducationalAttainment::select('school_year')
+            ->distinct()
+            ->orderBy('school_year', 'desc')
+            ->get();
+    
+        return $years;
+    }
+    
+
     public function getNotifications(){
         $response = [];
         $data = Notifications::where('sent_to', Auth::id())->orderBy('created_at', 'desc')->get();
@@ -253,5 +267,33 @@ class IndexController extends Controller
         return $data;
     }
 
+    public function educationalAttainmentReport(Request $request)
+    {
+        $schoolYear = $request->input('school_year');
+        $semester = $request->input('semester');
     
+        $attainments = EducationalAttainment::with('education_dtls')
+            ->where('school_year', $schoolYear)
+            ->where('semester', $semester)
+            ->get();
+    
+        if ($attainments->isEmpty()) {
+            return response()->json(['message' => 'No data available for this academic year and semester'], 404);
+        }
+    
+        $grouped = $attainments->groupBy(function ($item) {
+            return $item->education_dtls?->type ?? 'Unknown';
+        });
+    
+        $data = $grouped->map(function ($group, $key) {
+            return [
+                'label' => $key,
+                'value' => $group->sum('number_of_faculty')
+            ];
+        })->values();
+    
+        return response()->json($data);
+    }
+    
+
 }
