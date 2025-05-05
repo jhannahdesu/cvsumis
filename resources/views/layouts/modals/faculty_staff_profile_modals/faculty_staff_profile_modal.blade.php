@@ -529,9 +529,17 @@
                 </div>
 
                 
-                <div class="col-md-12">
+                <div class="col-md-10">
                     <label for="sholarship" class="form-label">Degree</label>
-                    <input type="text" class="form-control" id="fgs_degree" name="degree" placeholder="ex.MS Computer Science" required>
+                    <input type="text" class="form-control" id="view_fgs_degree" name="degree" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="units_earned" class="form-label">Units earned</label>
+                    <input type="number" class="form-control" id="view_fgs_units" name="units" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -658,12 +666,12 @@
                     <label for="fs_faculty_name" class="form-label">Participants</label>
                     @if(Auth::user()->position == 4)
                         {{-- Faculty Staff: Prefilled and Readonly --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                        <input type="text" class="form-control" id="fs_faculty_name" name="participants"
                             value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
                             required readonly>
                     @else
                         {{-- Other Roles: Editable --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                        <input type="text" class="form-control" id="fs_faculty_name" name="participants"
                             placeholder="e.x. LastName, First Name MiddleInitial." required>
                     @endif
                     <div class="valid-feedback">Looks good!</div>
@@ -806,12 +814,12 @@
                     <label for="fs_faculty_name" class="form-label">Name of awardee</label>
                     @if(Auth::user()->position == 4)
                         {{-- Faculty Staff: Prefilled and Readonly --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                        <input type="text" class="form-control" id="fs_faculty_name" name="awardee_name"
                             value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
                             required readonly>
                     @else
                         {{-- Other Roles: Editable --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                        <input type="text" class="form-control" id="fs_faculty_name" name="awardee_name"
                             placeholder="e.x. LastName, First Name MiddleInitial." required>
                     @endif
                     <div class="valid-feedback">Looks good!</div>
@@ -981,12 +989,12 @@
                     <label for="fs_faculty_name" class="form-label">Presenter</label>
                     @if(Auth::user()->position == 4)
                         {{-- Faculty Staff: Prefilled and Readonly --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                        <input type="text" class="form-control" id="fs_faculty_name" name="presenter_name"
                             value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
                             required readonly>
                     @else
                         {{-- Other Roles: Editable --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="faculty_name"
+                        <input type="text" class="form-control" id="fs_faculty_name" name="presenter_name"
                             placeholder="e.x. LastName, First Name MiddleInitial." required>
                     @endif
                     <div class="valid-feedback">Looks good!</div>
@@ -1054,7 +1062,7 @@
                 
                 <div class="col-md-12">
                     <label for="participants" class="form-label">Title of paper</label>
-                    <input type="text" class="form-control" id="view_pp_paper_name" name="paper_name" required>
+                    <input type="text" class="form-control" id="view_pp_paper_name" name="paper_name" >
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -1260,3 +1268,5 @@
         return true; // Allow form submission
     }
 </script>
+
+

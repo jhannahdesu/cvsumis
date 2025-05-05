@@ -1,26 +1,21 @@
 @extends('layouts.app')
 @section('content')
-<script>
-    window.userPosition = {{ Auth::user()->position }};
-</script>
 
     <div class="container">
-    @if(Auth::user()->position != 5)
         <div class="row">
             <section class="col-lg-12">    
                 <article class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Other Events / Accomplishments</h5>
+                        <h5 class="card-title">Other Events/Accomplishments</h5>
                         <form class="row g-3 needs-validation" id="accomplishment-form" novalidate>
                             @csrf
                     
                             <div class="col-md-6">
                                 <label for="faculty" class="form-label">Faculty</label>
-                                <input type="text" class="form-control" id="faculty" name="faculty" placeholder="Surname, First Name Middle Initial." required>
+                                <input type="text" class="form-control" id="faculty" name="faculty" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
-                                <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                             </div>
             
                             <div class="col-md-6">
@@ -79,7 +74,6 @@
                 </article>
             </section>
         </div>
-    @endif
         <div class="row">
             <section class="col-lg-12">    
                 <article class="card">

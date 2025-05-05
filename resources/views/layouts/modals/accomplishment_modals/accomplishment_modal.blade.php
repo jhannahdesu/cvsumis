@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Accomplishment / Events</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Enrollment</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -30,15 +30,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label for="university" class="form-label">University venue</label>
-                    <input type="text" class="form-control" id="view_university" name="university" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <label for="university" class="form-label">Sponsoring agency</label>
+                    <label for="university" class="form-label">University</label>
                     <input type="text" class="form-control" id="view_university" name="university" required>
                     <div class="valid-feedback">
                         Looks good!
@@ -79,23 +71,3 @@
       </div>
     </div>
 </div>
-
-
-<script>
-    // FOR RESET VALIDATION FOR ACCOMPLISHMENT FORM WITH MODAL :D
-    document.addEventListener("DOMContentLoaded", function () {
-        const formModalPairs = [
-            { formId: "view-accomplishment-form", modalId: "EditAccomplishmentModal" }
-        ];
-
-        formModalPairs.forEach(function(pair) {
-            const form = document.getElementById(pair.formId);
-            const modal = document.getElementById(pair.modalId);
-
-            modal?.addEventListener("hidden.bs.modal", function () {
-                form.classList.remove("was-validated");
-                form.reset();
-            });
-        });
-    });
-</script>

@@ -1887,6 +1887,19 @@ let facultyGraduateStudiesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
+        { title:'UNITS',
+            titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    UNITS EARNED
+                </strong>
+            </div>`,
+            field: "units",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
         { title:'INSTITUTION',
             titleFormatter: () =>
             `<div style="line-height: 2.5;">

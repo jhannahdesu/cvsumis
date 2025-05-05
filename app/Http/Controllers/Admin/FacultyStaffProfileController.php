@@ -739,7 +739,7 @@ class FacultyStaffProfileController extends Controller
                 'faculty_name' => 'required',
                 'scholarship' => 'required',
                 'institution' => 'required',
-                'program' => 'required',
+                // 'program' => 'required',
             ]);
     
             try {
@@ -1013,7 +1013,17 @@ public function storeFacultyGraduateStudies(Request $request)
             try {
                 $validatedData['module'] = 3;
                 $validatedData['added_by'] = auth()->user()->id;
-                SeminarsAndTraining::create($validatedData);
+                SeminarsAndTraining::create([
+                    'conference_title' => $validatedData['conference_title'],
+                    'participants' => $validatedData['participants'], // <- map it here
+                    'date' => $validatedData['date'],
+                    'venue' => $validatedData['venue'],
+                    'seminar_category' => $validatedData['seminar_category'],
+                    'sponsoring_agency' => $validatedData['sponsoring_agency'],
+                    'module' => 3,
+                    'added_by' => auth()->user()->id,
+                ]);
+                
                 Helper::storeNotifications(
                     Auth::id(),
                     'You Added Data in Faculty Staff List of seminars and trainings attended by faculty members',
