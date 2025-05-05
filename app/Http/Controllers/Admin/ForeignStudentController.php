@@ -56,50 +56,50 @@ class ForeignStudentController extends Controller
         return $data;
     }
 
-    public function ForeignStudentCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function ForeignStudentCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Foreign_Student_List.csv';
+//     $filename = $directory . '/Foreign_Student_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'PROGRAM', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF STUDENTS', 'COUNTRY']);
+//     fputcsv($fp, ['ADDED BY', 'PROGRAM', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF STUDENTS', 'COUNTRY']);
 
-    $query = ForeignStudent::latest()->with('created_by_dtls', 'program_dtls');
+//     $query = ForeignStudent::latest()->with('created_by_dtls', 'program_dtls');
 
-    // Apply semester filter if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply semester filter if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    // Apply year filter if provided
-    if ($request->has('year') && !empty($request->year)) {
-        $query->where('school_year', $request->year);
-    }
+//     // Apply year filter if provided
+//     if ($request->has('year') && !empty($request->year)) {
+//         $query->where('school_year', $request->year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->program_dtls->program),
-            ucwords($row->semester),
-            $row->school_year,
-            $row->number_of_student,
-            ucwords($row->country)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->program_dtls->program),
+//             ucwords($row->semester),
+//             $row->school_year,
+//             $row->number_of_student,
+//             ucwords($row->country)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Foreign_Student_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Foreign_Student_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeForeignStudent (Request $request) {
         try {

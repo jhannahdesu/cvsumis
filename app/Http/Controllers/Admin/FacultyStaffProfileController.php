@@ -243,53 +243,53 @@ class FacultyStaffProfileController extends Controller
     
     //Faculty profile by nature of appointment
     
-    public function NatureAppointmentCSV(Request $request)
-    {
-        $directory = public_path('reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
+    // public function NatureAppointmentCSV(Request $request)
+    // {
+    //     $directory = public_path('reports');
+    //     if (!file_exists($directory)) {
+    //         mkdir($directory, 0755, true);
+    //     }
     
-        $filename = $directory . '/Faculty_Nature_Appointment_List.csv';
+    //     $filename = $directory . '/Faculty_Nature_Appointment_List.csv';
     
-        $fp = fopen($filename, "w+");
+    //     $fp = fopen($filename, "w+");
     
-        fputcsv($fp, ['ADDED BY', 'NATURE OF APPOINTMENT', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
+    //     fputcsv($fp, ['ADDED BY', 'NATURE OF APPOINTMENT', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
     
-        $query = NatureOfAppointment::latest()->with('created_by_dtls', 'apointment_nature_dtls');
+    //     $query = NatureOfAppointment::latest()->with('created_by_dtls', 'apointment_nature_dtls');
     
-        // Apply filters if provided
-        if ($request->has('semester') && !empty($request->semester)) {
-            $query->where('semester', $request->semester);
-        }
+    //     // Apply filters if provided
+    //     if ($request->has('semester') && !empty($request->semester)) {
+    //         $query->where('semester', $request->semester);
+    //     }
     
-        if ($request->has('school_year') && !empty($request->school_year)) {
-            $query->where('school_year', $request->school_year);
-        }
+    //     if ($request->has('school_year') && !empty($request->school_year)) {
+    //         $query->where('school_year', $request->school_year);
+    //     }
     
-        $data = $query->get();
+    //     $data = $query->get();
     
-        foreach ($data as $row) {
-            if ($row->created_by_dtls && $row->apointment_nature_dtls) {
-                fputcsv($fp, [
-                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-                    ucwords($row->apointment_nature_dtls->type),
-                    ucwords($row->semester),
-                    $row->school_year,
-                    $row->number_of_faculty
-                ]);
-            } else {
-                // You can either skip this record or add a default value
-                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
-            }
-        }
+    //     foreach ($data as $row) {
+    //         if ($row->created_by_dtls && $row->apointment_nature_dtls) {
+    //             fputcsv($fp, [
+    //                 ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+    //                 ucwords($row->apointment_nature_dtls->type),
+    //                 ucwords($row->semester),
+    //                 $row->school_year,
+    //                 $row->number_of_faculty
+    //             ]);
+    //         } else {
+    //             // You can either skip this record or add a default value
+    //             // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
+    //         }
+    //     }
     
-        fclose($fp);
+    //     fclose($fp);
     
-        $headers = ['Content-Type' => 'text/csv'];
+    //     $headers = ['Content-Type' => 'text/csv'];
     
-        return response()->download($filename, 'Faculty_Nature_Appointment_List.csv', $headers)->deleteFileAfterSend(true);
-    }
+    //     return response()->download($filename, 'Faculty_Nature_Appointment_List.csv', $headers)->deleteFileAfterSend(true);
+    // }
 
     public function storeNatureAppointment(Request $request) {
         try {
@@ -427,53 +427,53 @@ class FacultyStaffProfileController extends Controller
     }
 
     // Faculty profile by academic rank
-    public function AcademicRankCSV(Request $request)
-    {
-        $directory = public_path('reports');
-        if (!file_exists($directory)) {
-            mkdir($directory, 0755, true);
-        }
+    // public function AcademicRankCSV(Request $request)
+    // {
+    //     $directory = public_path('reports');
+    //     if (!file_exists($directory)) {
+    //         mkdir($directory, 0755, true);
+    //     }
     
-        $filename = $directory . '/Faculty_Academic_Rank_List.csv';
+    //     $filename = $directory . '/Faculty_Academic_Rank_List.csv';
     
-        $fp = fopen($filename, "w+");
+    //     $fp = fopen($filename, "w+");
     
-        fputcsv($fp, ['ADDED BY', 'ACADEMIC RANK', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
+    //     fputcsv($fp, ['ADDED BY', 'ACADEMIC RANK', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF FACULTY']);
     
-        $query = AcademicRank::latest()->with('created_by_dtls', 'academic_rank_dtls');
+    //     $query = AcademicRank::latest()->with('created_by_dtls', 'academic_rank_dtls');
     
-        // Apply filters if provided
-        if ($request->has('semester') && !empty($request->semester)) {
-            $query->where('semester', $request->semester);
-        }
+    //     // Apply filters if provided
+    //     if ($request->has('semester') && !empty($request->semester)) {
+    //         $query->where('semester', $request->semester);
+    //     }
     
-        if ($request->has('school_year') && !empty($request->school_year)) {
-            $query->where('school_year', $request->school_year);
-        }
+    //     if ($request->has('school_year') && !empty($request->school_year)) {
+    //         $query->where('school_year', $request->school_year);
+    //     }
     
-        $data = $query->get();
+    //     $data = $query->get();
     
-        foreach ($data as $row) {
-            if ($row->created_by_dtls && $row->academic_rank_dtls) {
-                fputcsv($fp, [
-                    ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-                    ucwords($row->academic_rank_dtls->type),
-                    ucwords($row->semester),
-                    $row->school_year,
-                    $row->number_of_faculty
-                ]);
-            } else {
-                // You can either skip this record or add a default value
-                // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
-            }
-        }
+    //     foreach ($data as $row) {
+    //         if ($row->created_by_dtls && $row->academic_rank_dtls) {
+    //             fputcsv($fp, [
+    //                 ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+    //                 ucwords($row->academic_rank_dtls->type),
+    //                 ucwords($row->semester),
+    //                 $row->school_year,
+    //                 $row->number_of_faculty
+    //             ]);
+    //         } else {
+    //             // You can either skip this record or add a default value
+    //             // fputcsv($fp, ['Unknown', 'Unknown', 'Unknown', 'Unknown', 'Unknown']);
+    //         }
+    //     }
     
-        fclose($fp);
+    //     fclose($fp);
     
-        $headers = ['Content-Type' => 'text/csv'];
+    //     $headers = ['Content-Type' => 'text/csv'];
     
-        return response()->download($filename, 'Faculty_Academic_Rank_List.csv', $headers)->deleteFileAfterSend(true);
-    }
+    //     return response()->download($filename, 'Faculty_Academic_Rank_List.csv', $headers)->deleteFileAfterSend(true);
+    // }
 
     public function storeAcademicRank(Request $request) {
         try {
@@ -611,48 +611,48 @@ class FacultyStaffProfileController extends Controller
     }
 
     // List of faculty scholars
-    public function FacultyScholarCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function FacultyScholarCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Faculty_Scholars_List.csv';
+//     $filename = $directory . '/Faculty_Scholars_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'SCHOLARSHIP', 'INSTITUTION', 'PROGRAM']);
+//     fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'SCHOLARSHIP', 'INSTITUTION', 'PROGRAM']);
 
-    $query = FacultyScholars::latest()->with('created_by_dtls');
+//     $query = FacultyScholars::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->faculty_name),
-            ucwords($row->scholarship),
-            ucwords($row->institution),
-            ucwords($row->program)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->faculty_name),
+//             ucwords($row->scholarship),
+//             ucwords($row->institution),
+//             ucwords($row->program)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Faculty_Scholars_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Faculty_Scholars_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeFacultyScholar(Request $request) {
         try {
@@ -776,49 +776,49 @@ class FacultyStaffProfileController extends Controller
 
     // List of faculty Members who completed their Graduated Studies 
 
-    public function FacultyGraduateStudiesCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function FacultyGraduateStudiesCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Faculty_Graduate_Studies_List.csv';
+//     $filename = $directory . '/Faculty_Graduate_Studies_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'DEGREE', 'UNITS', 'INSTITUTION', 'DATE OF GRADUATION']);
+//     fputcsv($fp, ['ADDED BY', 'FACULTY NAME', 'DEGREE', 'UNITS', 'INSTITUTION', 'DATE OF GRADUATION']);
 
-    $query = FacultyGraduteStudies::latest()->with('created_by_dtls');
+//     $query = FacultyGraduteStudies::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->faculty_name),
-            ucwords($row->degree),
-            $row->units,
-            ucwords($row->institution),
-            date('F d, Y', strtotime($row->date_of_graduation))
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->faculty_name),
+//             ucwords($row->degree),
+//             $row->units,
+//             ucwords($row->institution),
+//             date('F d, Y', strtotime($row->date_of_graduation))
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Faculty_Graduate_Studies_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Faculty_Graduate_Studies_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
 public function storeFacultyGraduateStudies(Request $request)
 {
@@ -954,50 +954,50 @@ public function storeFacultyGraduateStudies(Request $request)
 
     //List of local seminars and trainings attended by faculty members
 
-    public function SeminarsAndTrainingCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function SeminarsAndTrainingCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Faculty_Seminars_and_Trainings_List.csv';
+//     $filename = $directory . '/Faculty_Seminars_and_Trainings_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'CONFERENCE TITLE', 'PARTICIPANTS', 'DATE', 'VENUE', 'SEMINAR CATEGORY', 'SPONSORING AGENCY']);
+//     fputcsv($fp, ['ADDED BY', 'CONFERENCE TITLE', 'PARTICIPANTS', 'DATE', 'VENUE', 'SEMINAR CATEGORY', 'SPONSORING AGENCY']);
 
-    $query = SeminarsAndTraining::latest()->with('created_by_dtls');
+//     $query = SeminarsAndTraining::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->conference_title),
-            ucwords($row->participants),
-            date('F d, Y', strtotime($row->date)),
-            ucwords($row->venue),
-            ucwords($row->seminar_category),
-            ucwords($row->sponsoring_agency)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->conference_title),
+//             ucwords($row->participants),
+//             date('F d, Y', strtotime($row->date)),
+//             ucwords($row->venue),
+//             ucwords($row->seminar_category),
+//             ucwords($row->sponsoring_agency)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Faculty_Seminars_and_Trainings_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Faculty_Seminars_and_Trainings_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeSeminarTraining(Request $request) {
         try {
@@ -1135,50 +1135,50 @@ public function storeFacultyGraduateStudies(Request $request)
 
     //List of recognition and award received by the faculty members
 
-    public function RecognitionAndAwardCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function RecognitionAndAwardCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Faculty_Recognition_and_Award_List.csv';
+//     $filename = $directory . '/Faculty_Recognition_and_Award_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'AWARD TYPE', 'AWARDEE NAME', 'AWARD', 'AGENCY', 'DATE RECEIVED', 'EVENT']);
+//     fputcsv($fp, ['ADDED BY', 'AWARD TYPE', 'AWARDEE NAME', 'AWARD', 'AGENCY', 'DATE RECEIVED', 'EVENT']);
 
-    $query = RecognitionAndAwards::latest()->with('created_by_dtls');
+//     $query = RecognitionAndAwards::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->award_type),
-            ucwords($row->awardee_name),
-            ucwords($row->award),
-            ucwords($row->agency),
-            date('F d, Y', strtotime($row->date_received)),
-            ucwords($row->event)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->award_type),
+//             ucwords($row->awardee_name),
+//             ucwords($row->award),
+//             ucwords($row->agency),
+//             date('F d, Y', strtotime($row->date_received)),
+//             ucwords($row->event)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Faculty_Recognition_and_Award_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Faculty_Recognition_and_Award_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeRecognition(Request $request) {
         try {
@@ -1315,50 +1315,50 @@ public function storeFacultyGraduateStudies(Request $request)
 
     //List of paper presentations of the faculty members
 
-    public function PresentationCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function PresentationCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Faculty_Paper_Presentations_List.csv';
+//     $filename = $directory . '/Faculty_Paper_Presentations_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'PRESENTATION TYPE', 'CONFERENCE NAME', 'PAPER NAME', 'PRESENTER NAME', 'DATE', 'VENUE']);
+//     fputcsv($fp, ['ADDED BY', 'PRESENTATION TYPE', 'CONFERENCE NAME', 'PAPER NAME', 'PRESENTER NAME', 'DATE', 'VENUE']);
 
-    $query = PaperPresentation::latest()->with('created_by_dtls');
+//     $query = PaperPresentation::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->presentation_type),
-            ucwords($row->conference_name),
-            ucwords($row->paper_name),
-            ucwords($row->presenter_name),
-            date('F d, Y', strtotime($row->date)),
-            ucwords($row->venue)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->presentation_type),
+//             ucwords($row->conference_name),
+//             ucwords($row->paper_name),
+//             ucwords($row->presenter_name),
+//             date('F d, Y', strtotime($row->date)),
+//             ucwords($row->venue)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Faculty_Paper_Presentations_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Faculty_Paper_Presentations_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storePresentation(Request $request) {
         try {

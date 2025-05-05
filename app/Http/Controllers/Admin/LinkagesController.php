@@ -54,51 +54,51 @@ class LinkagesController extends Controller
         }
     }
 
-    public function LinkagesCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function LinkagesCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Linkages_List.csv';
+//     $filename = $directory . '/Linkages_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'AGENCY', 'NATURE OF LINKAGE', 'ACTIVITY TITLE', 'DATE', 'VENUE', 'ATTENDEES', 'FACILITATORS']);
+//     fputcsv($fp, ['ADDED BY', 'AGENCY', 'NATURE OF LINKAGE', 'ACTIVITY TITLE', 'DATE', 'VENUE', 'ATTENDEES', 'FACILITATORS']);
 
-    $query = Linkages::latest()->with('created_by_dtls');
+//     $query = Linkages::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->agency),
-            ucwords($row->linkage_nature),
-            ucwords($row->activity_title),
-            date('Y-m-d', strtotime($row->date)),
-            ucwords($row->venue),
-            ucwords($row->attendees),
-            ucwords($row->facilitators)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->agency),
+//             ucwords($row->linkage_nature),
+//             ucwords($row->activity_title),
+//             date('Y-m-d', strtotime($row->date)),
+//             ucwords($row->venue),
+//             ucwords($row->attendees),
+//             ucwords($row->facilitators)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Linkages_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Linkages_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
 
     public function fetchLinkages(){
@@ -122,6 +122,7 @@ class LinkagesController extends Controller
                 'date_venue' =>  date('M d, Y', strtotime($item->date)).'/'.ucwords($item->venue),
                 'attendees' => ucwords($item->attendees),
                 'facilitators' => ucwords($item->facilitators),
+                'date' => date('M d, Y', strtotime($item->date)),
                 'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];

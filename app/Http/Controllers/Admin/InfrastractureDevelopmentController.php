@@ -19,46 +19,46 @@ class InfrastractureDevelopmentController extends Controller
         return view('admin.infrastracture_development.infrastracture_development', compact('main_title', 'nav'));
     }
 
-    public function InfrastructureCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function InfrastructureCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Infrastructure_Development_List.csv';
+//     $filename = $directory . '/Infrastructure_Development_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'INFRASTRUCTURE', 'STATUS']);
+//     fputcsv($fp, ['ADDED BY', 'INFRASTRUCTURE', 'STATUS']);
 
-    $query = InfrastructureDevelopment::latest()->with('created_by_dtls');
+//     $query = InfrastructureDevelopment::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->infrastracture),
-            ucwords($row->status)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->infrastracture),
+//             ucwords($row->status)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Infrastructure_Development_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Infrastructure_Development_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeInfrastructure (Request $request) {
         try {

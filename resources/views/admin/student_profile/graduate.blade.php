@@ -88,7 +88,18 @@
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchGraduate(value)" placeholder="Search" aria-label="Search">
                             </form>
-                        
+                                    <div class="d-flex">
+                                        <select id="graduate-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="graduate-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="graduate-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
                             <!-- <form class="form-inline">
                                 <select class="form-select ml-2" id="filter-status">
                                     <option value="" selected>Filter Semester</option>
@@ -101,25 +112,29 @@
                                     <i class="bi bi-printer-fill"></i>
                                 </button>
                             </div> -->
-                            <form class="form-inline ms-2">
+                            <!-- <form class="form-inline ms-2">
     <select class="form-select" id="graduate-years" aria-label="Filter Academic Year">
         <option value="" selected>Filter Academic Year</option>
-        @foreach ($academicYears as $defaultAcademicYear) <!-- Use $defaultAcademicYear here -->
+        @foreach ($academicYears as $defaultAcademicYear)
+        
             <option value="{{ $defaultAcademicYear->school_year }}">{{ $defaultAcademicYear->school_year }}</option>
         @endforeach
     </select>
-</form>
+</form> -->
 
 
                             <div class="ms-auto d-flex">
-                                <form id="graduateCsvDownloadForm" class="from-inline" method="GET" action="{{ route('GraduateCSV') }}">
+                                <!-- <form id="graduateCsvDownloadForm" class="from-inline" method="GET" action="{{ route('GraduateCSV') }}">
                                     <input type="hidden" name="year" id="graduateCsvYearInput">
                                     
                                     <button type="submit" class="btn btn-outline-info">
                                         <i class="bi bi-printer-fill"> CSV </i>
                                     </button>
                                     
-                                </form>
+                                </form> -->
+                                <button type="button" id="graduate-download-csv" class="btn btn-outline-info">
+                                    <i class="bi bi-printer-fill"> CSV </i>
+                                </button>
                             </div>
 
                         </div>

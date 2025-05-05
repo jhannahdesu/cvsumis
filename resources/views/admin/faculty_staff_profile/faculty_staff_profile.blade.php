@@ -25,13 +25,18 @@
                                         <input class="form-control" type="search" oninput="searcheducationalAttainments(value)" placeholder="Search" aria-label="Search">
                                     </form>
 
-                                    <form class="form-inline ms-2">
-                                        <select class="form-select" id="default_semester">
-                                            <option value="" selected disabled>Select Semester</option>
-                                            <option value="1st Semester">1st Semester</option>
-                                            <option value="2nd Semester">2nd Semester</option>
+                                    <div class="d-flex">
+                                        <select id="educational-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
                                         </select>
-                                    </form>
+
+                                        <select id="educational-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="educational-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
 
                                     <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
@@ -39,14 +44,17 @@
                                                 <i class="bi bi-plus-circle-fill"></i>
                                             </button>
                                         @endif
-                                        <form id="educationalAttainmentCsvDownloadForm" method="GET" action="{{ route('EducationalAttainmentCSV') }}">
+                                        <button type="button" id="educational-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                        <!-- <form id="educationalAttainmentCsvDownloadForm" method="GET" action="{{ route('EducationalAttainmentCSV') }}">
                                             <input type="hidden" name="school_year" id="educationalAttainmentCsvYearInput">
                                             <input type="hidden" name="semester" id="educationalAttainmentCsvSemesterInput">
                                             
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"></i> CSV
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="educational-attainment-table"></div>
@@ -73,13 +81,18 @@
                                         <input class="form-control" type="search" oninput="searchnatureAppointments(value)" placeholder="Search" aria-label="Search">
                                     </form>
 
-                                    <form class="form-inline ms-2">
-                                        <select class="form-select" id="nature_default_semester">
-                                            <option value="" selected>Select Semester</option>
-                                            <option value="1st Semester">1st Semester</option>
-                                            <option value="2nd Semester">2nd Semester</option>
+                                    <div class="d-flex">
+                                        <select id="appointment-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
                                         </select>
-                                    </form>
+
+                                        <select id="appointment-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="appointment-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
 
                                     <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
@@ -87,14 +100,17 @@
                                                 <i class="bi bi-plus-circle-fill"></i>
                                             </button>
                                         @endif
-                                        <form id="natureAppointmentCsvDownloadForm" method="GET" action="{{ route('NatureAppointmentCSV') }}">
+                                        <button type="button" id="appointment-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                        <!-- <form id="natureAppointmentCsvDownloadForm" method="GET" action="{{ route('NatureAppointmentCSV') }}">
                                             <input type="hidden" name="school_year" id="natureAppointmentCsvYearInput">
                                             <input type="hidden" name="semester" id="natureAppointmentCsvSemesterInput">
                                             
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"></i> CSV
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="nature-appointment-table"></div>
@@ -121,13 +137,19 @@
                                         <input class="form-control" type="search" oninput="searchacademicRanks(value)" placeholder="Search" aria-label="Search">
                                     </form>
 
-                                    <form class="form-inline ms-2">
-                                        <select class="form-select" id="academic_rank_semester">
-                                            <option value="" selected>Select Semester</option>
-                                            <option value="1st Semester">1st Semester</option>
-                                            <option value="2nd Semester">2nd Semester</option>
+                                    <div class="d-flex">
+                                        <select id="academic-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
                                         </select>
-                                    </form>
+
+                                        <select id="academic-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="academic-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+                                        
 
                                     <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
@@ -135,14 +157,17 @@
                                                 <i class="bi bi-plus-circle-fill"></i>
                                             </button>
                                         @endif
-                                        <form id="academicRankCsvDownloadForm" method="GET" action="{{ route('AcademicRankCSV') }}">
+                                        <button type="button" id="academic-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                        <!-- <form id="academicRankCsvDownloadForm" method="GET" action="{{ route('AcademicRankCSV') }}">
                                             <input type="hidden" name="school_year" id="academicRankCsvYearInput">
                                             <input type="hidden" name="semester" id="academicRankCsvSemesterInput">
                                             
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"></i> CSV
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="academic-rank-table"></div>
@@ -171,20 +196,36 @@
                                         <input class="form-control" type="search" oninput="searchfacultyScholars(value)" placeholder="Search" aria-label="Search">
                                     </form>
                                     
+                                    <div class="d-flex">
+                                        <select id="scholar-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="scholar-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="scholar-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+
                                     <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
                                             <button type="button" class="btn btn-outline-primary me-2" id="faculty-scholar-modal">
                                                 <i class="bi bi-plus-circle-fill"></i>
                                             </button>
                                         @endif
-                                        <form id="facultyScholarCsvDownloadForm" method="GET" action="{{ route('FacultyScholarCSV') }}">
+                                        <button type="button" id="scholar-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                        <!-- <form id="facultyScholarCsvDownloadForm" method="GET" action="{{ route('FacultyScholarCSV') }}">
                                             <input type="hidden" name="school_year" id="facultyScholarCsvYearInput">
                                             <input type="hidden" name="semester" id="facultyScholarCsvSemesterInput">
                                             
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"></i> CSV
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="faculty-scholar-table"></div>
@@ -211,20 +252,37 @@
                                         <input class="form-control" type="search" oninput="searchfacultyGraduateStudies(value)" placeholder="Search" aria-label="Search">
                                     </form>
 
+                                    <div class="d-flex">
+                                        <select id="faculty-graduate-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="faculty-graduate-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="faculty-graduate-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+
                                     <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
                                             <button type="button" class="btn btn-outline-primary me-2" id="faculty-graduate-studies-modal">
                                                 <i class="bi bi-plus-circle-fill"></i>
                                             </button>
                                         @endif
-                                        <form id="facultyGraduateStudiesCsvDownloadForm" method="GET" action="{{ route('FacultyGraduateStudiesCSV') }}">
+                                        
+                                        <button type="button" id="faculty-graduate-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                        <!-- <form id="facultyGraduateStudiesCsvDownloadForm" method="GET" action="{{ route('FacultyGraduateStudiesCSV') }}">
                                             <input type="hidden" name="school_year" id="facultyGraduateStudiesCsvYearInput">
                                             <input type="hidden" name="semester" id="facultyGraduateStudiesCsvSemesterInput">
                                             
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"></i> CSV
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="faculty-graduate-studies-table"></div>
@@ -249,19 +307,38 @@
                                     <form class="form-inline">
                                         <input class="form-control" type="search" oninput="searchseminarTrainings(value)" placeholder="Search" aria-label="Search">
                                     </form>
+
+                                    <div class="d-flex">
+                                        <select id="seminar-training-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="seminar-training-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="seminar-training-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+
                                     <div class="ms-auto d-flex">
+
                                         @if(Auth::user()->position != 5)
                                             <button type="button" class="btn btn-outline-primary me-2" id="seminar-training-modal">
                                                 <i class="bi bi-plus-circle-fill"></i>
                                             </button>
                                         @endif
-                                        <form id="seminarTrainingCsvDownloadForm" method="GET" action="{{ route('SeminarsAndTrainingCSV') }}">
+
+                                        <button type="button" id="seminar-training-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                        <!-- <form id="seminarTrainingCsvDownloadForm" method="GET" action="{{ route('SeminarsAndTrainingCSV') }}">
                                             <input type="hidden" name="school_year" id="seminarTrainingCsvYearInput">
                                             <input type="hidden" name="semester" id="seminarTrainingCsvSemesterInput">
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"></i> CSV
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="seminar-training-table"></div>
@@ -286,19 +363,38 @@
                                     <form class="form-inline">
                                         <input class="form-control" type="search" oninput="searchrecognitions(value)" placeholder="Search" aria-label="Search">
                                     </form>
+                                    
+                                    <div class="d-flex">
+                                        <select id="recognitions-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="recognitions-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="recognitions-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+
                                     <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
                                             <button type="button" class="btn btn-outline-primary me-2" id="recognition-modal">
                                                 <i class="bi bi-plus-circle-fill"></i>
                                             </button>
                                         @endif
-                                        <form id="recognitionCsvDownloadForm" method="GET" action="{{ route('RecognitionAndAwardCSV') }}">
+                                        
+                                        <button type="button" id="recognitions-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+
+                                        <!-- <form id="recognitionCsvDownloadForm" method="GET" action="{{ route('RecognitionAndAwardCSV') }}">
                                             <input type="hidden" name="school_year" id="recognitionCsvYearInput">
                                             <input type="hidden" name="semester" id="recognitionCsvSemesterInput">
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"></i> CSV
                                             </button>
-                                        </form>
+                                        </form> -->
                                     </div>
                                 </div>
                                 <div id="recognition-table"></div>
@@ -323,19 +419,38 @@
                                 <form class="form-inline">
                                     <input class="form-control" type="search" oninput="searchpresentations(value)" placeholder="Search" aria-label="Search">
                                 </form>
+
+                                <div class="d-flex">
+                                        <select id="presentations-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="presentations-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="presentations-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+
                                 <div class="ms-auto d-flex">
                                     @if(Auth::user()->position != 5)
                                         <button type="button" class="btn btn-outline-primary me-2" id="presentation-modal">
                                             <i class="bi bi-plus-circle-fill"></i>
                                         </button>
                                     @endif
-                                    <form id="presentationCsvDownloadForm" method="GET" action="{{ route('PresentationCSV') }}">
+
+                                    <button type="button" id="presentations-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                    
+                                    <!-- <form id="presentationCsvDownloadForm" method="GET" action="{{ route('PresentationCSV') }}">
                                         <input type="hidden" name="school_year" id="presentationCsvYearInput">
                                         <input type="hidden" name="semester" id="presentationCsvSemesterInput">
                                         <button type="submit" class="btn btn-outline-info">
                                             <i class="bi bi-printer-fill"></i> CSV
                                         </button>
-                                    </form>
+                                    </form> -->
                                 </div>
                             </div>
                             <div id="presentation-table"></div>

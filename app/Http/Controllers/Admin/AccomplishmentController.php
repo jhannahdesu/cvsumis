@@ -26,44 +26,44 @@ class AccomplishmentController extends Controller
         return $data;
     }
 
-    public function EventsAndAccomplishmentsCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function EventsAndAccomplishmentsCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Events_And_Accomplishments_List.csv';
+//     $filename = $directory . '/Events_And_Accomplishments_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'CATEGORY', 'CATEGORY NAME ','PROGRAM', 'PROGRAM DETAILS', 'UNIVERSITY VENUE', 'SPONSORING AGENCY ', 'START DATE', 'END DATE']);
+//     fputcsv($fp, ['ADDED BY', 'CATEGORY', 'CATEGORY NAME ','PROGRAM', 'PROGRAM DETAILS', 'UNIVERSITY VENUE', 'SPONSORING AGENCY ', 'START DATE', 'END DATE']);
 
-    $query = EventsAndAccomplishments::latest()->with('created_by_dtls', 'program_details');
+//     $query = EventsAndAccomplishments::latest()->with('created_by_dtls', 'program_details');
 
-    // Apply filters if provided (if you have any filtering logic)
-    // Example: if ($request->has('some_filter')) { $query->where('some_column', $request->some_filter); }
+//     // Apply filters if provided (if you have any filtering logic)
+//     // Example: if ($request->has('some_filter')) { $query->where('some_column', $request->some_filter); }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->faculty),
-            ucwords($row->program_details->program),
-            ucwords($row->program_dtls),
-            ucwords($row->university),
-            date('Y-m-d', strtotime($row->start_date)),
-            date('Y-m-d', strtotime($row->end_date))
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->faculty),
+//             ucwords($row->program_details->program),
+//             ucwords($row->program_dtls),
+//             ucwords($row->university),
+//             date('Y-m-d', strtotime($row->start_date)),
+//             date('Y-m-d', strtotime($row->end_date))
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Events_And_Accomplishments_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Events_And_Accomplishments_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
 public function storeEventsAndAccomplishments(Request $request) {
     try {
@@ -115,8 +115,10 @@ public function storeEventsAndAccomplishments(Request $request) {
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'category' => ucwords($item->faculty),
+                'faculty' => ucwords($item->faculty),
                 'program_id' => ucwords($item->program_details->program.'<br>'.$item->program_dtls),
-                'university' =>  ucwords($item->university).'<br>'.date('M d, Y', strtotime($item->start_date)).'-'.date('M d, Y', strtotime($item->end_date)),
+                'university' =>  ucwords($item->university).'<br>'.date('F d, Y', strtotime($item->start_date)).' - '.date('F d, Y', strtotime($item->end_date)),
+                'updated_at' => $item->updated_at ? $item->updated_at->format('F d, Y') : 'N/A', // Format the updated_at field
                 'action' => $actions['button']
             ];
         }
@@ -140,13 +142,14 @@ public function storeEventsAndAccomplishments(Request $request) {
         return response()->json([
             'category' => $data->category,
             'name_category' => $data->name,
+            'faculty' => $data->faculty,
             'program_id' => $data->program_id,
             'program_dtls' => $data->program_dtls,
             'start_date' => date('Y-m-d', strtotime($data->start_date)),
             'end_date' => date('Y-m-d', strtotime($data->end_date)),
             'university' => $data->university,
             'sponsoring' => $data->sponsoring,
-            'updated_at' => $item->updated_at->format('F d, Y'),
+            'updated_at' => $item->updated_at->format('F d, Y')
         ]);
     }
 

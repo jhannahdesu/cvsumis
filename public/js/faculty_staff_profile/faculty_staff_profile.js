@@ -37,36 +37,6 @@ $(document).ready(function() {
     updateDefaults();
 });
 
-$('#nature_default_semester, #default_school_year').on('change', function() {
-    applyFilters();
-});
-
-function applyFilters() {
-    const semesterValue = $('#nature_default_semester').val();
-    const yearValue = $('#default_school_year').val();
-
-    // Apply filters to educational attainment table
-    educationalAttainments.setFilter([
-        { field: "semester", type: "like", value: semesterValue ? semesterValue.trim() : "" },
-        { field: "school_year", type: "like", value: yearValue ? yearValue.trim() : "" }
-    ]);
-
-    natureAppointments.setFilter([
-        { field: "semester", type: "like", value: semesterValue ? semesterValue.trim() : "" },
-        { field: "school_year", type: "like", value: yearValue ? yearValue.trim() : "" }
-    ]);
-
-    academicRanks.setFilter([
-        { field: "semester", type: "like", value: semesterValue ? semesterValue.trim() : "" },
-        { field: "school_year", type: "like", value: yearValue ? yearValue.trim() : "" }
-    ]);
-
-    // You can apply similar filters to other tables if needed
-    // For example:
-    // natureAppointments.setFilter([...]);
-    // academicRanks.setFilter([...]);
-}
-
 function throwError(xhr, status){
     var response = JSON.parse(xhr.responseText);
     if (response.errors) {
@@ -91,6 +61,40 @@ function throwError(xhr, status){
 }
 
 let educationalAttainmentTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -119,7 +123,8 @@ let educationalAttainmentTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'EDUCATIONAL ATTAINMENT',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     EDUCATIONAL ATTAINMENT
@@ -131,7 +136,8 @@ let educationalAttainmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'SEMESTER',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     SEMESTER
@@ -143,7 +149,8 @@ let educationalAttainmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'ACADEMIC YEAR',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     ACADEMIC YEAR
@@ -155,7 +162,8 @@ let educationalAttainmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'NO. OF FACULTY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     NO. OF FACULTY
@@ -183,6 +191,7 @@ let educationalAttainmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle",
             formatter: "html",
+            download: false
         });
     }
 
@@ -207,6 +216,111 @@ let educationalAttainmentTable = () => {
     });
 }
 
+document.getElementById("educational-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("educational-filter-value");
+    const filterYearSelect = document.getElementById("educational-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        educationalAttainments.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = educationalAttainments.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("educational-filter-value").addEventListener("change", applyEducFilter);
+document.getElementById("educational-filter-year").addEventListener("change", applyEducFilter);
+
+function applyEducFilter() {
+    const type = document.getElementById("educational-filter-type").value;
+    const selectedValue = document.getElementById("educational-filter-value").value;
+    const selectedYear = document.getElementById("educational-filter-year").value;
+
+    educationalAttainments.clearFilter();
+
+    educationalAttainments.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#educational-download-csv').click(function() {
+   educationalAttainments.download("csv", "Educational Attainments.csv", { filter: true });
+});
 
 // function searcheducationalAttainments(value){
 //     educationalAttainments.setFilter([
@@ -382,6 +496,40 @@ $(document).on('click', '#remove-educational-attainment-btn', function(){
 
 //Faculty profile by nature of appointment
 let natureAppointmentTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -410,7 +558,8 @@ let natureAppointmentTable = () => {
                 `;
             }
         },
-        {  titleFormatter: () =>
+        { title:'NATURE OF APPOINTMENT',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     NATURE OF APPOINTMENT
@@ -422,7 +571,8 @@ let natureAppointmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'SEMSTER',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     SEMESTER
@@ -434,7 +584,8 @@ let natureAppointmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'ACADEMIC YEAR',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     ACADEMIC YEAR
@@ -446,7 +597,8 @@ let natureAppointmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'NO. OF FACULTY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     NO. OF FACULTY
@@ -474,6 +626,7 @@ let natureAppointmentTable = () => {
             hozAlign: "center",
             vertAlign: "middle",
             formatter: "html",
+            download: false
         });
     }
 
@@ -497,6 +650,112 @@ let natureAppointmentTable = () => {
         columns: columns
     });
 }
+
+document.getElementById("appointment-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("appointment-filter-value");
+    const filterYearSelect = document.getElementById("appointment-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        natureAppointments.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = natureAppointments.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("appointment-filter-value").addEventListener("change", applyAppointmentFilter);
+document.getElementById("appointment-filter-year").addEventListener("change", applyAppointmentFilter);
+
+function applyAppointmentFilter() {
+    const type = document.getElementById("appointment-filter-type").value;
+    const selectedValue = document.getElementById("appointment-filter-value").value;
+    const selectedYear = document.getElementById("appointment-filter-year").value;
+
+    natureAppointments.clearFilter();
+
+    natureAppointments.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#appointment-download-csv').click(function() {
+   natureAppointments.download("csv", "Nature of Appointment.csv", { filter: true });
+});
 
 
 // function searchnatureAppointments(value){
@@ -672,6 +931,40 @@ $(document).on('click', '#remove-nature-appointment-btn', function(){
 //storeAcademicRank
 
 let academicRankTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -700,7 +993,8 @@ let academicRankTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'ACADEMIC RANK',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     ACADEMIC RANK
@@ -712,7 +1006,8 @@ let academicRankTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'SEMESTER',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     SEMESTER
@@ -724,10 +1019,11 @@ let academicRankTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'ACADEMIC YEAR',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                    ACADEDMIC YEAR
+                    ACADEMIC YEAR
                 </strong>
             </div>`,
             field: "school_year",
@@ -736,7 +1032,8 @@ let academicRankTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'NO. OF FACULTY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     NO. OF FACULTY
@@ -763,7 +1060,8 @@ let academicRankTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -787,6 +1085,112 @@ let academicRankTable = () => {
         columns: columns
     });
 }
+
+document.getElementById("academic-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("academic-filter-value");
+    const filterYearSelect = document.getElementById("academic-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        academicRanks.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = academicRanks.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("academic-filter-value").addEventListener("change", applyAcademicRankFilter);
+document.getElementById("academic-filter-year").addEventListener("change", applyAcademicRankFilter);
+
+function applyAcademicRankFilter() {
+    const type = document.getElementById("academic-filter-type").value;
+    const selectedValue = document.getElementById("academic-filter-value").value;
+    const selectedYear = document.getElementById("academic-filter-year").value;
+
+    academicRanks.clearFilter();
+
+    academicRanks.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#academic-download-csv').click(function() {
+   academicRanks.download("csv", "Academic Rank.csv", { filter: true });
+});
 
 
 // function searchacademicRanks(value){
@@ -963,6 +1367,40 @@ $(document).on('click', '#remove-academic-rank-btn', function(){
 // List of faculty scholars
 
 let facultyScholarTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -991,7 +1429,8 @@ let facultyScholarTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'FACULTY NAME',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     FACULTY NAME
@@ -1003,7 +1442,8 @@ let facultyScholarTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'SCHOLARSHIP',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     SCHOLARSHIP
@@ -1015,7 +1455,8 @@ let facultyScholarTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'INSTITUTION',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     INSTITUTION
@@ -1027,7 +1468,8 @@ let facultyScholarTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'PROGRAM',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     PROGRAM
@@ -1054,7 +1496,8 @@ let facultyScholarTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -1078,6 +1521,112 @@ let facultyScholarTable = () => {
         columns: columns
     });
 }
+
+document.getElementById("scholar-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("scholar-filter-value");
+    const filterYearSelect = document.getElementById("scholar-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        facultyScholars.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = facultyScholars.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("scholar-filter-value").addEventListener("change", applyScholarFilter);
+document.getElementById("scholar-filter-year").addEventListener("change", applyScholarFilter);
+
+function applyScholarFilter() {
+    const type = document.getElementById("scholar-filter-type").value;
+    const selectedValue = document.getElementById("scholar-filter-value").value;
+    const selectedYear = document.getElementById("scholar-filter-year").value;
+
+    facultyScholars.clearFilter();
+
+    facultyScholars.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#scholar-download-csv').click(function() {
+   facultyScholars.download("csv", "Faculty Scholar.csv", { filter: true });
+});
 
 
 // function searchfacultyScholars(value){
@@ -1250,6 +1799,40 @@ $(document).on('click', '#remove-faculty-scholar-btn', function(){
 // List of faculty Members who completed their Graduated Studies 
 
 let facultyGraduateStudiesTable = () => {
+    const defaultDateFilter = {
+        column: 'date_of_graduation',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -1273,12 +1856,13 @@ let facultyGraduateStudiesTable = () => {
                 return `
                     <div>
                         <div>${data.name}</div>
-                        <span style="font-size: 0.8em; color: #888;">${data.updated_at}</span>
+                        <span style="font-size: 0.8em; color: #888;">${data.date_of_graduation}</span>
                     </div>
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'FACULTY NAME',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     FACULTY NAME
@@ -1290,7 +1874,8 @@ let facultyGraduateStudiesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'DEGREE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     DEGREE
@@ -1302,19 +1887,8 @@ let facultyGraduateStudiesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
-            `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                    UNITS
-                </strong>
-            </div>`,
-            field: "units",
-            headerHozAlign: "center",
-            headerSort: false,
-            hozAlign: "center",
-            vertAlign: "middle"
-        },
-        { titleFormatter: () =>
+        { title:'INSTITUTION',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     INSTITUTION
@@ -1326,7 +1900,8 @@ let facultyGraduateStudiesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'DATE OF GRADUATION',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     DATE OF GRADUATION
@@ -1353,7 +1928,8 @@ let facultyGraduateStudiesTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -1378,6 +1954,111 @@ let facultyGraduateStudiesTable = () => {
     });
 }
 
+document.getElementById("faculty-graduate-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("faculty-graduate-filter-value");
+    const filterYearSelect = document.getElementById("faculty-graduate-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        facultyGraduateStudies.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = facultyGraduateStudies.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.date_of_graduation);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("faculty-graduate-filter-value").addEventListener("change", applyfacultyGraduateStudiesFilter);
+document.getElementById("faculty-graduate-filter-year").addEventListener("change", applyfacultyGraduateStudiesFilter);
+
+function applyfacultyGraduateStudiesFilter() {
+    const type = document.getElementById("faculty-graduate-filter-type").value;
+    const selectedValue = document.getElementById("faculty-graduate-filter-value").value;
+    const selectedYear = document.getElementById("faculty-graduate-filter-year").value;
+
+    facultyGraduateStudies.clearFilter();
+
+    facultyGraduateStudies.setFilter(function(data) {
+        const date = new Date(data.date_of_graduation);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#faculty-graduate-download-csv').click(function() {
+    facultyGraduateStudies.download("csv", "Graduated Faculty.csv", { filter: true });
+});
 
 // function searchfacultyGraduateStudies(value){
 //     facultyGraduateStudies.setFilter([
@@ -1556,6 +2237,40 @@ $(document).on('click', '#remove-faculty-graduate-studies-btn', function(){
 //List of local seminars and trainings attended by faculty members
 
 let facultySeminarTrainingTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -1584,7 +2299,8 @@ let facultySeminarTrainingTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'CONFERENCE CATEGORY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     CONFERENCE CATEGORY
@@ -1596,7 +2312,8 @@ let facultySeminarTrainingTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'TITLE OF CONFERENCE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     TITLE OF CONFERENCE
@@ -1608,7 +2325,8 @@ let facultySeminarTrainingTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'PARTICIPANTS',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     PARTICIPANTS
@@ -1620,7 +2338,8 @@ let facultySeminarTrainingTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'SPONSORING AGANCY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     SPONSORING AGENCY
@@ -1632,7 +2351,8 @@ let facultySeminarTrainingTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'VENUE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     VENUE
@@ -1644,7 +2364,8 @@ let facultySeminarTrainingTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'DATE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     DATE
@@ -1671,7 +2392,8 @@ let facultySeminarTrainingTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -1696,6 +2418,111 @@ let facultySeminarTrainingTable = () => {
     });
 }
 
+document.getElementById("seminar-training-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("seminar-training-filter-value");
+    const filterYearSelect = document.getElementById("seminar-training-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        seminarTrainings.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = seminarTrainings.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.date_of_graduation);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("seminar-training-filter-value").addEventListener("change", applySeminarFilter);
+document.getElementById("seminar-training-filter-year").addEventListener("change", applySeminarFilter);
+
+function applySeminarFilter() {
+    const type = document.getElementById("seminar-training-filter-type").value;
+    const selectedValue = document.getElementById("seminar-training-filter-value").value;
+    const selectedYear = document.getElementById("seminar-training-filter-year").value;
+
+    seminarTrainings.clearFilter();
+
+    seminarTrainings.setFilter(function(data) {
+        const date = new Date(data.date_of_graduation);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#seminar-training-download-csv').click(function() {
+    seminarTrainings.download("csv", "Seminars and Trainings.csv", { filter: true });
+});
 
 // function searchseminarTrainings(value){
 //     seminarTrainings.setFilter([
@@ -1873,6 +2700,40 @@ $(document).on('click', '#remove-seminar-training-btn', function(){
 //List of recognition and award received by the faculty members
 
 let recognitionTable = () => {
+    const defaultDateFilter = {
+        column: 'date_received',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -1901,7 +2762,8 @@ let recognitionTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'TYPE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     TYPE
@@ -1913,7 +2775,8 @@ let recognitionTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'NAME OF AWARDEE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     NAME OF AWARDEE
@@ -1925,7 +2788,8 @@ let recognitionTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'AWARD',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     AWARD
@@ -1937,7 +2801,8 @@ let recognitionTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'INSTITUTION',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     INSTITUTION
@@ -1949,7 +2814,8 @@ let recognitionTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'EVENT',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     EVENT
@@ -1961,7 +2827,8 @@ let recognitionTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'DATE RECEIVED',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     DATE RECEIVED
@@ -1988,7 +2855,8 @@ let recognitionTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -2013,6 +2881,111 @@ let recognitionTable = () => {
     });
 }
 
+document.getElementById("recognitions-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("recognitions-filter-value");
+    const filterYearSelect = document.getElementById("recognitions-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        recognitions.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = recognitions.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.date_received);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("recognitions-filter-value").addEventListener("change", applyrecognitionsFilter);
+document.getElementById("recognitions-filter-year").addEventListener("change", applyrecognitionsFilter);
+
+function applyrecognitionsFilter() {
+    const type = document.getElementById("recognitions-filter-type").value;
+    const selectedValue = document.getElementById("recognitions-filter-value").value;
+    const selectedYear = document.getElementById("recognitions-filter-year").value;
+
+    recognitions.clearFilter();
+
+    recognitions.setFilter(function(data) {
+        const date = new Date(data.date_received);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#recognitions-download-csv').click(function() {
+    recognitions.download("csv", "Awards and Recognition.csv", { filter: true });
+});
 
 // function searchrecognitions(value){
 //     recognitions.setFilter([
@@ -2187,9 +3160,43 @@ $(document).on('click', '#remove-recognition-btn', function(){
     });
 });
 
-//List of recognition and award received by the faculty members
+//Paper presentation
 
 let presentationTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -2218,7 +3225,8 @@ let presentationTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'TYPE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     TYPE
@@ -2230,7 +3238,8 @@ let presentationTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'TITLE OF CONFERENCE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     TITLE OF CONFERENCE
@@ -2242,7 +3251,8 @@ let presentationTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'TITLE OF PAPER',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     TITLE OF PAPER
@@ -2254,7 +3264,8 @@ let presentationTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'PRESENTER',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     PRESENTER
@@ -2266,7 +3277,8 @@ let presentationTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'DATE AND VENUE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     DATE AND VENUE
@@ -2293,7 +3305,8 @@ let presentationTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -2318,6 +3331,111 @@ let presentationTable = () => {
     });
 }
 
+document.getElementById("presentations-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("presentations-filter-value");
+    const filterYearSelect = document.getElementById("presentations-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        presentations.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = presentations.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("presentations-filter-value").addEventListener("change", applyScholarFilter);
+document.getElementById("presentations-filter-year").addEventListener("change", applyScholarFilter);
+
+function applyScholarFilter() {
+    const type = document.getElementById("presentations-filter-type").value;
+    const selectedValue = document.getElementById("presentations-filter-value").value;
+    const selectedYear = document.getElementById("presentations-filter-year").value;
+
+    presentations.clearFilter();
+
+    presentations.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#presentations-download-csv').click(function() {
+    presentations.download("csv", "Faculty Scholar.csv", { filter: true });
+});
 
 // function searchpresentations(value){
 //     presentations.setFilter([

@@ -90,7 +90,8 @@ const enrollmentTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'PROGRAM',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">PROGRAM</strong>
             </div>`,
@@ -99,7 +100,8 @@ const enrollmentTable = () => {
             headerSort: false,
             hozAlign: "left",
             vertAlign: "middle" },
-        { titleFormatter: () =>
+        { title:'SEMESTER',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">SEMESTER</strong>
             </div>`, 
@@ -108,7 +110,8 @@ const enrollmentTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle" },
-        { titleFormatter: () =>
+        { title:'ACADEMIC YEAR',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">ACADEMIC YEAR</strong>
             </div>`,
@@ -117,7 +120,8 @@ const enrollmentTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle" },
-        { titleFormatter: () =>
+        { title:'NO. OF STUDENT',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">NO. OF STUDENT</strong>
             </div>`,
@@ -275,7 +279,9 @@ function applyFilter() {
     });
 }
 
-
+document.getElementById("download-csv").addEventListener("click", function() {
+    enrollments.download("csv", "Enrollments.csv", { filter: true });
+});
 
 function searchEnrollment(value) {
     let searchTerms = value.trim().toLowerCase().split(/\s+/);
@@ -293,7 +299,7 @@ function searchEnrollment(value) {
                 !data.name.toLowerCase().includes(term) &&
                 !data.semester.toLowerCase().includes(term) &&
                 !data.school_year.toLowerCase().includes(term) &&
-                // !data.student_count.toLowerCase().includes(term) &&
+                !data.student_count.toString().toLowerCase().includes(term) &&
                 !data.program.toLowerCase().includes(term)
             ) {
                 matches = false;
@@ -463,6 +469,4 @@ $('#filter-status').change(function(){
 });
 
 
-document.getElementById("download-csv").addEventListener("click", function() {
-    enrollments.download("csv", "Enrollments.csv", { filter: true });
-});
+

@@ -19,50 +19,50 @@ class ExtensionAndResearchController extends Controller
         return view('admin.extension_and_research.extension_and_research', compact('main_title', 'nav'));
     }
 
-    public function UniversityResearchCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function UniversityResearchCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/University_Research_List.csv';
+//     $filename = $directory . '/University_Research_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'TITLE', 'RESEARCHER', 'STATUS', 'YEAR', 'BUDGET', 'AGENCY']);
+//     fputcsv($fp, ['ADDED BY', 'TITLE', 'RESEARCHER', 'STATUS', 'YEAR', 'BUDGET', 'AGENCY']);
 
-    $query = Research::latest()->with('created_by_dtls');
+//     $query = Research::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->title),
-            ucwords($row->researcher),
-            ucwords($row->status),
-            date('Y', strtotime($row->year)),
-            $row->budget,
-            ucwords($row->agency ?? 'N/A') // Handle null agency
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->title),
+//             ucwords($row->researcher),
+//             ucwords($row->status),
+//             date('Y', strtotime($row->year)),
+//             $row->budget,
+//             ucwords($row->agency ?? 'N/A') // Handle null agency
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'University_Research_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'University_Research_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeUniversityResearch(Request $request) {
         try {
@@ -116,7 +116,7 @@ class ExtensionAndResearchController extends Controller
                 'title' => ucwords($item->title),
                 'status_details' =>  date('Y', strtotime($item->year)).' / P'.$item->budget.'<br>'.ucwords($item->status),
                 'researcher' => ucwords($item->researcher),
-                'year' => date('Y', strtotime($item->year)),
+                'year' => date('Y m, d', strtotime($item->year)),
                 'agency' => empty($item->agency) ? 'CvSU' : ucwords($item->agency),
                 'budget' => $item->budget,
                 'updated_at' => $item->updated_at->format('F d, Y'),
@@ -186,49 +186,49 @@ class ExtensionAndResearchController extends Controller
         return response()->json(['message' => 'Data removed successfully'], 200);
     }
 
-    public function ExtensionActivityCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function ExtensionActivityCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Extension_Activities_List.csv';
+//     $filename = $directory . '/Extension_Activities_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'EXTENSION ACTIVITY', 'EXTENSIONIST', 'NUMBER OF BENEFICIARIES', 'PARTNER AGENCY', 'ACTIVITY DATE']);
+//     fputcsv($fp, ['ADDED BY', 'EXTENSION ACTIVITY', 'EXTENSIONIST', 'NUMBER OF BENEFICIARIES', 'PARTNER AGENCY', 'ACTIVITY DATE']);
 
-    $query = ExtensionActivity::latest()->with('created_by_dtls');
+//     $query = ExtensionActivity::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->extension_activity),
-            ucwords($row->extensionist),
-            $row->number_of_beneficiaries,
-            ucwords($row->partner_agency ?? 'N/A'), // Handle null partner agency
-            date('Y-m-d', strtotime($row->activity_date))
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->extension_activity),
+//             ucwords($row->extensionist),
+//             $row->number_of_beneficiaries,
+//             ucwords($row->partner_agency ?? 'N/A'), // Handle null partner agency
+//             date('Y-m-d', strtotime($row->activity_date))
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Extension_Activities_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Extension_Activities_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeExtensionActivity(Request $request) {
         try {
@@ -278,7 +278,7 @@ class ExtensionAndResearchController extends Controller
             $response[] = [
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
-                'extension_activity' => ucwords($item->extension_activity).'<br>'.date('M, d Y', strtotime($item->activity_date)),
+                'extension_activity' => ucwords($item->extension_activity).'<br>'.date('F, d Y', strtotime($item->activity_date)),
                 'extensionist' => ucwords($item->extensionist),
                 'number_of_beneficiaries' => $item->number_of_beneficiaries,
                 'partner_agency' => ucwords($item->partner_agency),

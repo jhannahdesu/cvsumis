@@ -33,9 +33,9 @@
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
                             @endif
-                                    <button id="download-csv" class="btn btn-outline-info">
-                                        <i class="bi bi-printer-fill"> CSV </i>
-                                    </button>
+                                <button id="download-csv" type="button" class="btn btn-outline-info">
+                                    <i class="bi bi-printer-fill"> CSV </i>
+                                </button>
                             </div>
                         </div>
                         <div id="enrollment-table"></div>

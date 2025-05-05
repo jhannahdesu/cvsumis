@@ -18,18 +18,20 @@ class ScholarshipController extends Controller
     public function index(){
         $main_title = 'Scholarship';
         $nav = 'Student Profile';
-        $scholarships = $this->scholarshipList();
+        // $scholarships = $this->scholarshipList();
         $academicYears = $this->academicYearList();
         $defaultAcademicYears = $this->defaultAcademicYearList();
-        return view('admin.student_profile.scholarship', compact('main_title', 'nav', 'scholarships', 'academicYears', 'defaultAcademicYears'));
+        return view('admin.student_profile.scholarship', compact('main_title', 'nav', 
+        // 'scholarships', 
+        'academicYears', 'defaultAcademicYears'));
     }
 
 
-    public function scholarshipList(){
-        $data  = ScholarshipType::get();
+    // public function scholarshipList(){
+    //     $data  = ScholarshipType::get();
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
     public function defaultAcademicYearList(){
         $data = DefaultAcademicModel::first();
@@ -43,49 +45,49 @@ class ScholarshipController extends Controller
         return $data;
     }
 
-    public function ScholarshipCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function ScholarshipCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Scholarship_List.csv';
+//     $filename = $directory . '/Scholarship_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'SCHOLARSHIP TYPE', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF SCHOLARS']);
+//     fputcsv($fp, ['ADDED BY', 'SCHOLARSHIP TYPE', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF SCHOLARS']);
 
-    $query = Scholarship::latest()->with('created_by_dtls', 'scholarship_type_dtls');
+//     $query = Scholarship::latest()->with('created_by_dtls', 'scholarship_type_dtls');
 
-    // Apply semester filter if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply semester filter if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    // Apply year filter if provided
-    if ($request->has('year') && !empty($request->year)) {
-        $query->where('school_year', $request->year);
-    }
+//     // Apply year filter if provided
+//     if ($request->has('year') && !empty($request->year)) {
+//         $query->where('school_year', $request->year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->scholarship_type_dtls->type),
-            ucwords($row->semester),
-            $row->school_year,
-            $row->number_of_scholars
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->scholarship_type_dtls->type),
+//             ucwords($row->semester),
+//             $row->school_year,
+//             $row->number_of_scholars
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Scholarship_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Scholarship_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeScholarship(Request $request) {
         try {
@@ -133,7 +135,8 @@ class ScholarshipController extends Controller
             $response[] = [
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
-                'type' => ucwords($item->scholarship_type_dtls->type),
+                // 'type' => ucwords($item->scholarship_type_dtls->type),
+                'type' => ucwords($item->scholarship_type),
                 'semester' => ucwords($item->semester),
                 'number_of_scholars' => $item->number_of_scholars,
                 'school_year' => $item->school_year,

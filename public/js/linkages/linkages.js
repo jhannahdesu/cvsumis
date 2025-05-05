@@ -27,6 +27,36 @@ function throwError(xhr, status){
 }
 
 let linkagesTable = () => {
+    const defaultDateFilter = {
+        column: 'date',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '', endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3);
+                startDate = new Date(currentDate.getFullYear(), quarter * 3, 1);
+                endDate = new Date(currentDate.getFullYear(), (quarter + 1) * 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         {
             titleFormatter: function () {
@@ -55,7 +85,8 @@ let linkagesTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'AGENCY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     AGENCY
@@ -67,7 +98,8 @@ let linkagesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'NATURE OF LINKAGES',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     NATURE OF LINAKGES
@@ -79,7 +111,8 @@ let linkagesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'ACTIVITY TITLE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     ACTIVITY TITLE
@@ -91,7 +124,8 @@ let linkagesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'DATE AND VENUE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     DATE AND VENUE
@@ -103,7 +137,8 @@ let linkagesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'ATTENDEES',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     ATTENDEES
@@ -115,7 +150,8 @@ let linkagesTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'FACILITATORS',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     FACILITATORS
@@ -142,7 +178,8 @@ let linkagesTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -170,6 +207,104 @@ let linkagesTable = () => {
     });
 }
 
+document.getElementById("linkages-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValue = document.getElementById("linkages-filter-value");
+    const filterYear = document.getElementById("linkages-filter-year");
+
+    filterValue.innerHTML = "";
+    filterYear.innerHTML = "";
+
+    if (type === "all") {
+        linkages.clearFilter();
+        filterValue.style.display = "none";
+        filterYear.style.display = "none";
+        return;
+    }
+
+    filterValue.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYear.style.display = "inline-block";
+
+    const data = linkages.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.date);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            monthsSet.add(date.toLocaleString('default', { month: 'long' }));
+        } else if (type === "quarterly") {
+            const q = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${q}`);
+        }
+    });
+
+    const months = ["December", "November", "October", "September", "August", "July", "June", "May", "April", "March", "February", "January"];
+    if (type === "monthly") {
+        months.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValue.appendChild(opt);
+            }
+        });
+    }
+
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValue.appendChild(opt);
+            }
+        });
+    }
+
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYear.appendChild(opt);
+    });
+});
+
+document.getElementById("linkages-filter-value").addEventListener("change", applylinkagesFilter);
+document.getElementById("linkages-filter-year").addEventListener("change", applylinkagesFilter);
+
+function applylinkagesFilter() {
+    const type = document.getElementById("linkages-filter-type").value;
+    const value = document.getElementById("linkages-filter-value").value;
+    const year = document.getElementById("linkages-filter-year").value;
+
+    linkages.clearFilter();
+
+    linkages.setFilter(data => {
+        const date = new Date(data.date);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const yearVal = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === value && yearVal == year;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === value && yearVal == year;
+        } else if (type === "yearly") {
+            return yearVal == year;
+        }
+
+        return true;
+    });
+}
+
+document.getElementById("linkages-download-csv").addEventListener("click", () => {
+    linkages.download("csv", "Linkages.csv", { filter: true });
+});
 
 // function searchlinkages(value){
 //     linkages.setFilter([

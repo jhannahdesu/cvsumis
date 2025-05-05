@@ -89,8 +89,22 @@
                             <form class="form-inline">
                                 <input class="form-control mr-sm-2" type="search" oninput="searchaccomplishments(value)" placeholder="Search" aria-label="Search">
                             </form>
+
+                                    <div class="d-flex">
+                                        <select id="accomplishments-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="accomplishments-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="accomplishments-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+
                             <div class="ms-auto d-flex">
-                        <form id="eventsAccomplishmentsCsvDownloadForm" class="form-inline" method="GET" action="{{ route('EventsAndAccomplishmentsCSV') }}">
+                        <!-- <form id="eventsAccomplishmentsCsvDownloadForm" class="form-inline" method="GET" action="{{ route('EventsAndAccomplishmentsCSV') }}">
                             <input type="hidden" name="school_year" id="eventsAccomplishmentsCsvYearInput">
                             <input type="hidden" name="semester" id="eventsAccomplishmentsCsvSemesterInput">
                             
@@ -98,7 +112,10 @@
                                 <i class="bi bi-printer-fill"> CSV </i>
                             </button>
                             
-                        </form>
+                        </form> -->
+                                <button type="button" id="accomplishments-download-csv" class="btn btn-outline-info">
+                                    <i class="bi bi-printer-fill"> CSV </i>
+                                </button>
                     </div>
                         </div>
                         <div id="accomplishment-table"></div>

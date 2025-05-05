@@ -1274,3 +1274,11 @@ h6 {
   font-size: 13px;
   color: #a84300;
 }
+/* Alternating row colors */
+.even-row {
+  background-color: #FFF1D1;
+}
+
+.odd-row {
+  background-color: #ffffff;
+}

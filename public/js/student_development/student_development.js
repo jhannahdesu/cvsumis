@@ -27,6 +27,35 @@ function throwError(xhr, status){
 }
 
 let organizationTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '', endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3);
+                startDate = new Date(currentDate.getFullYear(), quarter * 3, 1);
+                endDate = new Date(currentDate.getFullYear(), (quarter + 1) * 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
     let columns = [
         {
             titleFormatter: function () {
@@ -55,7 +84,8 @@ let organizationTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title: 'ORGANIZATION ABBREVIATION',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     ORGANIZATION ABBREVIATION
@@ -67,7 +97,8 @@ let organizationTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title: 'ORGANIZATION NAME',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     ORGANNIZATION NAME
@@ -79,7 +110,8 @@ let organizationTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title: 'PROGRAM',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     PROGRAM
@@ -106,7 +138,8 @@ let organizationTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -121,15 +154,131 @@ let organizationTable = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
-        rowFormatter: function (dom) {
-            var selectedRow = dom.getData();
-            dom.getElement().classList.add("table-light");
+        initialSort: [
+            { column: "updated_at", dir: "asc" }
+        ],
+        initialFilter: [
+            {
+                field: defaultDateFilter.column,
+                type: "between",
+                value: [startDate.toISOString(), endDate.toISOString()]
+            }
+        ],
+        rowFormatter: function (row) {
+            const element = row.getElement();
+            const index = row.getPosition(true);
+            element.style.color = "#000000";
+            element.style.backgroundColor = index % 2 === 0 ? "#FFF1D1" : "#ffffff";
         },
         columns: columns
     });
+};
+
+document.getElementById("organizations-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("organizations-filter-value");
+    const filterYearSelect = document.getElementById("organizations-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        organizations.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = organizations.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("organizations-filter-value").addEventListener("change", applyorganizationsFilter);
+document.getElementById("organizations-filter-year").addEventListener("change", applyorganizationsFilter);
+
+function applyorganizationsFilter() {
+    const type = document.getElementById("organizations-filter-type").value;
+    const selectedValue = document.getElementById("organizations-filter-value").value;
+    const selectedYear = document.getElementById("organizations-filter-year").value;
+
+    organizations.clearFilter();
+
+    organizations.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
 }
 
-
+$('#organizations-download-csv').click(function() {
+    organizations.download("csv", "Organizations.csv", { filter: true });
+});
 
 
 // function searchorganizations(value){

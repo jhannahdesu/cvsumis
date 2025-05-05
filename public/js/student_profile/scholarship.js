@@ -26,6 +26,40 @@ function throwError(xhr, status){
 }
 
 const scholarshipTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+
     let columns = [
         { titleFormatter: () => `
             <div style="line-height: 1.2;">
@@ -49,7 +83,8 @@ const scholarshipTable = () => {
                 `;
             }
         },
-        { titleFormatter: () => `
+        { title:'SCHOLAR TYPE',
+            titleFormatter: () => `
             <div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">SCHOLAR TYPE</strong>
             </div>`,
@@ -59,7 +94,8 @@ const scholarshipTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () => `
+        { title:'SEMESTER',
+            titleFormatter: () => `
             <div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">SEMESTER</strong>
             </div>`,
@@ -68,7 +104,8 @@ const scholarshipTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle"},
-        { titleFormatter: () => `
+        { title:'ACADEMIC YEAR',
+            titleFormatter: () => `
             <div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">ACADEMIC YEAR</strong>
             </div>`,
@@ -77,7 +114,8 @@ const scholarshipTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle"},
-        { titleFormatter: () => `
+        { title:'NO. OF SCHOLARS',
+            titleFormatter: () => `
             <div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">NO. OF SCHOLARS</strong>
             </div>`,
@@ -101,6 +139,7 @@ const scholarshipTable = () => {
             hozAlign: "center",
             vertAlign: "middle",
             formatter: "html",
+            download: false
         });
     }
 
@@ -124,17 +163,133 @@ const scholarshipTable = () => {
         columns: columns
     });    
 };
+document.getElementById("scholar-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("scholar-filter-value");
+    const filterYearSelect = document.getElementById("scholar-filter-year");
 
-function searchScholarship(value){
-    scholarships.setFilter([
-        [
-            //{title:'NO', field: 'no'},
-            {field:"name", type:"like", value:value.trim()},
-            {field:"semester", type:"like", value:value.trim()},
-            {field:"school_year", type:"like", value:value.trim()},
-            {field:"type", type:"like", value:value.trim()},
-        ]
-    ]);
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        scholarships.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = scholarships.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("scholar-filter-value").addEventListener("change", applyForeignFilter);
+document.getElementById("scholar-filter-year").addEventListener("change", applyForeignFilter);
+
+function applyForeignFilter() {
+    const type = document.getElementById("scholar-filter-type").value;
+    const selectedValue = document.getElementById("scholar-filter-value").value;
+    const selectedYear = document.getElementById("scholar-filter-year").value;
+
+    scholarships.clearFilter();
+
+    scholarships.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#scholar-download-csv').click(function() {
+   scholarships.download("csv", "Scholarships.csv", { filter: true });
+});
+
+function searchScholarship(value) {
+    const searchTerms = value.toLowerCase().split(" ");
+
+    scholarships.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.semester.toLowerCase().includes(term) &&
+                !data.school_year.toLowerCase().includes(term) &&
+                !data.updated_at.toLowerCase().includes(term) &&
+                !data.type.toLowerCase().includes(term) &&
+                !data.number_of_scholars.toString().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 $('#filter-status').change(function(){

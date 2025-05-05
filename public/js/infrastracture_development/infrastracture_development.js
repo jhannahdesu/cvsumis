@@ -27,6 +27,40 @@ function throwError(xhr, status){
 }
 
 const infrastractureTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+    
     let columns = [
         {
             titleFormatter: function () {
@@ -55,7 +89,8 @@ const infrastractureTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
+        { title:'INFRASTRUCTURE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     INFRASTRUCTURE
@@ -67,7 +102,8 @@ const infrastractureTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'STATUS',
+             titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     STATUS
@@ -94,7 +130,8 @@ const infrastractureTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -122,6 +159,112 @@ const infrastractureTable = () => {
     });
 }
 
+document.getElementById("infrastructures-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("infrastructures-filter-value");
+    const filterYearSelect = document.getElementById("infrastructures-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        infrastructures.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = infrastructures.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("infrastructures-filter-value").addEventListener("change", applyinfrastructuresFilter);
+document.getElementById("infrastructures-filter-year").addEventListener("change", applyinfrastructuresFilter);
+
+function applyinfrastructuresFilter() {
+    const type = document.getElementById("infrastructures-filter-type").value;
+    const selectedValue = document.getElementById("infrastructures-filter-value").value;
+    const selectedYear = document.getElementById("infrastructures-filter-year").value;
+
+    infrastructures.clearFilter();
+
+    infrastructures.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#infrastructures-download-csv').click(function() {
+    infrastructures.download("csv", "Infrastructures.csv", { filter: true });
+});
+
 
 // function searchinfrastructures(value){
 //     infrastructures.setFilter([
@@ -148,6 +291,8 @@ function searchinfrastructures(value) {
             if (
                 !data.name.toLowerCase().includes(term) &&
                 !data.infrastracture.toLowerCase().includes(term) &&
+                !data.startDate.toLowerCase().includes(term) &&
+                !data.endDate.toLowerCase().includes(term) &&
                 !data.status.toLowerCase().includes(term)
             ) {
                 matches = false;

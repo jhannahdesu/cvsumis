@@ -60,17 +60,23 @@
                                 <input class="form-control mr-sm-2" type="search" oninput="searchorganizations(value)" placeholder="Search" aria-label="Search">
                             </form>
 
+                                    <div class="d-flex">
+                                        <select id="organizations-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="organizations-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="organizations-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
                             
                             <div class="ms-auto d-flex">                  
-                                <form id="studentDevelopmentCsvDownloadForm" class="form-inline" method="GET" action="{{ route('StudentDevelopmentCSV') }}">
-                                    <input type="hidden" name="school_year" id="studentDevelopmentCsvYearInput">
-                                    <input type="hidden" name="semester" id="studentDevelopmentCsvSemesterInput">
-                                    
-                                    <button type="submit" class="btn btn-outline-info">
-                                        <i class="bi bi-printer-fill"> CSV </i>
-                                    </button>
-                                    
-                                </form>
+                                <button type="button" id="organizations-download-csv" class="btn btn-outline-info">
+                                    <i class="bi bi-printer-fill"> CSV </i>
+                                </button>
                             </div>
                         </div>
                         <div id="organization-table"></div>

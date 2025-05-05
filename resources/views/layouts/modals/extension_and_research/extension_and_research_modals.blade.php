@@ -120,8 +120,8 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="year" class="form-label">Month Year</label>
-                    <input type="text" class="form-control" id="view_year" name="year" required>
+                    <label for="year" class="form-label">Date Year</label>
+                    <input type="date" class="form-control" id="view_year" name="year" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>

@@ -22,7 +22,7 @@
                                 <h5 class="card-title">Accreditation status of academic programs</h5>
                                 <div class="d-flex justify-content-between mb-3">
                                     <form class="form-inline">
-                                        <input class="form-control mr-sm-2" type="search" oninput="searchAcademicProgram(value)" placeholder="ex. BS Agricultural And Biosystems Engineering" aria-label="Search" style="width: 200px;">
+                                        <input class="form-control mr-sm-2" type="search" oninput="searchAcademicProgram(value)" placeholder="Search" aria-label="Search" style="width: 200px;">
                                     </form>
 
                                     <div class="d-flex">
@@ -71,7 +71,7 @@
                                 <h5 class="card-title">Academic programs with Government Recognition (CoPC)</h5>
                                 <div class="d-flex justify-content-between mb-3">
                                     <form class="form-inline">
-                                        <input class="form-control mr-sm-2" type="search" oninput="searchRecognition(value)" placeholder="ex. BS Information Technology" aria-label="Search" style="width: 200px;">
+                                        <input class="form-control mr-sm-2" type="search" oninput="searchRecognition(value)" placeholder="Search" aria-label="Search" style="width: 200px;">
                                     </form>
 
                                     <div class="d-flex justify-content-between">
@@ -119,7 +119,8 @@
                                 <h5 class="card-title">Performance in the licensure examination</h5>
                                 <div class="d-flex justify-content-between mb-3">
                                     <form class="form-inline">
-                                        <input class="form-control mr-sm-2" type="search" oninput="searchLicensureExam(value)" placeholder="ex. Architecture" aria-label="Search">
+                                        <!-- <input class="form-control mr-sm-2" type="search" oninput="searchLicensureExam(value)" placeholder="Search" aria-label="Search"> -->
+                                        <input class="form-control mr-sm-2" id="licensure-search" type="search" placeholder="Search" aria-label="Search" />
                                     </form>
 
                                     <div class="d-flex justify-content-between">
@@ -167,7 +168,7 @@
                                 <h5 class="card-title">List of faculty members with national TVET qualification and certification</h5>
                                 <div class="d-flex justify-content-between mb-3">
                                     <form class="form-inline">
-                                        <input class="form-control mr-sm-2" type="search" oninput="searchfacultyTvets(value)" placeholder="Holder Name" aria-label="Search" style="width: 250px;">
+                                        <input class="form-control mr-sm-2" type="search" oninput="searchfacultyTvets(value)" placeholder="Search" aria-label="Search" style="width: 250px;">
                                     </form>
                                     
                                     <div class="d-flex justify-content-between">
@@ -216,7 +217,7 @@
                                 <h5 class="card-title">Number of students with national TVET qualification and certification</h5>
                                 <div class="d-flex justify-content-between mb-3">
                                     <form class="form-inline">
-                                        <input class="form-control mr-sm-2" type="search" oninput="searchstudentTvets(value)" placeholder="ex. National Certificate I" aria-label="Search">
+                                        <input class="form-control mr-sm-2" type="search" oninput="searchstudentTvets(value)" placeholder="Search" aria-label="Search">
                                     </form>
                                     <div class="d-flex justify-content-between">
                                         <select id="student-filter-type" class="form-select ms-2 me-1">

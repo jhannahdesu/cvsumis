@@ -24,20 +24,37 @@
                                     <form class="form-inline">
                                         <input class="form-control mr-sm-2" type="search" oninput="searchuniversityResearchs(value)" placeholder="Title" aria-label="Search">
                                     </form>
+
+                                    <div class="d-flex">
+                                        <select id="universityResearchs-filter-type" class="form-select ms-2 me-1">
+                                            <option value="all" disabled selected>Date Filter</option>
+                                            <option value="all">All</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="quarterly">Quarterly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+
+                                        <select id="universityResearchs-filter-year" style="display:none;" class="form-select me-1"></select>
+                                        <select id="universityResearchs-filter-value" style="display:none;" class="form-select me-1"></select>
+                                    </div>
+                                    
                                     <div class="ms-auto d-flex">
                                         @if(Auth::user()->position != 5)
                                         <button type="button" class="btn btn-outline-primary me-2" id="university-research-modal">
                                             <i class="bi bi-plus-circle-fill"></i>
                                         </button>
                                         @endif
-                                        <form id="universityResearchCsvDownloadForm" class="form-inline" method="GET" action="{{ route('UniversityResearchCSV') }}">
+                                        <!-- <form id="universityResearchCsvDownloadForm" class="form-inline" method="GET" action="{{ route('UniversityResearchCSV') }}">
                                             <input type="hidden" name="school_year" id="universityResearchCsvYearInput">
                                             <input type="hidden" name="semester" id="universityResearchCsvSemesterInput">
                                                 
                                             <button type="submit" class="btn btn-outline-info">
                                                 <i class="bi bi-printer-fill"> CSV </i>
                                             </button>  
-                                        </form>
+                                        </form> -->
+                                        <button type="button" id="universityResearchs-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
                                     </div>
                                 </div>
                                 <div id="university-research-table"></div>
@@ -64,13 +81,30 @@
                                         <form class="form-inline">
                                             <input class="form-control mr-sm-2" type="search" oninput="searchextensionActvities(value)" placeholder="Activity" aria-label="Search">
                                         </form>
+
+                                        <div class="d-flex">
+                                            <select id="extensionActvities-filter-type" class="form-select ms-2 me-1">
+                                                <option value="all" disabled selected>Date Filter</option>
+                                                <option value="all">All</option>
+                                                <option value="monthly">Monthly</option>
+                                                <option value="quarterly">Quarterly</option>
+                                                <option value="yearly">Yearly</option>
+                                            </select>
+
+                                            <select id="extensionActvities-filter-year" style="display:none;" class="form-select me-1"></select>
+                                            <select id="extensionActvities-filter-value" style="display:none;" class="form-select me-1"></select>
+                                        </div>
+
                                     <div class="ms-auto d-flex">
                                     @if(Auth::user()->position != 5)
                                         <button type="button" class="btn btn-outline-primary me-2" id="extension-activity-modal">
                                             <i class="bi bi-plus-circle-fill"></i>
                                         </button>
                                     @endif
-                                    <form id="extensionActivityCsvDownloadForm" class="form-inline" method="GET" action="{{ route('ExtensionActivityCSV') }}">
+                                        <button type="button" id="extensionActvities-download-csv" class="btn btn-outline-info">
+                                            <i class="bi bi-printer-fill"> CSV </i>
+                                        </button>
+                                    <!-- <form id="extensionActivityCsvDownloadForm" class="form-inline" method="GET" action="{{ route('ExtensionActivityCSV') }}">
                                         <input type="hidden" name="school_year" id="extensionActivityCsvYearInput">
                                         <input type="hidden" name="semester" id="extensionActivityCsvSemesterInput">
                                         
@@ -78,7 +112,7 @@
                                             <i class="bi bi-printer-fill"> CSV </i>
                                         </button>
                                         
-                                    </form>
+                                    </form> -->
                                     </div>
                                     </div>
                                 <div id="extension-activity-table"></div>

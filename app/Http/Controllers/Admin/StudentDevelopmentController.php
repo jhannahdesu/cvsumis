@@ -18,47 +18,47 @@ class StudentDevelopmentController extends Controller
         return view('admin.student_development.student_development', compact('main_title', 'nav'));
     }
 
-    public function StudentDevelopmentCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function StudentDevelopmentCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Student_Organizations_List.csv';
+//     $filename = $directory . '/Student_Organizations_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'ORGANIZATION ABBREVIATION', 'PROGRAM ABBREVIATION', 'ORGANIZATION NAME']);
+//     fputcsv($fp, ['ADDED BY', 'ORGANIZATION ABBREVIATION', 'PROGRAM ABBREVIATION', 'ORGANIZATION NAME']);
 
-    $query = StudentOrganizations::latest()->with('created_by_dtls');
+//     $query = StudentOrganizations::latest()->with('created_by_dtls');
 
-    // Apply filters if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply filters if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    if ($request->has('school_year') && !empty($request->school_year)) {
-        $query->where('school_year', $request->school_year);
-    }
+//     if ($request->has('school_year') && !empty($request->school_year)) {
+//         $query->where('school_year', $request->school_year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->org_abbrev),
-            ucwords($row->program_abbrev),
-            ucwords($row->org_name)
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->org_abbrev),
+//             ucwords($row->program_abbrev),
+//             ucwords($row->org_name)
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Student_Organizations_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Student_Organizations_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
 
     public function storeOrganization(Request $request) {

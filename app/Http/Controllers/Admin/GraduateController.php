@@ -44,50 +44,50 @@ class GraduateController extends Controller
         return $data;
     }
 
-    public function GraduateCSV(Request $request)
-{
-    $directory = public_path('reports');
-    if (!file_exists($directory)) {
-        mkdir($directory, 0755, true);
-    }
+//     public function GraduateCSV(Request $request)
+// {
+//     $directory = public_path('reports');
+//     if (!file_exists($directory)) {
+//         mkdir($directory, 0755, true);
+//     }
 
-    $filename = $directory . '/Graduate_List.csv';
+//     $filename = $directory . '/Graduate_List.csv';
 
-    $fp = fopen($filename, "w+");
+//     $fp = fopen($filename, "w+");
 
-    fputcsv($fp, ['ADDED BY', 'PROGRAM', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF STUDENTS', 'GRADUATE DATE']);
+//     fputcsv($fp, ['ADDED BY', 'PROGRAM', 'SEMESTER', 'ACADEMIC YEAR', 'NUMBER OF STUDENTS', 'GRADUATE DATE']);
 
-    $query = GraduateHeader::latest()->with('created_by_dtls', 'program_dtls');
+//     $query = GraduateHeader::latest()->with('created_by_dtls', 'program_dtls');
 
-    // Apply semester filter if provided
-    if ($request->has('semester') && !empty($request->semester)) {
-        $query->where('semester', $request->semester);
-    }
+//     // Apply semester filter if provided
+//     if ($request->has('semester') && !empty($request->semester)) {
+//         $query->where('semester', $request->semester);
+//     }
 
-    // Apply year filter if provided
-    if ($request->has('year') && !empty($request->year)) {
-        $query->where('school_year', $request->year);
-    }
+//     // Apply year filter if provided
+//     if ($request->has('year') && !empty($request->year)) {
+//         $query->where('school_year', $request->year);
+//     }
 
-    $data = $query->get();
+//     $data = $query->get();
 
-    foreach ($data as $row) {
-        fputcsv($fp, [
-            ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-            ucwords($row->program_dtls->program),
-            ucwords($row->semester),
-            $row->school_year,
-            $row->number_of_student,
-            date('F d, Y', strtotime($row->graduate_date))
-        ]);
-    }
+//     foreach ($data as $row) {
+//         fputcsv($fp, [
+//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
+//             ucwords($row->program_dtls->program),
+//             ucwords($row->semester),
+//             $row->school_year,
+//             $row->number_of_student,
+//             date('F d, Y', strtotime($row->graduate_date))
+//         ]);
+//     }
 
-    fclose($fp);
+//     fclose($fp);
 
-    $headers = ['Content-Type' => 'text/csv'];
+//     $headers = ['Content-Type' => 'text/csv'];
 
-    return response()->download($filename, 'Graduate_List.csv', $headers)->deleteFileAfterSend(true);
-}
+//     return response()->download($filename, 'Graduate_List.csv', $headers)->deleteFileAfterSend(true);
+// }
 
     public function storeGraduateHeader(Request $request) {
         try {
@@ -149,13 +149,13 @@ class GraduateController extends Controller
         $query = GraduateHeader::query();
     
         // Apply filters if provided
-        if ($request->has('semester') && !empty($request->semester)) {
-            $query->where('semester', $request->semester);
-        }
+        // if ($request->has('semester') && !empty($request->semester)) {
+        //     $query->where('semester', $request->semester);
+        // }
     
-        if ($request->has('year') && !empty($request->year)) {
-            $query->where('school_year', $request->year);
-        }
+        // if ($request->has('year') && !empty($request->year)) {
+        //     $query->where('school_year', $request->year);
+        // }
     
         if(Auth::user()->position == 1 || Auth::user()->position == 5){
             $data = $query->orderBy('created_at', 'desc')->get();

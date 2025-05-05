@@ -95,7 +95,7 @@ const accreditationStatusTable = () => {
                 </div>
             `;
         }},
-        { 
+        {  title: "PROGRAMS",
             titleFormatter: function () {
                 return `
                     <div style="line-height: 2.5;">
@@ -104,8 +104,9 @@ const accreditationStatusTable = () => {
                         </strong>
                     </div>
                 `;
-            }, field: "program", headerSort: false, headerHozAlign: "center", hozAlign: "left", vertAlign: "middle" },
-        { 
+            }, field: "program", headerSort: false, headerHozAlign: "center", hozAlign: "left", vertAlign: "middle" 
+        },
+        { title: "STATUS",
             titleFormatter: function () {
             return `
                 <div style="line-height: 2.5;">
@@ -115,7 +116,7 @@ const accreditationStatusTable = () => {
                 </div>
             `;
         }, field: "status", headerSort: false, headerHozAlign: "center", hozAlign: "left", vertAlign: "middle" },
-        { 
+        { title: "VISIT DATE",
             titleFormatter: function () {
             return `
                 <div style="line-height: 2.5;">
@@ -159,9 +160,12 @@ const accreditationStatusTable = () => {
         paginationSizeSelector: [10, 50, 100],
         placeholder: "No Data Available",
         selectable: 1,
-        initialSort: [{ column: "date", dir: "desc" }],
         initialFilter: [
-            { field: defaultDateFilter.column, type: "between", value: [startDate.toISOString(), endDate.toISOString()] },
+            {
+                field: defaultDateFilter.column,
+                type: "between",
+                value: [startDate.toISOString(), endDate.toISOString()]
+            }
         ],
         rowFormatter: function (row) {
             const element = row.getElement();
@@ -498,7 +502,7 @@ const govRecognitionTable = () => {
                 `;
             }
         },
-        { 
+        { title:'PROGRAM',
             titleFormatter: function () {
                 return `
                     <div style="line-height: 2.5;">
@@ -514,7 +518,7 @@ const govRecognitionTable = () => {
             hozAlign: "left", 
             vertAlign: "middle" 
         },
-        { 
+        { title:'STATUS',
             titleFormatter: function () {
                 return `
                     <div style="line-height: 2.5;">
@@ -530,12 +534,12 @@ const govRecognitionTable = () => {
             hozAlign: "center", 
             vertAlign: "middle" 
         },
-        { 
+        { title:'CoPC NUMBER',
             titleFormatter: function () {
                 return `
                     <div style="line-height: 2.5;">
                         <strong style="background: linear-gradient(45deg,rgb(254, 160, 37),rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                            COPC NUMBER
+                            CoPC NUMBER
                         </strong>
                     </div>
                 `;
@@ -546,7 +550,7 @@ const govRecognitionTable = () => {
             hozAlign: "center", 
             vertAlign: "middle" 
         },
-        { 
+        { title:'DATE',
             titleFormatter: function () {
                 return `
                     <div style="line-height: 2.5;">
@@ -923,7 +927,7 @@ let licensureExamTable = () => {
     const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
 
     let columns = [
-        {
+        { 
             titleFormatter: function () {
                 return `
                     <div style="line-height: 1.2;">
@@ -950,7 +954,7 @@ let licensureExamTable = () => {
                 `;
             }
         },
-        {
+        { title:"EXAM TYPE",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">EXAM TYPE</strong>
@@ -961,7 +965,7 @@ let licensureExamTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        {
+        { title:"EXAM DATE",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">EXAM DATE</strong>
@@ -972,7 +976,7 @@ let licensureExamTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        {
+        { title:"CVSU FIRST TIME TAKER",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">CVSU FIRST TIME TAKER</strong>
@@ -984,7 +988,7 @@ let licensureExamTable = () => {
             formatter: "html",
             vertAlign: "middle"
         },
-        {
+        { title:"NATIONAL FIRST TIME TAKER",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">NATIONAL FIRST TIME TAKER</strong>
@@ -996,7 +1000,7 @@ let licensureExamTable = () => {
             formatter: "html",
             vertAlign: "middle"
         },
-        {
+        { title:"CVSU OVERALL TOTAL",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">CVSU OVERALL TOTAL</strong>
@@ -1008,7 +1012,7 @@ let licensureExamTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        {
+        { title:"NATIONAL OVERALL TOTAL",
             titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">NATIONAL OVERALL TOTAL</strong>
@@ -1051,11 +1055,12 @@ let licensureExamTable = () => {
         paginationSizeSelector: [10, 50, 100],
         selectable: 1,
         columns: columns,
-        initialSort: [
-            { column: "updated_at", dir: "asc" }
-        ],
         initialFilter: [
-            { field: defaultDateFilter.column, type: "between", value: [startDate.toISOString(), endDate.toISOString()] }
+            {
+                field: defaultDateFilter.column,
+                type: "between",
+                value: [startDate.toISOString(), endDate.toISOString()]
+            }
         ],
         rowFormatter: function (row) {
             const element = row.getElement();
@@ -1173,17 +1178,40 @@ function applyLicensureExamFilter() {
 }
 
 $('#licensure-exam-csv').click(function() {
-    licensureExams.download("csv", "LicensureExams.csv", { filter: true });
+    licensureExams.download("csv", "Licensure Exams.csv", { filter: true });
 });
 
 
-function searchlicensureExam(value) {
-    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+// function searchlicensureExam(value) {
+//     let searchTerms = value.trim().toLowerCase().split(/\s+/);
 
-    if (searchTerms.length === 0 || searchTerms[0] === "") {
-        licensureExams.clearFilter();
-        return;
-    }
+//     if (searchTerms.length === 0 || searchTerms[0] === "") {
+//         licensureExams.clearFilter();
+//         return;
+//     }
+
+//     licensureExams.setFilter(function(data) {
+//         let matches = true;
+
+//         searchTerms.forEach(term => {
+//             if (
+//                 !data.name.toLowerCase().includes(term) &&
+//                 !data.exam.toLowerCase().includes(term) &&
+//                 !data.exam_date.toLowerCase().includes(term) &&
+//                 !data.cvsu_rate.toLowerCase().includes(term) &&
+//                 !data.national_rate.toLowerCase().includes(term) &&
+//                 !data.cvsu_overall_passing_rate.toLowerCase().includes(term) &&
+//                 !data.national_overall_passing_rate.toLowerCase().includes(term)
+//             ) {
+//                 matches = false;
+//             }
+//         });
+
+//         return matches;
+//     });
+// }
+document.getElementById("licensure-search").addEventListener("input", function () {
+    const searchTerms = this.value.toLowerCase().split(" ");
 
     licensureExams.setFilter(function(data) {
         let matches = true;
@@ -1193,10 +1221,10 @@ function searchlicensureExam(value) {
                 !data.name.toLowerCase().includes(term) &&
                 !data.exam.toLowerCase().includes(term) &&
                 !data.exam_date.toLowerCase().includes(term) &&
-                !data.cvsu_rate.toLowerCase().includes(term) &&
-                !data.national_rate.toLowerCase().includes(term) &&
-                !data.cvsu_overall_passing_rate.toLowerCase().includes(term) &&
-                !data.national_overall_passing_rate.toLowerCase().includes(term)
+                !data.cvsu_rate.toString().includes(term) &&
+                !data.national_rate.toString().includes(term) &&
+                !data.cvsu_overall_passing_rate.toString().includes(term) &&
+                !data.national_overall_passing_rate.toString().includes(term)
             ) {
                 matches = false;
             }
@@ -1204,7 +1232,22 @@ function searchlicensureExam(value) {
 
         return matches;
     });
-}
+});
+
+// document.getElementById("licensure-search").addEventListener("input", function () {
+//     const keyword = this.value.toLowerCase();
+//     licensureExams.setFilter([
+//         [
+//             { field: "name", type: "like", value: keyword },
+//             { field: "exam", type: "like", value: keyword },
+//             { field: "exam_date", type: "like", value: keyword },
+//             { field: "cvsu_rate", type: "like", value: keyword },
+//             { field: "national_rate", type: "like", value: keyword },
+//             { field: "cvsu_overall_passing_rate", type: "like", value: keyword },
+//             { field: "national_overall_passing_rate", type: "like", value: keyword }
+//         ]
+//     ]);
+// });
 
 
 $('#licensure-exam-modal').click(function() {
@@ -1507,34 +1550,36 @@ let facultyTvetTable = () => {
                 `;
             }
         },
-        {
-            titleFormatter: () =>
-            `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">CERTIFICATE TYPE</strong>
-            </div>`,
-            field: "certificate",
-            headerHozAlign: "center",
-            headerSort: false,
-            hozAlign: "center",
-            vertAlign: "middle"
-        },
-        {
-            titleFormatter: () =>
-            `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">DATE</strong>
-            </div>`,
-            field: "date",
-            headerHozAlign: "center",
-            headerSort: false,
-            hozAlign: "center",
-            vertAlign: "middle"
-        },
-        {
+        { title:"HOLDER",
             titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">HOLDER</strong>
             </div>`,
             field: "holder",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { title:"CERTIFICATE DETAILS",
+            titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    CERTIFICATE DETAILS
+                </strong>
+            </div>`,
+            field: "details",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { title:"DATE",
+            titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">DATE</strong>
+            </div>`,
+            field: "date",
             headerHozAlign: "center",
             headerSort: false,
             hozAlign: "center",
@@ -1546,7 +1591,7 @@ let facultyTvetTable = () => {
         columns.push({
             titleFormatter: () =>
             `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">CERTIFICATE TYPE</strong>
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">ACTION</strong>
             </div>`,
             field: "action",
             headerHozAlign: "center",
@@ -1565,9 +1610,6 @@ let facultyTvetTable = () => {
         placeholder: "No Data Available",
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
-        initialSort: [
-            { column: "date", dir: "asc" }
-        ],
         initialFilter: [
             {
                 field: defaultDateFilter.column,
@@ -1914,7 +1956,7 @@ let studentTvetTable = () => {
                 `;
             }
         },
-        {
+        { title:"CERTIFICATE TYPE",
             titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">CERTIFICATE TYPE</strong>
@@ -1925,12 +1967,38 @@ let studentTvetTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        {
+        { title:"NUMBER OF STUDENT",
             titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">NUMBER OF STUDENT</strong>
             </div>`,
             field: "number",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { title:"LOCATION",
+            titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    LOCATION
+                </strong>
+            </div>`,
+            field: "location",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { title:"DATE",
+            titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    DATE
+                </strong>
+            </div>`,
+            field: "date",
             headerHozAlign: "center",
             headerSort: false,
             hozAlign: "center",
@@ -1961,9 +2029,6 @@ let studentTvetTable = () => {
         paginationSize: 10,
         paginationSizeSelector: [10, 50, 100],
         placeholder: "No Data Available",
-        initialSort: [
-            { column: "updated_at", dir: "asc" }
-        ],
         initialFilter: [
             {
                 field: defaultDateFilter.column,
@@ -2090,6 +2155,8 @@ function searchstudentTvets(value) {
             if (
                 !data.name.toLowerCase().includes(term) &&
                 !data.certificate.toLowerCase().includes(term) &&
+                !data.location.toLowerCase().includes(term) &&
+                !data.date.toLowerCase().includes(term) &&
                 !data.number.toString().toLowerCase().includes(term)
             ) {
                 matches = false;
@@ -2159,6 +2226,8 @@ $(document).on('click', '#edit-student-tvet-btn', function (e) {
         success: function(response) {
             $('#view_student_tvet_certification_type').val(response.certification_type);
             $('#view_student_tvet_number_of_student').val(response.number_of_student);
+            $('#view_student_tvet_location').val(response.student_tvet_location);
+            $('#view_student_tvet_date').val(response.student_tvet_date);
             $('#view_student_tvet_certificate_details').val(response.certificate_details);
         },
         error: function (xhr, status) {

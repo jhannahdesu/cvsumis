@@ -34,7 +34,7 @@
                                     <i class="bi bi-plus-circle-fill"></i>
                                 </button>
                             @endif
-                                <button type="button" id="scholar-csv" class="btn btn-outline-info">
+                                <button type="button" id="scholar-download-csv" class="btn btn-outline-info">
                                     <i class="bi bi-printer-fill"> CSV </i>
                                 </button>
                                     

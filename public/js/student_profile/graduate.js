@@ -72,6 +72,7 @@ const graduateHeaderTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
+            download: false,
             formatter: function (cell) {
                 const data = cell.getData();
                 return `
@@ -82,7 +83,7 @@ const graduateHeaderTable = () => {
                 `;
             }
         },
-        {
+        { title: 'PROGRAM',
             titleFormatter: () => `
                 <div style="line-height: 2.5;">
                     <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
@@ -95,7 +96,7 @@ const graduateHeaderTable = () => {
             hozAlign: "center",
             vertAlign: "middle",
         },
-        {
+        { title: 'SEMESTER',
             titleFormatter: () => `
                 <div style="line-height: 2.5;">
                     <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
@@ -108,7 +109,7 @@ const graduateHeaderTable = () => {
             hozAlign: "center",
             vertAlign: "middle",
         },
-        {
+        { title: 'ACADEMIC YEAR',
             titleFormatter: () => `
                 <div style="line-height: 2.5;">
                     <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
@@ -121,7 +122,7 @@ const graduateHeaderTable = () => {
             hozAlign: "center",
             vertAlign: "middle",
         },
-        {
+        { title: 'NO. OF STUDENTS',
             titleFormatter: () => `
                 <div style="line-height: 2.5;">
                     <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
@@ -134,7 +135,7 @@ const graduateHeaderTable = () => {
             hozAlign: "center",
             vertAlign: "middle",
         },
-        {
+        { title: 'DATE',
             titleFormatter: () => `
                 <div style="line-height: 2.5;">
                     <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
@@ -198,61 +199,161 @@ const graduateHeaderTable = () => {
     });
 };
 
+document.getElementById("graduate-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValue = document.getElementById("graduate-filter-value");
+    const filterYear = document.getElementById("graduate-filter-year");
 
-let graduateDetailsTable = () => {
-    graduatesDetails = new Tabulator("#graduate-details-table", {
-        dataTree:true,
-        dataTreeSelectPropagate:true,
-        // layout:"fitDataFill",
-        layout:"fitColumns",
-        maxHeight: "1000px",
-        scrollToColumnPosition: "center",
-        placeholder:"No Data Available", 
-        pagination:"local",
-        paginationSize:10,  
-        paginationSizeSelector:[10,50,100],
-        selectable:1,
-        rowFormatter:function(dom){
-            var selectedRow = dom.getData();
-            if(true)
-            {
-                dom.getElement().classList.add("table-light");
-            }else if(selectedRow.safety_stock == selectedRow.qty)
-            {
-                dom.getElement().classList.add("table-warning");
+    filterValue.innerHTML = "";
+    filterYear.innerHTML = "";
+
+    if (type === "all") {
+        graduatesHeader.clearFilter();
+        filterValue.style.display = "none";
+        filterYear.style.display = "none";
+        return;
+    }
+
+    filterValue.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYear.style.display = "inline-block";
+
+    const data = graduatesHeader.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.date);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            monthsSet.add(date.toLocaleString('default', { month: 'long' }));
+        } else if (type === "quarterly") {
+            const q = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${q}`);
+        }
+    });
+
+    const months = ["December", "November", "October", "September", "August", "July", "June", "May", "April", "March", "February", "January"];
+    if (type === "monthly") {
+        months.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValue.appendChild(opt);
             }
-        },
-        columns:[
-            //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
-            {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
-            {title:"NO. OF STUDENT", field:"number_of_student", hozAlign:"left", vertAlign:"middle"},
-            {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
-        ]
-    }); 
+        });
+    }
+
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValue.appendChild(opt);
+            }
+        });
+    }
+
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYear.appendChild(opt);
+    });
+});
+
+document.getElementById("graduate-filter-value").addEventListener("change", applyGraduateFilter);
+document.getElementById("graduate-filter-year").addEventListener("change", applyGraduateFilter);
+
+function applyGraduateFilter() {
+    const type = document.getElementById("graduate-filter-type").value;
+    const value = document.getElementById("graduate-filter-value").value;
+    const year = document.getElementById("graduate-filter-year").value;
+
+    graduatesHeader.clearFilter();
+
+    graduatesHeader.setFilter(data => {
+        const date = new Date(data.date);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const yearVal = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === value && yearVal == year;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === value && yearVal == year;
+        } else if (type === "yearly") {
+            return yearVal == year;
+        }
+
+        return true;
+    });
 }
+
+document.getElementById("graduate-download-csv").addEventListener("click", () => {
+    graduatesHeader.download("csv", "Graduates.csv", { filter: true });
+});
+
+// let graduateDetailsTable = () => {
+//     graduatesDetails = new Tabulator("#graduate-details-table", {
+//         dataTree:true,
+//         dataTreeSelectPropagate:true,
+//         // layout:"fitDataFill",
+//         layout:"fitColumns",
+//         maxHeight: "1000px",
+//         scrollToColumnPosition: "center",
+//         placeholder:"No Data Available", 
+//         pagination:"local",
+//         paginationSize:10,  
+//         paginationSizeSelector:[10,50,100],
+//         selectable:1,
+//         rowFormatter:function(dom){
+//             var selectedRow = dom.getData();
+//             if(true)
+//             {
+//                 dom.getElement().classList.add("table-light");
+//             }else if(selectedRow.safety_stock == selectedRow.qty)
+//             {
+//                 dom.getElement().classList.add("table-warning");
+//             }
+//         },
+//         columns:[
+//             //{title:"NO", field:"no", hozAlign:"left",width:75, vertAlign:"middle"},
+//             {title:"PROGRAM", field:"program", hozAlign:"left", vertAlign:"middle"},
+//             {title:"NO. OF STUDENT", field:"number_of_student", hozAlign:"left", vertAlign:"middle"},
+//             {title:"ACTION", field:"action", hozAlign:"left", formatter:"html", vertAlign:"middle"},
+//         ]
+//     }); 
+// }
 
 function searchGraduate(value){
     graduatesHeader.setFilter([
         [
-            {title:'NO', field: 'no'},
             {field:"name", type:"like", value:value.trim()},
+            {field:"program_id", type:"like", value:value.trim()},
             {field:"school_year", type:"like", value:value.trim()},
             {field:"semester", type:"like", value:value.trim()},
+            {field:"number_of_student", type:"like", value:value.trim()},
+            {field:"date", type:"like", value:value.trim()},
         ]
     ]);
 }
 
 function fetchGraduateHdrData(){
-    const selectedYear = document.getElementById('graduate-years').value;
-    const selectedSemester = document.getElementById('semester').value; // Use the correct ID for semester
+    // const selectedYear = document.getElementById('graduate-years').value;
+    // const selectedSemester = document.getElementById('semester').value;
 
     $.ajax({
         url: '/fetch-graduate-hdr',
         type: 'GET',
-        data: {
-            year: selectedYear,
-            semester: selectedSemester
-        },
+        // data: {
+        //     year: selectedYear,
+        //     semester: selectedSemester
+        // },
         success: function(response) {
             console.log(response);
             graduatesHeader.setData(response);
@@ -552,17 +653,17 @@ $(document).on('click', '#remove-graduate-dtls-btn', function(){
     });
 });
 
-$('#filter-status').change(function(){
-    var semesterValue = $('#filter-status').val();
-    graduatesHeader.setFilter([
-        [
-            {field:"semester", type:"like", value:semesterValue.trim()},
-        ]
-    ]);
+// $('#filter-status').change(function(){
+//     var semesterValue = $('#filter-status').val();
+//     graduatesHeader.setFilter([
+//         [
+//             {field:"semester", type:"like", value:semesterValue.trim()},
+//         ]
+//     ]);
     
-    // Set the value for the CSV download
-    document.getElementById('graduateCsvSemesterInput').value = semesterValue;
-});
+//     // Set the value for the CSV download
+//     document.getElementById('graduateCsvSemesterInput').value = semesterValue;
+// });
 
 
 
@@ -580,27 +681,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-document.getElementById('graduate-years').addEventListener('change', function () { 
-    const selectedYear = this.value;
+// document.getElementById('graduate-years').addEventListener('change', function () { 
+//     const selectedYear = this.value;
 
-    // Set the hidden input value for CSV
-    document.getElementById('graduateCsvYearInput').value = selectedYear;
+//     // Set the hidden input value for CSV
+//     document.getElementById('graduateCsvYearInput').value = selectedYear;
 
-    // Apply filter to Tabulator table
-    if (selectedYear === "") {
-        graduatesHeader.clearFilter(); // <-- Correct table variable
-    } else {
-        graduatesHeader.setFilter("school_year", "like", selectedYear); // <-- Correct field
-    }
-});
+//     // Apply filter to Tabulator table
+//     if (selectedYear === "") {
+//         graduatesHeader.clearFilter(); // <-- Correct table variable
+//     } else {
+//         graduatesHeader.setFilter("school_year", "like", selectedYear); // <-- Correct field
+//     }
+// });
 
-document.getElementById('graduate-years').addEventListener('change', function () {
-    fetchGraduateHdrData(); 
-});
+// document.getElementById('graduate-years').addEventListener('change', function () {
+//     fetchGraduateHdrData(); 
+// });
 
-document.getElementById('semester').addEventListener('change', function () {
-    fetchGraduateHdrData(); 
-});
+// document.getElementById('semester').addEventListener('change', function () {
+//     fetchGraduateHdrData(); 
+// });
 
 // Initialize the table after the DOM is ready
 document.addEventListener('DOMContentLoaded', () => {

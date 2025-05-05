@@ -251,7 +251,7 @@
 
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Exam Date</label>
-                    <input type="text" class="form-control" id="exam_date" name="exam_date" placeholder="e.g. 01/07, 01/09, 01/13/2025" required>
+                    <input type="text" class="form-control" id="exam_date" name="exam_date" placeholder="E.g. January 1 & 2, 2025" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -529,7 +529,7 @@
                             name="certificate_details" 
                             rows="4" 
                             style="resize: none;" 
-                            placeholder="ex. Automotive Servicing - (Chassis Repair)
+                            placeholder="E.g. Automotive Servicing - (Chassis Repair)
 Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA" 
                         ></textarea>
                         <div class="valid-feedback">
@@ -588,12 +588,22 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                 </div>
 
                 <div class="col-md-12">
-                    <label for="school_year" class="form-label">Certificate Details</label>
-                    <input type="text" class="form-control" id="view_certificate_details" name="certificate_details" required>
+                    <label for="view_certificate_details" class="form-label">Certificate Details</label>
+                    <textarea 
+                        class="form-control" 
+                        id="view_certificate_details" 
+                        name="certificate_details" 
+                        rows="4" 
+                        style="resize: none;" 
+                        required
+                        placeholder="E.g. Automotive Servicing - (Chassis Repair)
+Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
+                    ></textarea>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
+
 
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Date</label>
@@ -643,31 +653,31 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                     </div>
                 </div>
 
-                <div class="col-md-12">
-                    <label for="school_year" class="form-label">Certificate Details (DATE)</label>
-                    <input type="date" class="form-control" id="student_tvet_date" name="student_tvet_date" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
+                
                 <div class="col-md-12">
                     <div class="col-12">
-                        <label for="certificate_details" class="form-label">Certificate Details</label>
+                        <label for="certificate_details" class="form-label">Location</label>
                         <textarea 
                             class="form-control" 
-                            id="certificate_details" 
-                            name="certificate_details" 
+                            id="student_tvet_location" 
+                            name="student_tvet_location" 
                             rows="4" 
                             required
                             style="resize: none;" 
-                            placeholder="ex. Automotive Servicing - (Chassis Repair)
+                            placeholder="E.g. Automotive Servicing - (Chassis Repair)
 Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"></textarea>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                     </div>
                 </div>
-
+                <div class="col-md-12">
+                    <label for="school_year" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="student_tvet_date" name="student_tvet_date" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Number of student</label>
                     <input type="number" class="form-control" id="student_tvet_number_of_student" name="number_of_student" required>
@@ -707,15 +717,38 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"></textar
                         Looks good!
                     </div>
                 </div>
-
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                     <label for="school_year" class="form-label">Certificate Details</label>
                     <input type="text" class="form-control" id="view_student_tvet_certificate_details" name="certificate_details" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                </div> -->
+                <div class="col-md-12">
+                    <div class="col-12">
+                        <label for="student_tvet_location" class="form-label">Location</label>
+                        <textarea 
+                            class="form-control" 
+                            id="view_student_tvet_location" 
+                            name="student_tvet_location" 
+                            rows="4" 
+                            style="resize: none;" 
+                            required
+                            placeholder="E.g. Automotive Servicing - (Chassis Repair)
+Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
+                        ></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
                 </div>
-
+                <div class="col-md-12">
+                    <label for="student_tvet_date" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="view_student_tvet_date" name="student_tvet_date" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <label for="school_year" class="form-label">Number of student</label>
                     <input type="number" class="form-control" id="view_student_tvet_number_of_student" name="number_of_student" required>

@@ -31,6 +31,40 @@ function throwError(xhr, status){
 }
 
 let universityResearchTable = () => {
+    const defaultDateFilter = {
+        column: 'updated_at',
+        filterType: 'thisYear',
+    };
+
+    const getDateFilter = (filterType) => {
+        const currentDate = new Date();
+        let startDate = '';
+        let endDate = '';
+
+        switch (filterType) {
+            case 'thisMonth':
+                startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                break;
+            case 'thisQuarter':
+                const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                const quarterStartMonth = (quarter - 1) * 3;
+                startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                break;
+            case 'thisYear':
+                startDate = new Date(currentDate.getFullYear(), 0, 1);
+                endDate = new Date(currentDate.getFullYear(), 11, 31);
+                break;
+            default:
+                break;
+        }
+
+        return { startDate, endDate };
+    };
+
+    const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+    
     let columns = [
         {
             titleFormatter: function () {
@@ -59,18 +93,8 @@ let universityResearchTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
-            `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                    
-                </strong>
-            </div>`,
-            headerHozAlign: "center",
-            headerSort: false,
-            hozAlign: "center",
-            vertAlign: "middle"
-        },
-        { titleFormatter: () =>
+        { title:'AGENCY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     AGENCY
@@ -82,7 +106,8 @@ let universityResearchTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'TITLE',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     TITLE
@@ -94,7 +119,8 @@ let universityResearchTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'RESEARCHER',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     RESEARCHER
@@ -106,7 +132,8 @@ let universityResearchTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'STATUS',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     STATUS
@@ -134,7 +161,8 @@ let universityResearchTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -161,6 +189,112 @@ let universityResearchTable = () => {
         columns: columns
     });
 }
+
+document.getElementById("universityResearchs-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("universityResearchs-filter-value");
+    const filterYearSelect = document.getElementById("universityResearchs-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        universityResearchs.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = universityResearchs.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("universityResearchs-filter-value").addEventListener("change", applyuniversityResearchsFilter);
+document.getElementById("universityResearchs-filter-year").addEventListener("change", applyuniversityResearchsFilter);
+
+function applyuniversityResearchsFilter() {
+    const type = document.getElementById("universityResearchs-filter-type").value;
+    const selectedValue = document.getElementById("universityResearchs-filter-value").value;
+    const selectedYear = document.getElementById("universityResearchs-filter-year").value;
+
+    universityResearchs.clearFilter();
+
+    universityResearchs.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#universityResearchs-download-csv').click(function() {
+    universityResearchs.download("csv", "University Researches.csv", { filter: true });
+});
 
 
 // function searchuniversityResearchs(value){
@@ -357,6 +491,40 @@ $(document).on('click', '#remove-university-research-btn', function(){
 
 
 let extensionActvitieTable = () => {
+        const defaultDateFilter = {
+            column: 'updated_at',
+            filterType: 'thisYear',
+        };
+    
+        const getDateFilter = (filterType) => {
+            const currentDate = new Date();
+            let startDate = '';
+            let endDate = '';
+    
+            switch (filterType) {
+                case 'thisMonth':
+                    startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                    endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                    break;
+                case 'thisQuarter':
+                    const quarter = Math.floor(currentDate.getMonth() / 3) + 1;
+                    const quarterStartMonth = (quarter - 1) * 3;
+                    startDate = new Date(currentDate.getFullYear(), quarterStartMonth, 1);
+                    endDate = new Date(currentDate.getFullYear(), quarterStartMonth + 3, 0);
+                    break;
+                case 'thisYear':
+                    startDate = new Date(currentDate.getFullYear(), 0, 1);
+                    endDate = new Date(currentDate.getFullYear(), 11, 31);
+                    break;
+                default:
+                    break;
+            }
+    
+            return { startDate, endDate };
+        };
+    
+        const { startDate, endDate } = getDateFilter(defaultDateFilter.filterType);
+        
     let columns = [
         {
             titleFormatter: function () {
@@ -385,18 +553,8 @@ let extensionActvitieTable = () => {
                 `;
             }
         },
-        { titleFormatter: () =>
-            `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                    
-                </strong>
-            </div>`,
-            headerHozAlign: "center",
-            headerSort: false,
-            hozAlign: "center",
-            vertAlign: "middle"
-        },
-        { titleFormatter: () =>
+        { title:'EXTENSION ACTIVITY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     EXTENSION ACTIVITY
@@ -409,7 +567,8 @@ let extensionActvitieTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'EXTENSIONIST',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     EXTENSIONIST
@@ -421,7 +580,8 @@ let extensionActvitieTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'NO. OF BENEFICIARIES',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     NO. OF BENEFICIARIES
@@ -433,7 +593,8 @@ let extensionActvitieTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { titleFormatter: () =>
+        { title:'PARTNER AGENCY',
+            titleFormatter: () =>
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
                     PARTNER AGENCY
@@ -460,7 +621,8 @@ let extensionActvitieTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
-            formatter: "html"
+            formatter: "html",
+            download: false
         });
     }
 
@@ -487,6 +649,112 @@ let extensionActvitieTable = () => {
         columns: columns
     });
 }
+
+document.getElementById("extensionActvities-filter-type").addEventListener("change", function() {
+    const type = this.value;
+    const filterValueSelect = document.getElementById("extensionActvities-filter-value");
+    const filterYearSelect = document.getElementById("extensionActvities-filter-year");
+
+    filterValueSelect.innerHTML = "";
+    filterYearSelect.innerHTML = "";
+
+    if (type === "all") {
+        extensionActvities.clearFilter();
+        filterValueSelect.style.display = "none";
+        filterYearSelect.style.display = "none";
+        return;
+    }
+
+    filterValueSelect.style.display = (type === "yearly") ? "none" : "inline-block";
+    filterYearSelect.style.display = "inline-block";
+
+    const data = extensionActvities.getData();
+    const monthsSet = new Set();
+    const quartersSet = new Set();
+    const yearsSet = new Set();
+
+    data.forEach(row => {
+        const date = new Date(row.updated_at);
+        const year = date.getFullYear();
+        yearsSet.add(year);
+
+        if (type === "monthly") {
+            const month = date.toLocaleString('default', { month: 'long' });
+            monthsSet.add(month);
+        } else if (type === "quarterly") {
+            const quarter = Math.floor(date.getMonth() / 3) + 1;
+            quartersSet.add(`Q${quarter}`);
+        }
+    });
+
+    // Handle Monthly Filter (December to January)
+    if (type === "monthly") {
+        const monthOrder = [
+            "December", "November", "October", "September",
+            "August", "July", "June", "May",
+            "April", "March", "February", "January"
+        ];
+        monthOrder.forEach(month => {
+            if (monthsSet.has(month)) {
+                const opt = document.createElement("option");
+                opt.value = month;
+                opt.textContent = month;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Quarterly Filter (Q4 to Q1)
+    if (type === "quarterly") {
+        ["Q4", "Q3", "Q2", "Q1"].forEach(q => {
+            if (quartersSet.has(q)) {
+                const opt = document.createElement("option");
+                opt.value = q;
+                opt.textContent = q;
+                filterValueSelect.appendChild(opt);
+            }
+        });
+    }
+
+    // Handle Year Filter
+    [...yearsSet].sort((a, b) => b - a).forEach(year => {
+        const opt = document.createElement("option");
+        opt.value = year;
+        opt.textContent = year;
+        filterYearSelect.appendChild(opt);
+    });
+});
+
+document.getElementById("extensionActvities-filter-value").addEventListener("change", applyextensionActvitiesFilter);
+document.getElementById("extensionActvities-filter-year").addEventListener("change", applyextensionActvitiesFilter);
+
+function applyextensionActvitiesFilter() {
+    const type = document.getElementById("extensionActvities-filter-type").value;
+    const selectedValue = document.getElementById("extensionActvities-filter-value").value;
+    const selectedYear = document.getElementById("extensionActvities-filter-year").value;
+
+    extensionActvities.clearFilter();
+
+    extensionActvities.setFilter(function(data) {
+        const date = new Date(data.updated_at);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        const year = date.getFullYear();
+
+        if (type === "monthly") {
+            return month === selectedValue && year == selectedYear;
+        } else if (type === "quarterly") {
+            return `Q${quarter}` === selectedValue && year == selectedYear;
+        } else if (type === "yearly") {
+            return year == selectedYear;
+        }
+        return true;
+    });
+}
+
+$('#extensionActvities-download-csv').click(function() {
+    extensionActvities.download("csv", "Extension Actvities.csv", { filter: true });
+});
 
 
 // function searchextensionActvities(value){

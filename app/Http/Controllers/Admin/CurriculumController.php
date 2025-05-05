@@ -19,6 +19,7 @@ use App\Models\StudentsTVET;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Console\Helper\ProgressIndicator;
+use Carbon\Carbon;
 
 class CurriculumController extends Controller
 {
@@ -329,10 +330,11 @@ class CurriculumController extends Controller
             try {
                 $validatedData['module'] = 1;
                 $validatedData['added_by'] = auth()->user()->id;
-                $validatedData['cvsu_passing_rate'] = ($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100;
-                $validatedData['national_passing_rate'] = ($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100;
-                $validatedData['cvsu_overall_passing_rate'] = ($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100;
-                $validatedData['national_overall_passing_rate'] = ($validatedData['national_overall_passer'] / $validatedData['national_overall_taker']) * 100;
+                $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
+                $validatedData['national_passing_rate'] = number_format(($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100, 2);
+                $validatedData['cvsu_overall_passing_rate'] = number_format(($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100, 2);
+                $validatedData['national_overall_passing_rate'] = number_format(($validatedData['national_overall_passer'] / $validatedData['national_overall_taker']) * 100, 2);
+
                 LicensureExamnination::create($validatedData);
                 Helper::storeNotifications(
                     Auth::id(),
@@ -362,24 +364,24 @@ class CurriculumController extends Controller
                 $query->where('department', Auth::user()->department);
             })->orderBy('created_at', 'desc')->get();
         }
-        foreach ($data as $key=>$item) {
+        foreach ($data as $key => $item) {
             $actions = $this->licensureExamAction($item);
             $response[] = [
-                'no' => ++$key,
-                'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
-                'exam' => ucwords($item->examination_type_dtls->type),
-                'cvsu_rate' => $item->cvsu_total_passer.'/'.$item->cvsu_total_takers.'<br>'.$item->cvsu_passing_rate.'%',
-                'national_rate' => $item->national_total_passer.'/'.$item->national_total_takers.'<br>'.$item->national_passing_rate.'%',
-                'examination_type' => ucwords($item->examination_type_dtls->type),
-                'cvsu_overall_passing_rate' => $item->cvsu_overall_passer.'/'.$item->cvsu_overall_taker.'<br>'.$item->cvsu_overall_passing_rate.'%',
-                'national_overall_passing_rate' => $item->national_overall_passer.'/'.$item->national_overall_taker.'<br>'.$item->national_overall_passing_rate.'%',
-                // 'exam_date' => date('F d, Y', strtotime($item->exam_date)),
-                'exam_date' => $item->exam_date,
-                'updated_at' => $item->updated_at->format('F d, Y'),
-                'action' => $actions['button']
-
-            ];
-        }
+            'no' => ++$key,
+            'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
+            'exam' => ucwords($item->examination_type_dtls->type),
+            'cvsu_rate' => "{$item->cvsu_total_passer}/{$item->cvsu_total_takers} - {$item->cvsu_passing_rate}%",
+            'national_rate' => "{$item->national_total_passer}/{$item->national_total_takers} - {$item->national_passing_rate}%",
+            'cvsu_overall_passing_rate' => "{$item->cvsu_overall_passer}/{$item->cvsu_overall_taker} - {$item->cvsu_overall_passing_rate}%",
+            'national_overall_passing_rate' => "{$item->national_overall_passer}/{$item->national_overall_taker} - {$item->national_overall_passing_rate}%",
+            'examination_type' => ucwords($item->examination_type_dtls->type),
+            'exam_date' => $item->exam_date,
+            'updated_at' => $item->updated_at->format('F d, Y'),
+            'action' => $actions['button'],
+            
+        ];
+        }        
+        
         return response()->json($response);
     }
 
@@ -435,10 +437,10 @@ class CurriculumController extends Controller
             ]);
     
             try {
-                $validatedData['cvsu_passing_rate'] = ($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100;
-                $validatedData['national_passing_rate'] = ($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100;
-                $validatedData['cvsu_overall_passing_rate'] = ($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100;
-                $validatedData['national_overall_passing_rate'] = ($validatedData['national_overall_passer'] / $validatedData['national_overall_taker']) * 100;
+                $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
+                $validatedData['national_passing_rate'] = number_format(($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100, 2);
+                $validatedData['cvsu_overall_passing_rate'] = number_format(($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100, 2);
+                $validatedData['national_overall_passing_rate'] = number_format(($validatedData['national_overall_passer'] / $validatedData['national_overall_taker']) * 100, 2);
                 LicensureExamnination::where('id', $id)->update($validatedData);
                 
                 Helper::storeNotifications(
@@ -644,6 +646,8 @@ class CurriculumController extends Controller
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
                 'certificate' => ucwords($item->certification_type_dtls->type),
+                'location' => $item->student_tvet_location,
+                'date' => Carbon::parse($item->student_tvet_date)->format('F d, Y'),
                 'details' =>$item->certificate_details,
                 'number' => $item->number_of_student,
                 'created_at' => $item->created_at,
@@ -668,7 +672,8 @@ class CurriculumController extends Controller
         $data = StudentsTVET::where('id', $id)->first();
 
         return response()->json([
-            'certificate_details' => $data->certificate_details,
+            'student_tvet_location' => $data->student_tvet_location,
+            'student_tvet_date' => date('Y-m-d', strtotime($data->student_tvet_date)),
             'certification_type' => $data->certification_type,
             'number_of_student' => $data->number_of_student,
         ]);
@@ -678,10 +683,10 @@ class CurriculumController extends Controller
         try {
             $validatedData = $request->validate([
                 'certification_type' => 'required',
-                'certificate_details' => 'required',
+                'student_tvet_location' => 'required|string',
+                'student_tvet_date' => 'required|date',
                 'number_of_student' => 'required|integer',
-            ]);
-    
+            ]);    
             try {
                 StudentsTVET::where('id', $id)->update($validatedData);
                 Helper::storeNotifications(
