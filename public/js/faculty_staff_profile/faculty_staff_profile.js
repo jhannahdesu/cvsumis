@@ -2132,12 +2132,14 @@ $('#submit-faculty-graduate-studies-btn').on('click', function () {
         method: "POST",
         data: form.serialize(),
         success: function (response) {
+            console.log("Success:", response);
             toastr.success(response.message);
             $('#AddFacultyGraduateStudiesModal').modal('hide');
             form[0].reset();
             facultyGraduateStudies.setData("/fetchFacultyGraduateStudies");
         },
         error: function (xhr) {
+            console.log("Error:", xhr);
             if (xhr.status === 422) {
                 toastr.error("Please fill in all required fields correctly.");
             } else {

@@ -48,7 +48,7 @@
 
                 <div class="col-md-12">
                     <label for="budget" class="form-label">Budget</label>
-                    <input type="int" class="form-control" id="budget" name="budget" required>
+                    <input type="number" class="form-control" id="budget" name="budget" min="0" step="any" required oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -58,8 +58,7 @@
                     <div class="form-check">
                       <input class="form-check-input" type="checkbox" id="outside-agency" required>
                       <label class="form-check-label" for="invalidCheck2">
-                      Check if the research is externally funded from the university
-                      </label>
+                      Check if the research is externally funded
                     </div>
                 </div>
 
@@ -129,7 +128,7 @@
 
                 <div class="col-md-12">
                     <label for="budget" class="form-label">Budget</label>
-                    <input type="int" class="form-control" id="view_budget" name="budget" required>
+                    <input type="number" class="form-control" id="view_budget" name="budget" min="0" step="any" required oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
                     <div class="valid-feedback">
                         Looks good!
                     </div>
