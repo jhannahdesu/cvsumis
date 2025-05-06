@@ -77,32 +77,43 @@ class CurriculumController extends Controller
     public function storeAccreditationStatus(Request $request) {
         try {
             $validatedData = $request->validate([
-                'visit_date' => 'required',
+                'visit_date' => 'required|date',
                 'status_id' => 'required|integer',
                 'program_id' => 'required|integer'
             ]);
     
-            try {
-                $validatedData['module'] = 1;
-                $validatedData['added_by'] = auth()->user()->id;
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Curriculum Accreditation status of academic programs',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Curriculum Accreditation status of academic programs',
-                );
-                AccreditationStatus::create($validatedData);
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
+            // Check for existing record
+            $exists = AccreditationStatus::where('visit_date', $validatedData['visit_date'])
+                ->where('status_id', $validatedData['status_id'])
+                ->where('program_id', $validatedData['program_id'])
+                ->exists();
+    
+            if ($exists) {
+                return response()->json(['error' => 'The data already exists.'], 409);
             }
-        }catch (ValidationException $e) {
+    
+            DB::beginTransaction();
+            $validatedData['module'] = 1;
+            $validatedData['added_by'] = auth()->user()->id;
+    
+            Helper::storeNotifications(
+                Auth::id(),
+                'You Added Data in Curriculum Accreditation status of academic programs',
+                Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Curriculum Accreditation status of academic programs',
+            );
+    
+            AccreditationStatus::create($validatedData);
+            DB::commit();
+            return response()->json(['message' => 'Data added successfully'], 200);
+    
+        } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
         }
     }
+    
 
     public function fetchAccreditationStatusData(){
         $response = [];
@@ -193,35 +204,46 @@ class CurriculumController extends Controller
     public function storeGovRecognition(Request $request) {
         try {
             $validatedData = $request->validate([
-                'date' => 'required',
+                'date' => 'required|date',
                 'status_id' => 'required|integer',
                 'program_id' => 'required|integer',
-                'copc_number' => 'required',
-
+                'copc_number' => 'required|string',
             ]);
     
-            try {
-                $validatedData['module'] = 1;
-                $validatedData['added_by'] = auth()->user()->id;
-                ProgramsWithGovntRecognition::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Curriculum Academic programs with Government Recognition (CoPC)',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Curriculum Academic programs with Government Recognition (CoPC)',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
+            // Check for duplicates
+            $exists = ProgramsWithGovntRecognition::where('date', $validatedData['date'])
+                ->where('status_id', $validatedData['status_id'])
+                ->where('program_id', $validatedData['program_id'])
+                ->where('copc_number', $validatedData['copc_number'])
+                ->exists();
+    
+            if ($exists) {
+                return response()->json(['error' => 'The data already exists.'], 409);
             }
-        }catch (ValidationException $e) {
+    
+            DB::beginTransaction();
+            $validatedData['module'] = 1;
+            $validatedData['added_by'] = auth()->user()->id;
+    
+            ProgramsWithGovntRecognition::create($validatedData);
+    
+            Helper::storeNotifications(
+                Auth::id(),
+                'You Added Data in Curriculum Academic programs with Government Recognition (CoPC)',
+                Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Curriculum Academic programs with Government Recognition (CoPC)',
+            );
+    
+            DB::commit();
+            return response()->json(['message' => 'Data added successfully'], 200);
+    
+        } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
         }
     }
-
+    
     public function fetchGovRecognitionData(){
         $response= [];
         

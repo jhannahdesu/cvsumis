@@ -330,9 +330,10 @@ $('#submit-enrollment-btn').on('click', function(event) {
     if (form.checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
+        form.classList.add('was-validated');
+        return;
     }
-    form.classList.add('was-validated');
-    
+
     $.ajax({
         url: '/store-enrollment',
         type: 'POST',
@@ -347,11 +348,20 @@ $('#submit-enrollment-btn').on('click', function(event) {
             $('#EnrollmentModal').modal('hide');
             fetchEnrollmentData();
         },
-        error: function (xhr, status) {
-            throwError(xhr, status);
+        error: function (xhr) {
+            if (xhr.status === 409) {
+                Swal.fire({
+                    title: "Duplicate Entry",
+                    text: xhr.responseJSON.error,
+                    icon: "warning"
+                });
+            } else {
+                throwError(xhr, xhr.status);
+            }
         }
     });
 });
+
 
 function fetchEnrollmentData(){
     $.ajax({

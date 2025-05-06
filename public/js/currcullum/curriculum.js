@@ -317,9 +317,10 @@ $('#submit-accreditation-status-btn').on('click', function(event) {
     if (form.checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
+        form.classList.add('was-validated');
+        return;
     }
-    form.classList.add('was-validated');
-    
+
     $.ajax({
         url: '/store-accreditation-status',
         type: 'POST',
@@ -334,11 +335,20 @@ $('#submit-accreditation-status-btn').on('click', function(event) {
             $('#AddAccreditationStatus').modal('hide');
             fetchAccreditationStatusData();
         },
-        error: function (xhr, status) {
-            throwError(xhr, status);
+        error: function(xhr) {
+            if (xhr.status === 409) {
+                Swal.fire({
+                    title: "Duplicate Entry",
+                    text: xhr.responseJSON.error,
+                    icon: "warning"
+                });
+            } else {
+                throwError(xhr, xhr.status);
+            }
         }
     });
-})
+});
+
 
 function fetchAccreditationStatusData(){
     $.ajax({
@@ -769,9 +779,10 @@ $('#submit-gov-recognition-btn').on('click', function(event) {
     if (form.checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
+        form.classList.add('was-validated');
+        return;
     }
-    form.classList.add('was-validated');
-    
+
     $.ajax({
         url: '/store-gov-recognition',
         type: 'POST',
@@ -786,11 +797,20 @@ $('#submit-gov-recognition-btn').on('click', function(event) {
             $('#AddGovRecognition').modal('hide');
             fetchGovRecognitionData();
         },
-        error: function (xhr, status) {
-            throwError(xhr, status);
+        error: function(xhr) {
+            if (xhr.status === 409) {
+                Swal.fire({
+                    title: "Duplicate Entry",
+                    text: xhr.responseJSON.error,
+                    icon: "warning"
+                });
+            } else {
+                throwError(xhr, xhr.status);
+            }
         }
     });
 });
+
 //
 function fetchGovRecognitionData(){
     $.ajax({

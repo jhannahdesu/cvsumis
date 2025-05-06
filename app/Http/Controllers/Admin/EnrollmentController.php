@@ -92,36 +92,47 @@ class EnrollmentController extends Controller
 //     return response()->download($filename, 'Enrollment_List.csv', $headers)->deleteFileAfterSend(true);
 // }
 
-    public function storeEnrollment(Request $request) {
-        try {
-            $validatedData = $request->validate([
-                'number_of_student' => 'required|integer',
-                'semester' => 'required',
-                'school_year' => 'required',
-                'program_id' => 'required|integer'
-            ]);
-    
-            try {
-                $validatedData['module'] = 2;
-                $validatedData['created_by'] = Auth::id();
-                Enrollment::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Enrollment',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Enrollment',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
-            }
-        }catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
+public function storeEnrollment(Request $request) {
+    try {
+        $validatedData = $request->validate([
+            'number_of_student' => 'required|integer',
+            'semester' => 'required',
+            'school_year' => 'required',
+            'program_id' => 'required|integer'
+        ]);
+
+        // Check for duplicates
+        $exists = Enrollment::where('program_id', $validatedData['program_id'])
+            ->where('semester', $validatedData['semester'])
+            ->where('school_year', $validatedData['school_year'])
+            ->exists();
+
+        if ($exists) {
+            return response()->json(['error' => 'This enrollment record already exists.'], 409);
         }
+
+        DB::beginTransaction();
+        $validatedData['module'] = 2;
+        $validatedData['created_by'] = Auth::id();
+        Enrollment::create($validatedData);
+
+        Helper::storeNotifications(
+            Auth::id(),
+            'You Added Data in Enrollment',
+            Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Enrollment'
+        );
+
+        DB::commit();
+        return response()->json(['message' => 'Data added successfully'], 200);
+
+    } catch (ValidationException $e) {
+        return response()->json(['errors' => $e->errors()], 422);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
     }
+}
+
 
     public function fetchEnrollmentData(){
         $response = [];
