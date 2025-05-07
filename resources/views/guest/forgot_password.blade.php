@@ -237,9 +237,17 @@
                 <!-- Left logo -->
                 <img src="{{ asset('images/background/cvsu1.png') }}" alt="Cavite State University Logo" class="logo-left">
 
-                <div class="title-container" style="display: flex; justify-content: center; align-items: center; margin-top: -200px; margin-bottom: 5px;">
-                    <img src="{{ asset('images/logo/titlelogo.png') }}" alt="System Title Logo" style="max-width: 450px; width: 100%; height: auto;">
+                <div class="d-flex flex-column align-items-center justify-content-center mb-10">
+                <div class="d-flex align-items-center justify-content-center gap-30 flex-wrap">
+                    <!-- CVSU logo -->
+                    <!-- <img src="{{ asset('images/background/cvsu1.png') }}" alt="Cavite State University Logo"
+                        class="img-fluid" style="height: 180px; width: 200px;"> -->
+
+                    <!-- Title logo -->
+                    <img src="{{ asset('images/logo/titlelogo.png') }}" alt="System Title Logo"
+                        class="img-fluid" style="height: 200px; width: 400px;">
                 </div>
+            </div>
 
 
                 <!-- Right logo -->

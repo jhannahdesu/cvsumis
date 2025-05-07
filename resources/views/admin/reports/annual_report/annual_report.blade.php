@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <?php
+        $year = date('Y');
+        $secondSem = "2<sup>nd</sup> SEM AY " . ($year - 1) . "-" . $year;
+        $firstSem = "1<sup>st</sup> SEM AY " . $year . "-" . ($year + 1);
+    ?>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 12px; }
         table { width: 100%; border-collapse: collapse;}
         th, td { border: 1px solid black; padding: 8px; text-align: left; }
         .page-break { page-break-after: always; }
@@ -16,26 +21,35 @@
             height: 50px;
             text-align: center;
             font-size: 12px;
-            line-height: 35px;
+            line-height: 75px;
         }
         .image-container {
             display: grid; 
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px; 
-            margin-bottom: 20px; 
+            grid-template-columns: repeat(4, 1fr); /* Adjust for up to 4 items per row */
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 0 50px;
         }
 
         .image-container img {
-            width: 60%; 
-            height: 200px; 
-            object-fit: cover; 
-            border-radius: 8px; 
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            display: block;
+            transition: transform 0.3s ease;
+            transform: scale(0.6);
         }
+
+
+
+
 
     </style>
 
 <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 12px; }
         .container { text-align: center; margin: 50px; }
         h1 { font-size: 24px; margin-bottom: 20px; }
         h2 { font-size: 20px; margin-bottom: 15px; }
@@ -50,7 +64,15 @@
             text-align: center;
             font-size: 12px;
         }
+        .break-page {
+            page-break-before: always; /* For older browsers */
+            break-before: page;         /* Modern syntax */
+        }
+
     </style>
+
+
+
 </head>
 <body>
 <div class="container">
@@ -77,6 +99,7 @@
     <footer>
         <p>College of Engineering and Information Technology - ANNUAL REPORT {{ $year }}</p>
     </footer>
+    <div class="break-page"></div>
     <center>
         <h2>ANNUAL REPORT {{ $year }} COLLEGE OF ENGINEERING AND INFORMATION TECHNOLOGY</h2>
     </center>
@@ -96,7 +119,7 @@
                     <tr>
                         <td>{{ ucwords($accreditations->program_dtls->program) }}</td>
                         <td>{{ $accreditations->status_dtls->status }}</td>
-                        <td>Accreditation Visit: <br>{{ date('M d, Y', strtotime($accreditations->visit_date)) }}</td>
+                        <td>Accreditation Visit: <br>{{ date('F d, Y', strtotime($accreditations->visit_date)) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -120,7 +143,7 @@
                 @foreach($gov_recognitions as $gov_recognition)
                     <tr>
                         <td>{{ ucwords($gov_recognition->program_dtls->program) }}</td>
-                        <td> {{ $gov_recognition->status_dtls->status }} <br> (COPC NO. {{ $gov_recognition->copc_number.' '.date('M d, Y', strtotime($gov_recognition->date)) }} )</td>
+                        <td> {{ $gov_recognition->status_dtls->status }} <br> (COPC NO. {{ $gov_recognition->copc_number.' '.date('F d, Y', strtotime($gov_recognition->date)) }} )</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -173,7 +196,7 @@
             <tbody>
                 @foreach($faculty_tvets as $faculty_tvet)
                     <tr>
-                        <td>{{ ucwords($faculty_tvet->certification_type_dtls->type) }} <br> {{ date('M d, Y', strtotime($faculty_tvet->date)) }} <br> {{ ucwords($faculty_tvet->certificate_details) }}</td>
+                        <td>{{ ucwords($faculty_tvet->certification_type_dtls->type) }} <br> {{ date('F d, Y', strtotime($faculty_tvet->date)) }} <br> {{ ucwords($faculty_tvet->certificate_details) }}</td>
                         <td>{{ $faculty_tvet->certificate_holder }}</td>
                     </tr>
                 @endforeach
@@ -197,7 +220,7 @@
             <tbody>
                 @foreach($student_tvets as $student_tvet)
                     <tr>
-                        <td>{{ ucwords($student_tvet->certification_type_dtls->type) }} <br> {{ ucwords($student_tvet->certificate_details) }}</td>
+                        <td>{{ ucwords($student_tvet->certification_type_dtls->type) }} <br> {{ ucwords($student_tvet->student_tvet_location) .' - '. date('F d, Y', strtotime($student_tvet->date))}}</td>
                         <td>{{ $student_tvet->number_of_student }}</td>
                     </tr>
                 @endforeach
@@ -216,16 +239,19 @@
                     $imageCount = 0; // Initialize the image count
                 @endphp
 
-                <div class="image-container"> <!-- Add a container for images -->
+                <div class="image-container">
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
+
 
                         @php
                             $imageCount++; // Increment the count
                         @endphp
 
                         @if ($imageCount % 4 == 0 && $imageCount < $item->attachment_dtls->count()) 
-                        <!-- Add a page break after every 4 images if there are more images -->
+                        
                         <div class="page-break"></div>
                         @endif
                     @endforeach
@@ -249,8 +275,12 @@
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF STUDENTS</th>
             </tr>
             <tr>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $secondSem; ?>
+                </th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $firstSem; ?>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -301,9 +331,13 @@
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 10px;" colspan="2">NO. OF FOREIGN STUDENTS</th>
             </tr>
             <tr>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 10px;">2<sup>nd</sup> SEM. AY 2022-2023</th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $secondSem; ?>
+                </th>
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 10px;">PROGRAM/ COURSE</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 10px;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $firstSem; ?>
+                </th>
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white;padding: 10px;">PROGRAM/ COURSE</th>
             </tr>
         </thead>
@@ -349,8 +383,12 @@
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF STUDENTS</th>
             </tr>
             <tr>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
+            <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $secondSem; ?>
+                </th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $firstSem; ?>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -390,7 +428,8 @@
         </tbody>
     </table>
 
-    
+
+
      <br>
     <h3>Scholarships</h3>
     <h4>Table 9. Distribution of scholars by type of scholarship</h4>
@@ -401,37 +440,42 @@
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF STUDENTS</th>
             </tr>
             <tr>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $secondSem; ?>
+                </th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $firstSem; ?>
+                </th>
             </tr>
         </thead>
         <tbody>
             @php
-                $total_first_sem = 0; // Initialize total for first semester
-                $total_second_sem = 0; // Initialize total for second semester
+                $total_first_sem = 0;
+                $total_second_sem = 0;
             @endphp
-    
-            @foreach($scholarships as $program_id => $scholarship)
+
+            @foreach($scholarships as $type => $records)
                 <tr>
-                    <td style="border: 1px solid #000; padding: 8px; text-align: center;">{{ $scholarship->first()->scholarship_type_dtls->type }}</td>
+                    <td style="border: 1px solid #000; padding: 8px; text-align: center;">{{ $type }}</td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: center;">
                         @php
-                            $second_sem = $scholarship->where('semester', '2nd Semester')->first();
-                            $second_sem_scholars = $second_sem ? $second_sem->number_of_scholars : 0; // Default to 0 if not found
-                            $total_second_sem += $second_sem_scholars; // Add to total for second semester
+                            $second_sem = $records->where('semester', '2nd Semester')->first();
+                            $second_sem_scholars = $second_sem ? $second_sem->number_of_scholars : 0;
+                            $total_second_sem += $second_sem_scholars;
                         @endphp
-                        {{ $second_sem_students }}
+                        {{ $second_sem_scholars }}
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: center;">
                         @php
-                            $first_sem = $scholarship->where('semester', '1st Semester')->first();
-                            $first_sem_scholars = $first_sem ? $first_sem->number_of_scholars : 0; // Default to 0 if not found
-                            $total_first_sem += $first_sem_scholars; // Add to total for first semester
+                            $first_sem = $records->where('semester', '1st Semester')->first();
+                            $first_sem_scholars = $first_sem ? $first_sem->number_of_scholars : 0;
+                            $total_first_sem += $first_sem_scholars;
                         @endphp
-                       {{ $first_sem_scholars }}
+                        {{ $first_sem_scholars }}
                     </td>
                 </tr>
             @endforeach
+
     
             <tr>
                 <td style="border: 1px solid #000; padding: 8px; text-align: center; font-weight: bold;">TOTAL</td>
@@ -481,8 +525,9 @@
 
                 <div class="image-container"> <!-- Add a container for images -->
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
-
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
                         @php
                             $imageCount++; // Increment the count
                         @endphp
@@ -513,8 +558,12 @@
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF FACULTY</th>
             </tr>
             <tr>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $secondSem; ?>
+                </th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $firstSem; ?>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -568,8 +617,12 @@
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF FACULTY</th>
                 </tr>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                        <?php echo $secondSem; ?>
+                    </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                        <?php echo $firstSem; ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -623,8 +676,12 @@
                 <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF FACULTY</th>
             </tr>
             <tr>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $secondSem; ?>
+                </th>
+                <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                    <?php echo $firstSem; ?>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -719,7 +776,7 @@
                         <td>{{ ucwords($graduates->faculty_name) }}</td>
                         <td>{{ ucwords($graduates->degree) }}</td>
                         <td>{{ ucwords($graduates->institution) }}</td>
-                        <td>{{ date('M d, Y', strtotime($graduates->date_of_graduation)) }}</td>
+                        <td>{{ date('F d, Y', strtotime($graduates->date_of_graduation)) }}</td>
                        
                     </tr>
                 @endforeach
@@ -782,7 +839,7 @@
                     <tr>
                         <td>{{ ucwords($provincial_seminar->conference_title) }}</td>
                         <td>{{ ucwords($provincial_seminar->participants) }}</td>
-                        <td>{{ date('M d, Y', strtotime($provincial_seminar->date)) }} / {{ ucwords($provincial_seminar->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($provincial_seminar->date)) }} / {{ ucwords($provincial_seminar->venue) }}</td>
                        
                     </tr>
                 @endforeach
@@ -812,7 +869,7 @@
                     <tr>
                         <td>{{ ucwords($regional_seminar->conference_title) }}</td>
                         <td>{{ ucwords($regional_seminar->participants) }}</td>
-                        <td>{{ date('M d, Y', strtotime($regional_seminar->date)) }} / {{ ucwords($regional_seminar->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($regional_seminar->date)) }} / {{ ucwords($regional_seminar->venue) }}</td>
                        
                     </tr>
                 @endforeach
@@ -843,7 +900,7 @@
                     <tr>
                         <td>{{ ucwords($national_seminar->conference_title) }}</td>
                         <td>{{ ucwords($national_seminar->participants) }}</td>
-                        <td>{{ date('M d, Y', strtotime($national_seminar->date)) }} / {{ ucwords($national_seminar->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($national_seminar->date)) }} / {{ ucwords($national_seminar->venue) }}</td>
                        
                     </tr>
                 @endforeach
@@ -874,7 +931,7 @@
                 <tr>
                     <td>{{ ucwords($international_seminar->conference_title) }}</td>
                     <td>{{ ucwords($international_seminar->participants) }}</td>
-                    <td>{{ date('M d, Y', strtotime($international_seminar->date)) }}</td>
+                    <td>{{ date('F d, Y', strtotime($international_seminar->date)) }}</td>
                    
                 </tr>
             @endforeach
@@ -907,7 +964,7 @@
                         <td>{{ ucwords($recognition->awardee_name) }}</td>
                         <td>{{ ucwords($recognition->award) }}</td>
                         <td>{{ ucwords($recognition->agency) }}</td>
-                        <td>{{ date('M d, Y', strtotime($recognition->date_received)) }} / {{ ucwords($recognition->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($recognition->date_received)) }} / {{ ucwords($recognition->venue) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -938,7 +995,7 @@
                         <td>{{ ucwords($recognition->awardee_name) }}</td>
                         <td>{{ ucwords($recognition->award) }}</td>
                         <td>{{ ucwords($recognition->agency) }}</td>
-                        <td>{{ date('M d, Y', strtotime($recognition->date_received)) }} / {{ ucwords($recognition->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($recognition->date_received)) }} / {{ ucwords($recognition->venue) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -972,7 +1029,7 @@
                         <td>{{ ucwords($paper->conference_name) }}</td>
                         <td>{{ ucwords($paper->paper_name) }}</td>
                         <td>{{ ucwords($paper->presenter_name) }}</td>
-                        <td>{{ date('M d, Y', strtotime($paper->date)) }} / {{ ucwords($paper->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($paper->date)) }} / {{ ucwords($paper->venue) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -993,8 +1050,9 @@
 
                 <div class="image-container"> <!-- Add a container for images -->
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
-
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
                         @php
                             $imageCount++; // Increment the count
                         @endphp
@@ -1035,8 +1093,9 @@
 
                 <div class="image-container"> <!-- Add a container for images -->
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
-
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
                         @php
                             $imageCount++; // Increment the count
                         @endphp
@@ -1156,8 +1215,9 @@
 
                 <div class="image-container"> <!-- Add a container for images -->
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
-
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
                         @php
                             $imageCount++; // Increment the count
                         @endphp
@@ -1211,7 +1271,7 @@
                 @foreach($linkages as $linkage)
                     <tr>
                         <td>{{ ucwords($linkage->activity_title) }}</td>
-                        <td>{{ date('M d, Y', strtotime($linkage->date)) }} <br> {{ ucwords($linkage->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($linkage->date)) }} <br> {{ ucwords($linkage->venue) }}</td>
                         <td>{{ ucwords($linkage->attendees) }}</td>
                         <td>{{ ucwords($linkage->facilitators) }}</td>
                     </tr>
@@ -1234,8 +1294,9 @@
 
                 <div class="image-container"> <!-- Add a container for images -->
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
-
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
                         @php
                             $imageCount++; // Increment the count
                         @endphp
@@ -1291,8 +1352,9 @@
 
                 <div class="image-container"> <!-- Add a container for images -->
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
-
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
                         @php
                             $imageCount++; // Increment the count
                         @endphp
@@ -1349,8 +1411,9 @@
 
                 <div class="image-container"> <!-- Add a container for images -->
                     @foreach ($item->attachment_dtls as $attachment)
-                        <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}" class="img-fluid" alt="Attachment Image" />
-
+                    <img src="{{ public_path('images/report_attachment/' . $attachment->attachment) }}"
+                    class="scaled-image"
+                    alt="Attachment Image" />
                         @php
                             $imageCount++; // Increment the count
                         @endphp
@@ -1367,10 +1430,5 @@
         
     @endif
 
-
-    <footer>
-        <p>College of Engineering and Information Technology - ANNUAL REPORT {{ $year }} | </p>  
-     
-    </footer>
 </body>
 </html>

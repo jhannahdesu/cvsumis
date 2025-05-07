@@ -209,31 +209,32 @@
         </thead>
         <tbody>
             @php
-                $total_first_sem = 0; // Initialize total for first semester
-                $total_second_sem = 0; // Initialize total for second semester
+                $total_first_sem = 0;
+                $total_second_sem = 0;
             @endphp
-    
-            @foreach($scholarships as $program_id => $scholarship)
+
+            @foreach($scholarships as $type => $records)
                 <tr>
-                    <td style="border: 1px solid #000; padding: 8px; text-align: center;">{{ $scholarship->first()->scholarship_type_dtls->type }}</td>
+                    <td style="border: 1px solid #000; padding: 8px; text-align: center;">{{ $type }}</td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: center;">
                         @php
-                            $second_sem = $scholarship->where('semester', '2nd Semester')->first();
-                            $second_sem_scholars = $second_sem ? $second_sem->number_of_scholars : 0; // Default to 0 if not found
-                            $total_second_sem += $second_sem_scholars; // Add to total for second semester
+                            $second_sem = $records->where('semester', '2nd Semester')->first();
+                            $second_sem_scholars = $second_sem ? $second_sem->number_of_scholars : 0;
+                            $total_second_sem += $second_sem_scholars;
                         @endphp
-                        {{ $second_sem_students }}
+                        {{ $second_sem_scholars }}
                     </td>
                     <td style="border: 1px solid #000; padding: 8px; text-align: center;">
                         @php
-                            $first_sem = $scholarship->where('semester', '1st Semester')->first();
-                            $first_sem_scholars = $first_sem ? $first_sem->number_of_scholars : 0; // Default to 0 if not found
-                            $total_first_sem += $first_sem_scholars; // Add to total for first semester
+                            $first_sem = $records->where('semester', '1st Semester')->first();
+                            $first_sem_scholars = $first_sem ? $first_sem->number_of_scholars : 0;
+                            $total_first_sem += $first_sem_scholars;
                         @endphp
-                       {{ $first_sem_scholars }}
+                        {{ $first_sem_scholars }}
                     </td>
                 </tr>
             @endforeach
+
     
             <tr>
                 <td style="border: 1px solid #000; padding: 8px; text-align: center; font-weight: bold;">TOTAL</td>

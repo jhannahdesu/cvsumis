@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html>
+<style>
+    .centered-title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+
+<h4 class="centered-title">CURRICULUM</h4>
+
 <head>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        body { font-family: Arial, sans-serif; font-size: 12px; }
         table { width: 100%; border-collapse: collapse;}
         th, td { border: 1px solid black; padding: 8px; text-align: left; }
         .page-break { page-break-after: always; }
@@ -38,7 +48,7 @@
                     <tr>
                         <td>{{ ucwords($accreditations->program_dtls->program) }}</td>
                         <td>{{ $accreditations->status_dtls->status }}</td>
-                        <td>Accreditation Visit: <br>{{ date('M d, Y', strtotime($accreditations->visit_date)) }}</td>
+                        <td>Accreditation Visit: <br>{{ date('F d, Y', strtotime($accreditations->visit_date)) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -62,7 +72,7 @@
                 @foreach($gov_recognitions as $gov_recognition)
                     <tr>
                         <td>{{ ucwords($gov_recognition->program_dtls->program) }}</td>
-                        <td> {{ $gov_recognition->status_dtls->status }} <br> (COPC NO. {{ $gov_recognition->copc_number.' '.date('M d, Y', strtotime($gov_recognition->date)) }} )</td>
+                        <td> {{ $gov_recognition->status_dtls->status }} <br> (COPC NO. {{ $gov_recognition->copc_number.' '.date('F d, Y', strtotime($gov_recognition->date)) }} )</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -113,7 +123,7 @@
             <tbody>
                 @foreach($faculty_tvets as $faculty_tvet)
                     <tr>
-                        <td>{{ ucwords($faculty_tvet->certification_type_dtls->type) }} <br> {{ date('M d, Y', strtotime($faculty_tvet->date)) }} <br> {{ ucwords($faculty_tvet->certificate_details) }}</td>
+                        <td>{{ ucwords($faculty_tvet->certification_type_dtls->type) }} <br> {{ date('F d, Y', strtotime($faculty_tvet->date)) }} <br> {{ ucwords($faculty_tvet->certificate_details) }}</td>
                         <td>{{ $faculty_tvet->certificate_holder }}</td>
                     </tr>
                 @endforeach
@@ -147,6 +157,7 @@
         <p>No Data available.</p>
     @endif
 
+    
     <footer>
         <p>College of Engineering and Information Technology - ANNUAL REPORT {{ $year }} | </p>  
      

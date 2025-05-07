@@ -36,8 +36,8 @@ class ReportAttachmentController extends Controller
                 'module_id' => 'required'
             ]);
 
-            if (count($request->file('attachment')) > 4) {
-                return response()->json(['errors' => ['attachment' => 'You can upload a maximum of 4 images.']], 422);
+            if (count($request->file('attachment')) > 2) {
+                return response()->json(['errors' => ['attachment' => 'You can upload a maximum of 2 images.']], 422);
             }
             
             $data_hdr = ReportAttachmentHeader::create([
@@ -134,8 +134,8 @@ class ReportAttachmentController extends Controller
                 'attachment.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            if (count($request->file('attachment')) > 4) {
-                return response()->json(['errors' => ['attachment' => 'You can upload a maximum of 4 images.']], 422);
+            if (count($request->file('attachment')) > 2) {
+                return response()->json(['errors' => ['attachment' => 'You can upload a maximum of 2 images.']], 422);
             }
         
 

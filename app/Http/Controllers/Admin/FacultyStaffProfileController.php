@@ -36,6 +36,9 @@ class FacultyStaffProfileController extends Controller
         $defaultAcademicYears = $this->defaultAcademicYearList();
         return view('admin.faculty_staff_profile.faculty_staff_profile', compact('main_title', 'nav', 'educationAttainmentType', 'appointments', 
         'academicRanks', 'academicYears', 'defaultAcademicYears'));
+
+        $attachments = ReportAttachmentHeader::with('attachment_dtls')->get();
+        return view('admin.report_attachment', compact('main_title', 'nav', 'modules', 'attachments'));
     }
 
     public function academicYearList(){

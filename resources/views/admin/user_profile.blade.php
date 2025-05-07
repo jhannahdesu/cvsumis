@@ -27,9 +27,9 @@
                             <li class="nav-item">
                                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
-                            </li>
+                            </li> -->
                         </ul>
 
                         <div class="tab-content pt-2">
@@ -41,13 +41,13 @@
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Full Name</div>
-                                    <div class="col-lg-9 col-md-8">{{ Auth::user()->firstname.' '.Auth::user()->lastname }}</div>
+                                    <div class="col-lg-9 col-md-8">{{ Auth::user()->firstname.' '.Auth::user()->middlename.'. '.Auth::user()->lastname }}</div>
                                 </div>
 
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Company</div>
                                     <div class="col-lg-9 col-md-8">Cavite State University - Indang</div>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Position</div>
@@ -55,9 +55,14 @@
                                 </div>
 
                                 <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Department</div>
+                                    <div class="col-lg-9 col-md-8">{{ Auth::user()->department_dtls->department }}</div>
+                                </div>
+
+                                <!-- <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Country</div>
                                     <div class="col-lg-9 col-md-8">Philippines</div>
-                                </div>
+                                </div> -->
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Email</div>
@@ -94,9 +99,9 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="middle_initial" class="col-md-4 col-lg-3 col-form-label">Middle Initial</label>
+                                        <label for="middlename" class="col-md-4 col-lg-3 col-form-label">Middle Initial</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="middle_initial" type="text" class="form-control" id="middle_initial" value="{{ Auth::user()->middle_initial }}">
+                                            <input name="middlename" type="text" class="form-control" id="middlename" value="{{ Auth::user()->middle_initial }}">
                                         </div>
                                     </div>
 

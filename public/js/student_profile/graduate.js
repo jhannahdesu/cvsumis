@@ -330,17 +330,32 @@ document.getElementById("graduate-download-csv").addEventListener("click", () =>
 //     }); 
 // }
 
-function searchGraduate(value){
-    graduatesHeader.setFilter([
-        [
-            {field:"name", type:"like", value:value.trim()},
-            {field:"program_id", type:"like", value:value.trim()},
-            {field:"school_year", type:"like", value:value.trim()},
-            {field:"semester", type:"like", value:value.trim()},
-            {field:"number_of_student", type:"like", value:value.trim()},
-            {field:"date", type:"like", value:value.trim()},
-        ]
-    ]);
+function searchGraduate(value) {
+    let searchTerms = value.trim().toLowerCase().split(/\s+/);
+
+    if (searchTerms.length === 0 || searchTerms[0] === "") {
+        graduatesHeader.clearFilter();
+        return;
+    }
+
+    graduatesHeader.setFilter(function(data) {
+        let matches = true;
+
+        searchTerms.forEach(term => {
+            if (
+                !data.name.toLowerCase().includes(term) &&
+                !data.program_id.toLowerCase().includes(term) &&
+                !data.school_year.toLowerCase().includes(term) &&
+                !data.semester.toLowerCase().includes(term) &&
+                !data.number_of_student.toString().toLowerCase().includes(term) &&
+                !data.date.toLowerCase().includes(term)
+            ) {
+                matches = false;
+            }
+        });
+
+        return matches;
+    });
 }
 
 function fetchGraduateHdrData(){

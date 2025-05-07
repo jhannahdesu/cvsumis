@@ -86,18 +86,59 @@
         <div class="modal-body">
             <form class="row g-3 needs-validation" id="update-user-form" novalidate>
                 @csrf
+                
                 <div class="col-md-12">
-                    <label for="position" class="form-label">Roles</label>
-                    <select class="form-select" id="view_position" name="position" required>
-                        <option selected disabled value="">Select Roles</option>
-                        @foreach ($positions as $position)
-                            <option value="{{ $position->id }}">{{ $position->position }}</option>
-                        @endforeach
-                    </select>
-                    <div class="valid-feedback">
-                        Looks good!
+                        <label for="firstname" class="form-label">Firstname</label>
+                        <input type="text" class="form-control" id="view_firstname" name="firstname" required>
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Only letters are allowed.</div>
                     </div>
-                </div>
+
+                    <div class="col-md-12">
+                        <label for="middlename" class="form-label">Middle Initial <small class="text-muted">(optional)</small></label>
+                        <input type="text" class="form-control" id="view_middlename" name="middlename" maxlength="1" pattern="[A-Za-z]" placeholder="e.g. A">
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Only one letter is allowed.</div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="lastname" class="form-label">Lastname</label>
+                        <input type="text" class="form-control" id="view_lastname" name="lastname" required>
+                        <div class="valid-feedback">Looks good!</div>
+                        <div class="invalid-feedback">Only letters are allowed.</div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="view_email" name="email" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="department" class="form-label">Department</label>
+                        <div class="input-group has-validation">
+                            <select class="form-select" id="view_department" name="department" required>
+                                <option disabled value="" selected>Select Department</option>
+                                @foreach($departments as $department)
+                                    <option value="{{$department->id }}">{{ ucwords($department->department) }}</option>
+                                @endforeach
+                            </select>
+                            <div class="valid-feedback">Looks good!</div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="position" class="form-label">Roles</label>
+                        <select class="form-select" id="view_position" name="position" required>
+                            <option selected disabled value="">Select Roles</option>
+                            @foreach ($positions as $position)
+                                <option value="{{ $position->id }}">{{ $position->position }}</option>
+                            @endforeach
+                        </select>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
             </form>
         </div>
         <div class="modal-footer">

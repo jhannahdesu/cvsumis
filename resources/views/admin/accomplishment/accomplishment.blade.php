@@ -32,7 +32,7 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label for="university" class="form-label">University</label>
+                                <label for="university" class="form-label">Venue</label>
                                 <input type="text" class="form-control" id="university" name="university" required>
                                 <div class="valid-feedback">
                                     Looks good!
