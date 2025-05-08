@@ -205,6 +205,23 @@
     .col-12 {
         margin-bottom: 1rem;
     }
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 100px); /* Adjust based on header/footer if needed */
+        padding: 20px;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+        background-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        padding: 2rem;
+    }
+
 
     /* Privacy Modal Styles */
     .modal-privacy {
@@ -386,11 +403,7 @@
            <!-- Header section: CVSU + Title logo centered -->
             <div class="d-flex flex-column align-items-center justify-content-center mb-10">
                 <div class="d-flex align-items-center justify-content-center gap-30 flex-wrap">
-                    <!-- CVSU logo -->
-                    <!-- <img src="{{ asset('images/background/cvsu1.png') }}" alt="Cavite State University Logo"
-                        class="img-fluid" style="height: 180px; width: 200px;"> -->
 
-                    <!-- Title logo -->
                     <img src="{{ asset('images/logo/titlelogo.png') }}" alt="System Title Logo"
                         class="img-fluid" style="height: 200px; width: 400px;">
                 </div>
@@ -439,6 +452,11 @@
                                     </button>
                                 </div>
                             </form>
+
+                            <p class="text-center mt-2">
+                                By continuing, you acknowledge our 
+                                <a href="#" id="openPrivacyModal">Data Privacy Act</a>.
+                            </p>
 
                         </div>
                     </div>
@@ -505,7 +523,7 @@
                 <p>The <strong>Data Privacy Act of 2012</strong> is in place to ensure that your personal data is protected and handled responsibly. <strong>By confirming</strong> your consent, you are helping us fulfill our legal obligations while maintaining the privacy and security of your data. Your trust is essential to us, and we are committed to safeguarding your personal information throughout its lifecycle.</p>
             </div>
 
-            <p><em>Please review the information above carefully. By clicking <strong>'Confirm'</strong>, you acknowledge that you have read, understood, and consent to the collection, processing, and storage of your personal data as described.</em></p>
+            <p><em>Please review the information above carefully. By clicking <strong>'I understand'</strong>, you acknowledge that you have read, understood, and consent to the collection, processing, and storage of your personal data as described.</em></p>
 
             <div class="privacy-checkbox-container">
                 <input type="checkbox" class="privacy-checkbox" id="privacyConsent">
@@ -513,15 +531,14 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="cancel-privacy-btn">Cancel</button>
-            <button type="button" class="btn btn-primary" id="confirm-privacy-btn" disabled>Confirm</button>
+            <button type="button" class="btn btn-primary" id="confirm-privacy-btn" disabled>I understand</button>
         </div>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
-        let privacyConsentConfirmed = false; // Track if privacy consent is confirmed
+        let privacyConsentConfirmed = true; // Track if privacy consent is confirmed
 
         // Background slideshow with enhanced visibility
         const bgImages = [
@@ -725,4 +742,20 @@
         });
     });
 </script>
+
+<script>
+    const modal = document.getElementById("privacyModal");
+    const openModalBtn = document.getElementById("openPrivacyModal");
+    const closeModalBtn = document.getElementById("closePrivacyModal");
+
+    openModalBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        modal.classList.add("show");
+    });
+
+    closeModalBtn.addEventListener("click", function() {
+        modal.classList.remove("show");
+    });
+</script>
+
 @endsection

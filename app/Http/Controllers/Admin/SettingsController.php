@@ -33,31 +33,28 @@ class SettingsController extends Controller
     public function storeProgram(Request $request) {
         try {
             $validatedData = $request->validate([
-                'program' => 'required',
-                'abbreviation' => 'required',
-                
+                'program' => 'required|unique:programs,program',
+                'abbreviation' => 'required|unique:programs,abbreviation',
             ]);
     
-            try {
-                $validatedData['created_by'] = Auth::id();
-                Programs::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added New Program',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added New Program',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
-            }
-        }catch (ValidationException $e) {
+            $validatedData['created_by'] = Auth::id();
+    
+            Programs::create($validatedData);
+    
+            Helper::storeNotifications(
+                Auth::id(),
+                'You Added New Program',
+                Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added New Program',
+            );
+    
+            return response()->json(['message' => 'Data added successfully'], 200);
+        } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
         }
     }
+    
 
     public function fetchProgram(){
         $response = [];
