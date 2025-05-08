@@ -114,8 +114,9 @@ public function fetchEventsAndAccomplishmentsData(){
             'no' => ++$key,
             'name' => ucwords($item->created_by_dtls->firstname.' '.$item->created_by_dtls->lastname),
             'faculty' => ucwords($item->faculty),
-            'program_id' => ucwords($item->program_details->program.'<br>'.$item->program_dtls),
-            'university' =>  ucwords($item->university).'<br>'.date('M d, Y', strtotime($item->start_date)).'-'.date('M d, Y', strtotime($item->end_date)),
+            'program_id' => ucwords($item->program_details->program.' - '.$item->program_dtls),
+            'university' =>  ucwords($item->university).' - '.date('F d, Y', strtotime($item->start_date)).'-'.date('M d, Y', strtotime($item->end_date)),
+            'updated_at' => $item->updated_at->format('F d, Y'),
             'action' => $actions['button']
         ];
     }
@@ -124,7 +125,7 @@ public function fetchEventsAndAccomplishmentsData(){
 
 public function EventsAndAccomplishmentsaction($data){
     $button = '
-        <button type="button" class="btn btn-outline-info btn-sm px-3" id="edit-accomplishment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
+        <button type="button" class="btn btn-outline-info btn-sm px-3 me-1" id="edit-accomplishment-btn" data-id="'.$data->id.'"><i class="bi bi-pencil-square"></i></button>
         <button type="button" class="btn btn-outline-danger btn-sm px-3" id="remove-accomplishment-btn" data-id="'.$data->id.'"><i class="bi bi-trash"></i></button>
     ';
 

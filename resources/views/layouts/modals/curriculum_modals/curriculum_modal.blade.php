@@ -664,8 +664,7 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
                             rows="4" 
                             required
                             style="resize: none;" 
-                            placeholder="E.g. Automotive Servicing - (Chassis Repair)
-Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"></textarea>
+                            placeholder="E.g. Automotive Servicing - (Chassis Repair)"></textarea>
                         <div class="valid-feedback">
                             Looks good!
                         </div>

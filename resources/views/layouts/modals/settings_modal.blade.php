@@ -19,7 +19,8 @@
 
                 <div class="col-md-12">
                     <label for="abbreviation" class="form-label">Program Abbreviation</label>
-                    <input type="text" class="form-control" id="abbreviation" name="abbreviation" required>
+                    <input type="text" class="form-control abbreviation-input" id="abbreviation" name="abbreviation" required>
+                    <!-- <input type="text" class="form-control" id="abbreviation" name="abbreviation" required> -->
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -54,7 +55,8 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="abbreviation" class="form-label">Program Abbreviation</label>
+                    <!-- <label for="abbreviation" class="form-label">Program Abbreviation</label> -->
+                    <input type="text" class="form-control abbreviation-input" id="view_abbreviation" name="abbreviation" required>
                     <input type="text" class="form-control" id="view_abbreviation" name="abbreviation" required>
                     <div class="valid-feedback">
                         Looks good!
@@ -91,4 +93,35 @@
             });
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Apply to all abbreviation inputs
+        const abbreviationInputs = document.querySelectorAll('.abbreviation-input');
+
+        abbreviationInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                // Remove numbers and convert to uppercase
+                this.value = this.value.replace(/[0-9]/g, '').toUpperCase();
+            });
+        });
+
+        // Reset validation + clear inputs when modal is hidden
+        const formModalPairs = [
+            { formId: "program-form", modalId: "AddProgramModal" },
+            { formId: "program-form", modalId: "EditProgramModal" },
+            { formId: "view-program-form", modalId: "AddProgramModal" },
+            { formId: "view-program-form", modalId: "EditProgramModal" }
+        ];
+
+        formModalPairs.forEach(function(pair) {
+            const form = document.getElementById(pair.formId);
+            const modal = document.getElementById(pair.modalId);
+
+            modal?.addEventListener("hidden.bs.modal", function () {
+                form.classList.remove("was-validated");
+                form.reset();
+            });
+        });
+    });
 </script>
+

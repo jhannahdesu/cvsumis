@@ -43,6 +43,7 @@ class RoleAccessController extends Controller
                 'no' => ++$key,
                 'name' => ucwords($item->firstname.' '.$item->lastname),
                 'employee_number' => $item->employee_number,
+                'middlename' => $item->middlename,
                 'position' => ucwords($item->position_dtls->position),
                 'status' => $actions['status'],
                 'action' => $actions['button']
@@ -122,6 +123,11 @@ class RoleAccessController extends Controller
     public function updateUser(Request $request, $id) {
         try {
             $validatedData = $request->validate([
+                'firstname' => 'required',
+                'middlename' => 'nullable',
+                'lastname' => 'required',
+                'email' => 'required',
+                'department' => 'required',
                 'position' => 'required',
             ]);
     
@@ -163,7 +169,7 @@ class RoleAccessController extends Controller
     {
         $request->validate([
             'firstname' => 'required|string|max:255',
-            'middlename' => 'nullable|string|max:1', // ⬅️ ADD THIS LINE
+            'middlename' => 'nullable|string|max:1',
             'lastname' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'department' => 'required|exists:departments,id',
@@ -172,7 +178,7 @@ class RoleAccessController extends Controller
     
         $user = new User();
         $user->firstname = $request->firstname;
-        $user->middle_initial = strtoupper($request->middlename); // ⬅️ Store it as uppercase
+        $user->middlename = strtoupper($request->middlename);
         $user->lastname = $request->lastname;
         $user->email = $request->email;
         $user->department_id = $request->department;

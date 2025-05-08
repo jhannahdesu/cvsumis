@@ -70,8 +70,8 @@
                   <div class="d-flex justify-content-start mb-2">
                     <div class="form-group me-2">
                       <label for="yearSelect" class="form-label">Academic Year</label>
-                      <select id="school_year" class="form-select" aria-label="Select Year">
-                          <option disabled selected value="">Select Academic Year</option>
+                      <select id="school_year" class="form-select" aria-label="Year">
+                          <option disabled selected value="">Academic Year</option>
                           @foreach ($schoolYears as $schoolYear)
                             <option value="{{$schoolYear->school_year}}">{{$schoolYear->school_year}}</option>
                           @endforeach
@@ -80,8 +80,8 @@
 
                     <div class="form-group me-2">
                       <label for="yearSelect" class="form-label">Semester</label>
-                      <select id="semester" class="form-select" aria-label="Select Year">
-                          <option disabled selected value="">Select Semester</option>
+                      <select id="semester" class="form-select" aria-label="Year">
+                          <option disabled selected value="">Semester</option>
                           <option value="1st Semester">1st Semester</option>
                           <option value="2nd Semester">2nd Semester</option>
                       </select>
@@ -103,8 +103,8 @@
                     <div class="d-flex">
                         <div class="form-group me-2">
                             <label for="research-year" class="form-label">Research Year</label>
-                            <select id="research-year" class="form-select" aria-label="Select Year">
-                                <option disabled selected value="">Select Research Year</option>
+                            <select id="research-year" class="form-select" aria-label="Year">
+                                <option disabled selected value="">Research Year</option>
                                 @foreach ($research_year as $year)
                                     <option value="{{ $year->year }}">{{ $year->year }}</option>
                                 @endforeach
@@ -112,8 +112,8 @@
                         </div>
                         <div class="form-group me-2">
                             <label for="research-status" class="form-label">Status</label>
-                            <select id="research-status" class="form-select" aria-label="Select Status">
-                                <option disabled selected value="">Select Status</option>
+                            <select id="research-status" class="form-select" aria-label="Status">
+                                <option disabled selected value="">Status</option>
                                 <option value="Ongoing">Ongoing</option>
                                 <option value="Completed">Completed</option>
                             </select>
@@ -137,8 +137,8 @@
                 <div class="d-flex justify-content-between align-items-end">
                     <div class="form-group me-2">
                         <label for="extension-year" class="form-label">Extension Year</label>
-                        <select id="extension-year" class="form-select" aria-label="Select Year">
-                            <option disabled selected value="">Select Extension Year</option>
+                        <select id="extension-year" class="form-select" aria-label="Year">
+                            <option disabled selected value="">Extension Year</option>
                             @foreach ($extension_year as $year)
                                 <option value="{{$year->year}}">{{$year->year}}</option>
                             @endforeach
@@ -175,8 +175,8 @@
                     -->
                     <div class="form-group me-2">
                       <label for="yearSelect" class="form-label">Year</label>
-                      <select id="licensure-year" class="form-select" aria-label="Select Year">
-                          <option disabled selected value="">Select Year</option>
+                      <select id="licensure-year" class="form-select" aria-label="Year">
+                          <option disabled selected value="">Year</option>
                           @foreach ($licensure_year as $year)
                             <option value="{{ $year->year }}">{{ $year->year }}</option>
                           @endforeach
@@ -192,7 +192,7 @@
             </div>
           </div><!-- End Reports -->
 
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Educational Attainment Report</h5>
                 <div class="row mb-3">
@@ -217,7 +217,7 @@
                     <canvas id="educationPieChart" width="300" height="300"></canvas>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         </div>
       </div><!-- End Left side columns -->

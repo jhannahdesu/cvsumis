@@ -42,7 +42,7 @@ const reportTable = () => {
         paginationSizeSelector:[10,50,100],
         selectable:1,
         initialSort: [
-            { column: "uploaded_at", dir: "asc" }
+            { column: "uploaded_at", dir: "desc" }
         ],
         rowFormatter: function (row) {
             const element = row.getElement();

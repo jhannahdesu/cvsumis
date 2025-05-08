@@ -98,11 +98,73 @@ const rolesTable = () => {
             }
         },
         columns: [
-            { title: "EMPLOYEE ID", field: "employee_number", hozAlign: "left", vertAlign: "middle" },
-            { title: "FULLNAME", field: "name", hozAlign: "left", vertAlign: "middle" },
-            { title: "POSITION", field: "position", hozAlign: "left", vertAlign: "middle" },
-            { title: "STATUS", field: "status", hozAlign: "left", formatter: "html", vertAlign: "middle" },
-            { title: "ACTION", field: "action", hozAlign: "left", formatter: "html", vertAlign: "middle" },
+            { title: "EMPLOYEE ID", 
+                titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        EMPLOYEE ID
+                    </strong>
+                </div>`,
+                field: "employee_number",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+            },
+            { title: "FULLNAME", 
+                titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        FULLNAME
+                    </strong>
+                </div>`,
+                field: "name",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+            },
+            { title: "POSITION", 
+                titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        POSITION
+                    </strong>
+                </div>`,
+                field: "position", 
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+            },
+            { title: "STATUS",
+                titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        STATUS
+                    </strong>
+                </div>`,
+                field: "status",
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+                formatter: "html", 
+            },
+            { title: "ACTION", 
+                titleFormatter: () => `
+                <div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        ACTION
+                    </strong>
+                </div>`,
+                field: "action", 
+                formatter: "html", 
+                headerHozAlign: "center",
+                headerSort: false,
+                hozAlign: "center",
+                vertAlign: "middle",
+            },
             
         ]
     });
@@ -191,6 +253,11 @@ $(document).on('click', '#edit-user-modal', function(){
         success: function(response) {
             // console.log(response);
             $('#view_position').val(response.position);
+            $('#view_firstname').val(response.firstname);
+            $('#view_middlename').val(response.middlename);
+            $('#view_lastname').val(response.lastname);
+            $('#view_department').val(response.department);
+            $('#view_email').val(response.email);
         },
         error: function (xhr, status) {
             console.log("Error:", xhr.responseText);
@@ -301,7 +368,7 @@ $('#submit-user-btn').click(function () {
     if (form[0].checkValidity()) {
         let data = {
             firstname: $('#firstname').val(),
-            middlename: $('#middlename').val(), // ⬅️ ADD THIS LINE
+            middlename: $('#middlename').val(),
             lastname: $('#lastname').val(),
             email: $('#email').val(),
             department: $('#department').val(),

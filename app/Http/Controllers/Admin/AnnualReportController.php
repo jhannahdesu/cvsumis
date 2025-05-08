@@ -14,6 +14,10 @@ class AnnualReportController extends Controller
         $nav = 'Dashboard';
         $years = $this->annualReportYearList();
         return view('admin.reports.annual_reports', compact('main_title', 'nav', 'years'));
+        
+        $attachments = ReportAttachmentHeader::with('attachment_dtls')->get();
+        return view('admin.report_attachment', compact('main_title', 'nav', 'modules', 'attachments'));
+
     }
 
     public function annualReportYearList() {
