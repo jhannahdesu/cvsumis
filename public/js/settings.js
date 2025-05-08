@@ -455,4 +455,50 @@ $(document).ready(function () {
     });
 });
 
-//Default Select
+$('#generate-academic-year-btn').click(function () {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "This will generate the next academic year.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, generate!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/generate-academic-year',
+                type: 'POST',
+                success: function(response) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: response.message,
+                        icon: "success"
+                    });
+                    $('#generate-academic-year-btn').prop('disabled', false);
+                    fetchAcademicYear();
+                },
+                error: function (xhr) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.errors) {
+                        Object.keys(response.errors).forEach(key => {
+                            Toastify({
+                                text: response.errors[key],
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "linear-gradient(to right, #ff0000, #ff7f50)",
+                            }).showToast();
+                        });
+                    } else {
+                        Swal.fire("Error!", "An error occurred.", "error");
+                    }
+                }
+            });
+        }
+    });
+});

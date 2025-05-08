@@ -80,6 +80,8 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
         Route::post('/store-academic-year', [\App\Http\Controllers\Admin\SettingsController::class, 'storeAcademicYear'])->name('academic_year.store');
         Route::get('/fetch-academic-year', [\App\Http\Controllers\Admin\SettingsController::class, 'fetchAcademicYear'])->name('academic_year.fetch');
         Route::post('/remove-academic-year/{id}', [\App\Http\Controllers\Admin\SettingsController::class, 'removeAcademicYear'])->name('academic_year.remove');
+        
+        Route::post('/generate-academic-year', [\App\Http\Controllers\Admin\SettingsController::class, 'generateAcademicYear']);
 
         Route::post('/store-default-academic-year-semester', [\App\Http\Controllers\Admin\SettingsController::class, 'storeDefaultAcademicYear'])->name('default_academic_settings.store');
         Route::get('/get-default-academic-year', [\App\Http\Controllers\Admin\SettingsController::class, 'getDefaultAcademicYear']);

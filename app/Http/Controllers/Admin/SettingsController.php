@@ -129,6 +129,35 @@ class SettingsController extends Controller
         return response()->json(['message' => 'Data removed successfully'], 200);
     }
 
+    public function generateAcademicYear(Request $request) {
+        $latestYear = AcademicYear::orderBy('year_start', 'desc')->first();
+    
+        if ($latestYear) {
+            $newYearStart = $latestYear->year_start + 1;
+            $newYearEnd = $latestYear->year_end + 1;
+        } else {
+            $newYearStart = now()->year;
+            $newYearEnd = now()->year + 1;
+        }
+    
+        $newYear = AcademicYear::create([
+            'year_start' => $newYearStart,
+            'year_end' => $newYearEnd,
+            'created_by' => Auth::id()
+        ]);
+    
+        Helper::storeNotifications(
+            Auth::id(),
+            'Generated New Academic Year',
+            Auth::user()->firstname . ' ' . Auth::user()->lastname . ' generated a new academic year.'
+        );
+    
+        return response()->json([
+            'message' => 'Academic year ' . $newYearStart . '-' . $newYearEnd . ' created successfully.'
+        ], 200);
+    }
+    
+
     public function storeAcademicYear(Request $request) {
         try {
             $validatedData = $request->validate([
@@ -187,7 +216,7 @@ class SettingsController extends Controller
         Helper::storeNotifications(
             Auth::id(),
             'You Removed Academic Year',
-            Auth::user()->firstname .''. Auth::user()->lastname .'Removed Academic Year',
+            Auth::user()->firstname .''. Auth::user()->lastname .' Removed Academic Year',
         );
         return response()->json(['message' => 'Data removed successfully'], 200);
     }

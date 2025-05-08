@@ -47,7 +47,7 @@
                         <article class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Academic Year List</h5>
-                                <form class="row g-2 needs-validation" id="academic-year-form" novalidate>
+                                <!-- <form class="row g-2 needs-validation" id="academic-year-form" novalidate>
                                     @csrf
                                     <div class="col-md-6">
                                         <label for="year_start" class="form-label">Year Start</label>
@@ -66,7 +66,13 @@
                                     <div class="col-md-8">
                                     <button type="button" class="btn btn-primary px-2 mb-2" id="submit-academic-year">Submit</button>
                                     </div>
-                                </form>
+                                </form> -->
+
+                                <div class="class=col-md-8">
+                                    <button type="button" class="btn btn-primary px-2 mb-3" id="generate-academic-year-btn">
+                                        <i class="bi bi-calendar-plus me-2"></i> Add Academic Year
+                                    </button>
+                                </div>
                                 </hr>
                                 <div id="academic-year-table"></div>
                             </div>
@@ -184,6 +190,8 @@
             form.classList.add("was-validated");
         });
     });
+
+
 </script>
 
 

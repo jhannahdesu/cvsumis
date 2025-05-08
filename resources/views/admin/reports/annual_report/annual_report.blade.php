@@ -7,7 +7,7 @@
         $firstSem = "1<sup>st</sup> SEM AY " . $year . "-" . ($year + 1);
     ?>
     <style>
-        body { font-family: Arial, Arial; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 14px; }
         table { width: 100%; border-collapse: collapse;}
         th, td { border: 1px solid black; padding: 8px; text-align: left; }
         .page-break { page-break-after: always; }
@@ -39,7 +39,7 @@
             border-radius: 8px;
             display: block;
             transition: transform 0.3s ease;
-            transform: scale(0.6);
+            /* transform: scale(0.6); */
         }
 
 
@@ -49,7 +49,7 @@
     </style>
 
 <style>
-        body { font-family: Arial, Arial; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 14px; }
         .container { text-align: center; margin: 50px; }
         h1 { font-size: 24px; margin-bottom: 20px; }
         h2 { font-size: 20px; margin-bottom: 15px; }
