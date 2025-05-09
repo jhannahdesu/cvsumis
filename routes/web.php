@@ -242,6 +242,7 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
         Route::post('/remove-gov-recognition/{id}', [\App\Http\Controllers\Admin\CurriculumController::class, 'removeGovRecognition'])->name('curriculum.remove_gov_recognition');
 
         Route::post('/store-licensure-exam', [\App\Http\Controllers\Admin\CurriculumController::class, 'storeLicensureExam'])->name('curriculum.store_licensure_exam');
+        Route::post('/store-licensure-exam', [CurriculumController::class, 'storeLicensureExam']);
         Route::get('/view-licensure-exam/{id}', [\App\Http\Controllers\Admin\CurriculumController::class, 'viewLicensureExamData'])->name('curriculum.view_licensure_exam');
         Route::post('/update-licensure-exam/{id}', [\App\Http\Controllers\Admin\CurriculumController::class, 'updateLicensureExam'])->name('curriculum.update_licensure_exam');
         Route::post('/remove-licensure-exam/{id}', [\App\Http\Controllers\Admin\CurriculumController::class, 'removeLicensureExam'])->name('curriculum.remove_licensure_exam');

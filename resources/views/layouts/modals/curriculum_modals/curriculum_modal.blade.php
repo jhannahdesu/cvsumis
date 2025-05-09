@@ -1,3 +1,5 @@
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="modal fade" id="AddAccreditationStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
       <div class="modal-content">
@@ -249,9 +251,17 @@
                     </div>
                 </div>
 
+
                 <div class="col-md-12">
-                    <label for="school_year" class="form-label">Exam Date</label>
-                    <input type="text" class="form-control" id="exam_date" name="exam_date" placeholder="E.g. January 1 & 2, 2025" required>
+                    <label class="form-label">Exam Start - End</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="exam_date_start" name="exam_date_start" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="exam_date_end" name="exam_date_end" required>
+                        </div>
+                    </div>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -386,8 +396,15 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="school_year" class="form-label">Exam Date</label>
-                    <input type="text" class="form-control" id="view_exam_date" name="exam_date" required>
+                    <label class="form-label">Exam End</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="exam_date_start" name="exam_date_start" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="date" class="form-control" id="exam_date_end" name="exam_date_end" required>
+                        </div>
+                    </div>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -822,4 +839,42 @@ Location: Assessment Center - Toyota Motor Philippines, Laguna / TESDA"
         // Allow letters, spaces, commas, and periods
         this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
     });
+
+    $('#submit-licensure-exam-btn').click(function(event) {
+    var form = $('#licensure-exam-form')[0];
+    if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+
+    $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+
+    $.ajax({
+        url: '/store-licensure-exam',
+        type: 'POST',
+        data: $('#licensure-exam-form').serialize(),
+        success: function(response) {
+            console.log("Success response:", response); // Log success response
+            Swal.fire({
+                title: "Success!",
+                text: response.message,
+                icon: "success"
+            });
+            $('#licensure-exam-form')[0].reset();
+            $('#AddLicensureExam').modal('hide');
+            fetchLicensureExamData();
+        },
+        error: function (xhr, status) {
+            console.log("Error response:", xhr.responseText); // Log error response
+            throwError(xhr, status);
+        }
+    });
+});
+
 </script>

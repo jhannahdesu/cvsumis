@@ -985,12 +985,23 @@ let licensureExamTable = () => {
             hozAlign: "center",
             vertAlign: "middle"
         },
-        { title:"EXAM DATE",
+        { title:"EXAM START",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">EXAM DATE</strong>
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">EXAM START</strong>
             </div>`,
-            field: "exam_date",
+            field: "exam_date_start",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle"
+        },
+        { title:"EXAM END",
+            titleFormatter: () => 
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">EXAM END</strong>
+            </div>`,
+            field: "exam_date_end",
             headerHozAlign: "center",
             headerSort: false,
             hozAlign: "center",
@@ -1201,35 +1212,6 @@ $('#licensure-exam-csv').click(function() {
     licensureExams.download("csv", "Licensure Exams.csv", { filter: true });
 });
 
-
-// function searchlicensureExam(value) {
-//     let searchTerms = value.trim().toLowerCase().split(/\s+/);
-
-//     if (searchTerms.length === 0 || searchTerms[0] === "") {
-//         licensureExams.clearFilter();
-//         return;
-//     }
-
-//     licensureExams.setFilter(function(data) {
-//         let matches = true;
-
-//         searchTerms.forEach(term => {
-//             if (
-//                 !data.name.toLowerCase().includes(term) &&
-//                 !data.exam.toLowerCase().includes(term) &&
-//                 !data.exam_date.toLowerCase().includes(term) &&
-//                 !data.cvsu_rate.toLowerCase().includes(term) &&
-//                 !data.national_rate.toLowerCase().includes(term) &&
-//                 !data.cvsu_overall_passing_rate.toLowerCase().includes(term) &&
-//                 !data.national_overall_passing_rate.toLowerCase().includes(term)
-//             ) {
-//                 matches = false;
-//             }
-//         });
-
-//         return matches;
-//     });
-// }
 document.getElementById("licensure-search").addEventListener("input", function () {
     const searchTerms = this.value.toLowerCase().split(" ");
 
@@ -1240,7 +1222,8 @@ document.getElementById("licensure-search").addEventListener("input", function (
             if (
                 !data.name.toLowerCase().includes(term) &&
                 !data.exam.toLowerCase().includes(term) &&
-                !data.exam_date.toLowerCase().includes(term) &&
+                !data.exam_date_start.toLowerCase().includes(term) &&
+                !data.exam_date_end.toLowerCase().includes(term) &&
                 !data.cvsu_rate.toString().includes(term) &&
                 !data.national_rate.toString().includes(term) &&
                 !data.cvsu_overall_passing_rate.toString().includes(term) &&
@@ -1254,39 +1237,28 @@ document.getElementById("licensure-search").addEventListener("input", function (
     });
 });
 
-// document.getElementById("licensure-search").addEventListener("input", function () {
-//     const keyword = this.value.toLowerCase();
-//     licensureExams.setFilter([
-//         [
-//             { field: "name", type: "like", value: keyword },
-//             { field: "exam", type: "like", value: keyword },
-//             { field: "exam_date", type: "like", value: keyword },
-//             { field: "cvsu_rate", type: "like", value: keyword },
-//             { field: "national_rate", type: "like", value: keyword },
-//             { field: "cvsu_overall_passing_rate", type: "like", value: keyword },
-//             { field: "national_overall_passing_rate", type: "like", value: keyword }
-//         ]
-//     ]);
-// });
-
-
 $('#licensure-exam-modal').click(function() {
    $('#AddLicensureExam').modal('show');
 });
 //updateLicensureExam
 $('#submit-licensure-exam-btn').click(function(event) {
+    event.preventDefault(); // <-- Always prevent default form submission
     var form = $('#licensure-exam-form')[0];
+
     if (form.checkValidity() === false) {
-        event.preventDefault();
         event.stopPropagation();
+        form.classList.add('was-validated');
+        return;
     }
+
     form.classList.add('was-validated');
-    
+
     $.ajax({
         url: '/store-licensure-exam',
         type: 'POST',
         data: $('#licensure-exam-form').serialize(),
         success: function(response) {
+            console.log("Success response:", response);
             Swal.fire({
                 title: "Success!",
                 text: response.message,
@@ -1296,11 +1268,13 @@ $('#submit-licensure-exam-btn').click(function(event) {
             $('#AddLicensureExam').modal('hide');
             fetchLicensureExamData();
         },
-        error: function (xhr, status) {
+        error: function(xhr, status) {
+            console.log("Error response:", xhr.responseText);
             throwError(xhr, status);
         }
     });
 });
+
 
 function fetchLicensureExamData(){
     $.ajax({
@@ -1328,7 +1302,8 @@ $(document).on('click', '#edit-licensure-exam-btn', function (e) {
             $('#view_examination_type').val(response.examination_type);
             $('#view_cvsu_passing_rate').val(response.cvsu_passing_rate);
             $('#view_national_passing_rate').val(response.national_passing_rate);
-            $('#view_exam_date').val(response.exam_date);
+            $('#view_exam_date_start').val(response.exam_date_start);
+            $('#view_exam_date_end').val(response.exam_date_end);
             $('#view_cvsu_total_passer').val(response.cvsu_total_passer);
             $('#view_cvsu_total_takers').val(response.cvsu_total_takers);
             $('#view_national_total_passer').val(response.national_total_passer);

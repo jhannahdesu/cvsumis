@@ -335,10 +335,12 @@ class CurriculumController extends Controller
     //Performance in the licensure examination
 
     public function storeLicensureExam(Request $request) {
+         \Log::info('Request data:', $request->all());
         try {
             $validatedData = $request->validate([
                 'examination_type' => 'required',
-                'exam_date' => 'required',
+                'exam_date_start' => 'required',
+                'exam_date_end' => 'required',
                 'cvsu_total_passer' => 'required|integer|min:1',
                 'cvsu_total_takers' => 'required|integer|min:1',
                 'national_total_passer' => 'required|integer|min:1',
@@ -397,7 +399,8 @@ class CurriculumController extends Controller
             'cvsu_overall_passing_rate' => "{$item->cvsu_overall_passer}/{$item->cvsu_overall_taker} - {$item->cvsu_overall_passing_rate}%",
             'national_overall_passing_rate' => "{$item->national_overall_passer}/{$item->national_overall_taker} - {$item->national_overall_passing_rate}%",
             'examination_type' => ucwords($item->examination_type_dtls->type),
-            'exam_date' => $item->exam_date,
+            'exam_date_start' => $item->exam_date_start,
+            'exam_date_end' => $item->exam_date_end,
             'updated_at' => $item->updated_at->format('F d, Y'),
             'action' => $actions['button'],
             
@@ -424,8 +427,10 @@ class CurriculumController extends Controller
             'examination_type' => $data->examination_type,
             'cvsu_passing_rate' => $data->cvsu_passing_rate,
             'national_passing_rate' => $data->national_passing_rate,
-            // 'exam_date' => date('Y-m-d', strtotime($data->exam_date)),
-            'exam_date' => $data->exam_date,
+            // 'exam_date_start' => date('Y-m-d', strtotime($data->exam_date_start)),
+            // 'exam_date_end' => date('Y-m-d', strtotime($data->exam_date_end)),
+            'exam_date_start' => $data->exam_date_start,
+            'exam_date_end' => $data->exam_date_end,
             'cvsu_total_passer' => $data->cvsu_total_passer,
             'cvsu_total_takers' => $data->cvsu_total_takers,
             'national_total_passer' => $data->national_total_passer,
@@ -446,7 +451,8 @@ class CurriculumController extends Controller
         try {
             $validatedData = $request->validate([
                 'examination_type' => 'required',
-                'exam_date' => 'required',
+                'exam_date_start' => 'required',
+                'exam_date_end' => 'required',
                 'cvsu_total_passer' => 'required|integer|min:1',
                 'cvsu_total_takers' => 'required|integer|min:1',
                 'national_total_passer' => 'required|integer|min:1',
