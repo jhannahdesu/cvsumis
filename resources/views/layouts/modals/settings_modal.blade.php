@@ -55,9 +55,9 @@
                 </div>
 
                 <div class="col-md-12">
-                    <!-- <label for="abbreviation" class="form-label">Program Abbreviation</label> -->
+                    <label for="abbreviation" class="form-label">Program Abbreviation</label>
                     <input type="text" class="form-control abbreviation-input" id="view_abbreviation" name="abbreviation" required>
-                    <input type="text" class="form-control" id="view_abbreviation" name="abbreviation" required>
+                    <!-- <input type="text" class="form-control" id="view_abbreviation" name="abbreviation" required> -->
                     <div class="valid-feedback">
                         Looks good!
                     </div>

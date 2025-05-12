@@ -62,36 +62,80 @@
 </div> -->
 <!-- End -->
 
-          <!--Enrolees Reports -->
-            <div class="col-12">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Enrollees Report | <span class="enrolees-text"></span></h5>
-                  <div class="d-flex justify-content-start mb-2">
-                    <div class="form-group me-2">
-                      <label for="yearSelect" class="form-label">Academic Year</label>
-                      <select id="school_year" class="form-select" aria-label="Year">
-                          <option disabled selected value="">Academic Year</option>
-                          @foreach ($schoolYears as $schoolYear)
-                            <option value="{{$schoolYear->school_year}}">{{$schoolYear->school_year}}</option>
-                          @endforeach
-                      </select>
-                    </div>
+<!--Enrollees Reports -->
+<div class="col-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Enrollees Report | <span class="enrolees-text"></span></h5>
+      <div class="d-flex justify-content-start mb-2">
+        <div class="form-group me-2">
+          <label class="form-label">Filter Mode</label>
+          <select id="filterMode" class="form-select">
+            <option value="academic_year" selected>By Academic Year</option>
+            <option value="program">By Program</option>
+          </select>
+        </div>
 
-                    <div class="form-group me-2">
-                      <label for="yearSelect" class="form-label">Semester</label>
-                      <select id="semester" class="form-select" aria-label="Year">
-                          <option disabled selected value="">Semester</option>
-                          <option value="1st Semester">1st Semester</option>
-                          <option value="2nd Semester">2nd Semester</option>
-                      </select>
-                    </div>
-                  </div>
-                  <!-- Line Chart -->
-                  <div id="enrolees-chart"></div>
-                </div>
-              </div>
-            </div><!-- End Reports -->
+        <!-- By Academic Year Filters -->
+        <div id="academicYearFilters" class="d-flex">
+          <div class="form-group me-2">
+            <label for="school_year" class="form-label">Academic Year</label>
+            <select id="school_year" class="form-select">
+              <option disabled selected value="">Academic Year</option>
+              @foreach ($schoolYears as $schoolYear)
+                <option value="{{ $schoolYear->school_year }}">{{ $schoolYear->school_year }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="form-group me-2">
+            <label for="semester" class="form-label">Semester</label>
+            <select id="semester" class="form-select">
+              <option disabled selected value="">Semester</option>
+              <option value="1st Semester">1st Semester</option>
+              <option value="2nd Semester">2nd Semester</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- By Program Filters -->
+        <div id="programFilters" style="display: none;">
+          <div class="form-group me-2">
+            <label for="programSelect" class="form-label">Program</label>
+            <select id="programSelect" class="form-select">
+              <option disabled selected value="">Select Program</option>
+              @foreach ($programs as $program)
+                <option value="{{ $program->id }}">{{ $program->abbreviation }}</option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div id="enrolees-chart"></div>
+    </div>
+  </div>
+</div><!-- End Reports -->
+
+<script>
+  document.getElementById('filterMode').addEventListener('change', function () {
+    var filterMode = this.value;
+    var academicYearFilters = document.getElementById('academicYearFilters');
+    var programFilters = document.getElementById('programFilters');
+
+    // Adjust visibility based on the selected filter mode
+    if (filterMode === 'program') {
+      academicYearFilters.classList.add('d-none');  // Hide academic year filters
+      programFilters.classList.remove('d-none');  // Show program filters
+    } else {
+      academicYearFilters.classList.remove('d-none');  // Show academic year filters
+      programFilters.classList.add('d-none');  // Hide program filters
+    }
+  });
+</script>
+
+
 <!-- Research & Extension Reports Row -->
 <div class="row">
     <!-- Research Reports -->

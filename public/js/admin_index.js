@@ -77,7 +77,7 @@ $('#reset-licensure').click(function() {
 
 const enroleesAnnualReport = (school_year, semester) => {
     $.ajax({
-        url: '/enrolees-annual-report', // Ensure this route is correct
+        url: '/enrolees-annual-report',
         type: 'GET',
         dataType: 'json',
         data: {school_year : school_year, semester : semester},
@@ -116,8 +116,8 @@ const enroleesAnnualReport = (school_year, semester) => {
                 },
                 plotOptions: {
                     bar: {
-                        distributed: true, // Enables each bar to have its own color
-                        borderRadius: 4, // Optional, for rounded edges
+                        distributed: true,
+                        borderRadius: 4,
                         dataLabels: {
                             position: 'top'
                         }
@@ -135,8 +135,7 @@ const enroleesAnnualReport = (school_year, semester) => {
             if (chart) {
                 chart.destroy();
             }
-    
-            // Render new chart
+
             chart = new ApexCharts(document.querySelector("#enrolees-chart"), options);
             chart.render();
         },
@@ -145,6 +144,104 @@ const enroleesAnnualReport = (school_year, semester) => {
             console.log("Error fetching data", error);
         }
     });
+};
+
+$(document).ready(function () {
+    $('#filterMode').on('change', function () {
+        const mode = $(this).val();
+        if (mode === 'academic_year') {
+        $('#academicYearFilters').show();
+        $('#programFilters').hide();
+        } else if (mode === 'program') {
+        $('#academicYearFilters').hide();
+        $('#programFilters').show();
+        }
+    });
+
+    $('#school_year, #semester').on('change', function () {
+        const year = $('#school_year').val();
+        const semester = $('#semester').val();
+        if (year && semester) {
+        enroleesAnnualReport(year, semester);
+        }
+    });
+
+        $('#programSelect').on('change', function () {
+        const programId = $(this).val();
+        if (programId) {
+            fetchProgramTrend(programId);
+        }
+        });
+});
+
+
+const fetchProgramTrend = (program_id) => {
+  $.ajax({
+    url: '/enrolees-by-program',
+    type: 'GET',
+    data: { program_id },
+    success: function(response) {
+      const aggregatedData = response.reduce((acc, item) => {
+        const year = new Date(item.created_at).getFullYear();
+        if (!acc[year]) {
+          acc[year] = { year: year, total: 0 };
+        }
+        acc[year].total += item.number_of_student;
+        return acc;
+      }, {});
+
+      const years = Object.values(aggregatedData).map(item => item.year);
+      const totals = Object.values(aggregatedData).map(item => item.total);
+
+      const options = {
+        chart: { 
+            type: 'line',
+            height: 350,
+            toolbar: {
+            show: true,
+            tools: {
+                download: true,
+                zoom: false,
+                pan: false,
+                reset: false,
+                zoomin: false,
+                zoomout: false,
+                selection: false,
+                menu: true
+            }
+        }
+        },
+        series: [{
+          name: 'Enrollees',
+          data: totals
+        }],
+        xaxis: {
+          categories: years,
+          title: { text: 'Year' }
+        },
+        title: {
+          text: `Enrollment Trend: ${response[0]?.program_dtls?.program || 'No data for this program'}`,
+          align: 'center'
+        },
+
+        yaxis: {
+          title: { text: 'Total Enrollees' }
+        },
+        colors: ['#00E396'],
+        dataLabels: { enabled: true },
+        stroke: { curve: 'smooth' }
+      };
+
+      if (chart) {
+        chart.destroy();
+      }
+      chart = new ApexCharts(document.querySelector("#enrolees-chart"), options);
+      chart.render();
+    },
+    error: function(error) {
+      console.error("Failed to fetch trend data", error);
+    }
+  });
 };
 
 const researchReport = (research_year, research_status) => {

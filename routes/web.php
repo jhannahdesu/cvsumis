@@ -50,6 +50,7 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
 
     Route::get('/dummy-enrolees-monthly-report', [\App\Http\Controllers\Admin\IndexController::class, 'CourseMonthlyEnroleesReport'])->name('admin.enroleesReport');
     Route::get('/enrolees-annual-report', [\App\Http\Controllers\Admin\IndexController::class, 'annualProgramReportData'])->name('admin.enroleesReport');
+    Route::get('/enrolees-by-program', [\App\Http\Controllers\Admin\IndexController::class, 'fetchEnrolleesByProgram']);
     Route::get('/research-report', [\App\Http\Controllers\Admin\IndexController::class, 'researchCountReportData'])->name('admin.researchReport');
     Route::get('/extension-report', [\App\Http\Controllers\Admin\IndexController::class, 'extensionCountReportData'])->name('admin.extensionReport');
     Route::get('/licensure-exam-report', [\App\Http\Controllers\Admin\IndexController::class, 'licensureExamReport'])->name('admin.licensureExamReport');

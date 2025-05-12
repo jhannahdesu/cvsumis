@@ -21,10 +21,11 @@ use Illuminate\Support\Facades\DB;
 
 class IndexController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
         $main_title = 'Home';
         $nav = 'Dashboard';
+
         $schoolYears = $this->getSchoolYears();
         $program_count = $this->programCount();
         $department_count = $this->departmentCount();
@@ -37,11 +38,36 @@ class IndexController extends Controller
         $academicYears = $this->academicYearList();
         $defaultAcademicYears = $this->defaultAcademicYearList();
         $educational_attainment_years = $this->getEducationalAttainmentYears();
+        $programs = Programs::all();
 
-        return view('admin.index', compact('main_title', 'nav', 'schoolYears', 'user_count', 
-        'program_count', 'research_year', 'extension_year', 'department_count', 'licensure_year', 
-        'exam_types', 'faculty_count', 'academicYears', 'defaultAcademicYears', 'educational_attainment_years'));
+        return view('admin.index', compact(
+            'main_title',
+            'nav',
+            'schoolYears',
+            'program_count',
+            'department_count',
+            'user_count',
+            'faculty_count',
+            'research_year',
+            'extension_year',
+            'licensure_year',
+            'exam_types',
+            'academicYears',
+            'defaultAcademicYears',
+            'educational_attainment_years',
+            'programs'
+        ));
+    }
 
+    public function fetchEnrolleesByProgram(Request $request)
+    {
+        $programId = $request->get('program_id');
+
+        $enrollees = Enrollment::with('program_dtls')
+            ->where('program_id', $programId)
+            ->get();
+
+        return response()->json($enrollees);
     }
 
     public function defaultAcademicYearList(){
@@ -157,13 +183,36 @@ class IndexController extends Controller
         ]);
     }
 
+    public function byProgramReportData(Request $request)
+    {
+        $programId = $request->program_id;
+
+        $program = Programs::with('enrollment_dtls')->findOrFail($programId);
+
+        $yearlyData = $program->enrollment_dtls
+            ->groupBy(function ($item) {
+                return \Carbon\Carbon::parse($item->updated_at)->format('Y');
+            })
+            ->map(function ($yearGroup) {
+                return [
+                    'year' => $yearGroup->first()->updated_at->format('Y'),
+                    'total' => $yearGroup->sum('number_of_student'),
+                ];
+            })->values();
+
+        return response()->json([
+            'program' => $program->abbreviation,
+            'data' => $yearlyData
+        ]);
+    }
+
     public function licensureExamReport(Request $request){
         $examYear = $request->exam_year;
         $examType = $request->exam_type;
 
         $exams = ExaminationType::with(['licensure_dtls' => function ($query) use ($examYear, $examType) {
         if ($examYear) {
-            $query->whereYear('exam_date', $examYear); // Filter by year only
+            $query->whereYear('exam_date', $examYear);
         }
         if ($examType) {
             $query->where('examination_type', $examType);
