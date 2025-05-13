@@ -525,14 +525,16 @@
 
             <p><em>Please review the information above carefully. By clicking <strong>'I understand'</strong>, you acknowledge that you have read, understood, and consent to the collection, processing, and storage of your personal data as described.</em></p>
 
-            <div class="privacy-checkbox-container">
+            <!-- <div class="privacy-checkbox-container">
                 <input type="checkbox" class="privacy-checkbox" id="privacyConsent">
                 <label for="privacyConsent">I have read, understood, and agree to the data privacy terms outlined above.</label>
-            </div>
+            </div> -->
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="confirm-privacy-btn" disabled>I understand</button>
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('privacyModal').classList.remove('show')">I Understand</button>
+            <!-- <button type="button" class="btn btn-primary">I Understand</button> -->
         </div>
+
     </div>
 </div>
 
@@ -744,18 +746,58 @@
 </script>
 
 <script>
-    const modal = document.getElementById("privacyModal");
-    const openModalBtn = document.getElementById("openPrivacyModal");
-    const closeModalBtn = document.getElementById("closePrivacyModal");
+    document.addEventListener("DOMContentLoaded", function () {
+        const openModalBtn = document.getElementById("openPrivacyModal");
+        const modal = document.getElementById("privacyModal");
+        const confirmBtn = document.getElementById("confirmConsent");
+        const loginForm = document.getElementById("login_form");
 
-    openModalBtn.addEventListener("click", function(e) {
-        e.preventDefault();
-        modal.classList.add("show");
-    });
+        // Open modal
+        openModalBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            modal.classList.add("show");
+        });
 
-    closeModalBtn.addEventListener("click", function() {
-        modal.classList.remove("show");
+        // Confirm consent
+        confirmBtn.addEventListener("click", function () {
+            // Trigger form validation
+            if (!loginForm.checkValidity()) {
+                loginForm.classList.add('was-validated');
+            } else {
+                // Close modal only if form is valid
+                modal.classList.remove("show");
+            }
+        });
     });
 </script>
+
+
+<script>
+    document.getElementById("openPrivacyModal").addEventListener("click", function(e) {
+        e.preventDefault();
+        document.getElementById("privacyModal").classList.add("show");
+    });
+
+    document.querySelector("#privacyModal .modal-footer .btn-primary")?.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const form = document.getElementById("login_form");
+
+        if (form.checkValidity()) {
+            document.getElementById("privacyModal").classList.remove("show");
+        } else {
+            form.classList.add("was-validated");
+        }
+    });
+
+    // Optional: Close modal when clicking outside of modal content
+    window.addEventListener('click', function(e) {
+        const modal = document.getElementById("privacyModal");
+        if (e.target === modal) {
+            modal.classList.remove("show");
+        }
+    });
+</script>
+
 
 @endsection
