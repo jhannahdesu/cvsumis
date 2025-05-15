@@ -15,6 +15,7 @@ use App\Models\Notifications;
 use App\Models\Programs;
 use App\Models\Research;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,7 @@ class IndexController extends Controller
         $academicYears = $this->academicYearList();
         $defaultAcademicYears = $this->defaultAcademicYearList();
         $educational_attainment_years = $this->getEducationalAttainmentYears();
+        $examinationTypes = ExaminationType::all();
         $programs = Programs::all();
 
         return view('admin.index', compact(
@@ -55,7 +57,8 @@ class IndexController extends Controller
             'academicYears',
             'defaultAcademicYears',
             'educational_attainment_years',
-            'programs'
+            'programs',
+            'examinationTypes'
         ));
     }
 
@@ -205,50 +208,83 @@ class IndexController extends Controller
             'data' => $yearlyData
         ]);
     }
+public function getLatestExamYear() {
+    $latestYear = LicensureExam::max(DB::raw('YEAR(exam_date)'));
+    return response()->json(['latestYear' => $latestYear]);
+}
 
-    public function licensureExamReport(Request $request){
-        $examYear = $request->exam_year;
-        $examType = $request->exam_type;
+    public function licensureExamReport(Request $request)
+{
+    $examYear = $request->exam_year;
+    $examType = $request->exam_type;
+    $startMonth = $request->start_month;
+    $endMonth = $request->end_month;
 
-        $exams = ExaminationType::with(['licensure_dtls' => function ($query) use ($examYear, $examType) {
-        if ($examYear) {
-            $query->whereYear('exam_date', $examYear);
+    $exams = ExaminationType::with(['licensure_dtls' => function ($query) use ($examYear, $startMonth, $endMonth, $examType) {
+        if ($examYear && $startMonth && $endMonth) {
+            $startDate = Carbon::createFromDate($examYear, $startMonth, 1)->startOfMonth();
+            $endDate = Carbon::createFromDate($examYear, $endMonth, 1)->endOfMonth();
+
+            // Handle cases like December to January (wrap around)
+            if ($startDate->gt($endDate)) {
+                $query->where(function ($subQuery) use ($startDate, $endDate) {
+                    $subQuery->whereBetween('updated_at', [$startDate, Carbon::createFromDate($startDate->year, 12, 31)])
+                             ->orWhereBetween('updated_at', [Carbon::createFromDate($endDate->year, 1, 1), $endDate]);
+                });
+            } else {
+                $query->whereBetween('updated_at', [$startDate, $endDate]);
+            }
+        } elseif ($examYear) {
+            $query->whereYear('updated_at', $examYear);
         }
+
         if ($examType) {
             $query->where('examination_type', $examType);
         }
-        }])->get();
+    }])->get();
 
-        $examData = [];
-        foreach ($exams as $exam) {
-            $localCount = $exam->licensure_dtls->sum('cvsu_total_passer');
-            $nationalCount = $exam->licensure_dtls->sum('national_total_passer');
-            $cvsu_overall_passer = $exam->licensure_dtls->sum('cvsu_overall_passer');
-            $national_overall_passer = $exam->licensure_dtls->sum('national_overall_passer');
-    
-            $examData[] = [
-                'exam_type' => $exam->type,
-                'type' => 'cvsu',
-                'count' => $localCount,
-            ];
-            $examData[] = [
-                'exam_type' => $exam->type,
-                'type' => 'national',
-                'count' => $nationalCount,
-            ];
-            $examData[] = [
-                'exam_type' => $exam->type,
-                'type' => 'cvsu_overall',
-                'count' => $cvsu_overall_passer,
-            ];
-            $examData[] = [
-                'exam_type' => $exam->type,
-                'type' => 'national_overall',
-                'count' => $national_overall_passer,
-            ];
-        }
-        return response()->json($examData);
+    $examData = [];
+    foreach ($exams as $exam) {
+        $localCount = $exam->licensure_dtls->sum('cvsu_total_passer');
+        $nationalCount = $exam->licensure_dtls->sum('national_total_passer');
+        $cvsu_overall_passer = $exam->licensure_dtls->sum('cvsu_overall_passer');
+        $national_overall_passer = $exam->licensure_dtls->sum('national_overall_passer');
+
+        $examData[] = ['exam_type' => $exam->type, 'type' => 'cvsu', 'count' => $localCount];
+        $examData[] = ['exam_type' => $exam->type, 'type' => 'national', 'count' => $nationalCount];
+        $examData[] = ['exam_type' => $exam->type, 'type' => 'cvsu_overall', 'count' => $cvsu_overall_passer];
+        $examData[] = ['exam_type' => $exam->type, 'type' => 'national_overall', 'count' => $national_overall_passer];
     }
+
+    return response()->json($examData);
+}
+
+public function licensureExamTrend(Request $request)
+{
+    $examTypeId = $request->exam_type;
+
+    $data = LicensureExamnination::where('examination_type', $examTypeId)
+        ->selectRaw('YEAR(updated_at) as year,
+                     SUM(cvsu_total_passer) as cvsu,
+                     SUM(national_total_passer) as national,
+                     SUM(cvsu_overall_passer) as cvsu_overall,
+                     SUM(national_overall_passer) as national_overall')
+        ->groupByRaw('YEAR(updated_at)')
+        ->orderByRaw('YEAR(updated_at)')
+        ->get();
+
+    $result = [];
+
+    foreach ($data as $row) {
+        $result[] = ['year' => $row->year, 'type' => 'cvsu', 'count' => $row->cvsu];
+        $result[] = ['year' => $row->year, 'type' => 'national', 'count' => $row->national];
+        $result[] = ['year' => $row->year, 'type' => 'cvsu_overall', 'count' => $row->cvsu_overall];
+        $result[] = ['year' => $row->year, 'type' => 'national_overall', 'count' => $row->national_overall];
+    }
+
+    return response()->json($result);
+}
+
 
     public function researchCountReportData(Request $request){
 
