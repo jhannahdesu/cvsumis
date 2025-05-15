@@ -27,7 +27,7 @@
   <link href="{{ asset('libraries/niceadmin/assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
   <link href="{{ asset('libraries/niceadmin/assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{{ asset('libraries/toastify/toastify.css') }}">
-
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="{{ asset('libraries/aos/aos.css') }}">
 
   <link rel="stylesheet" href="{{ asset('libraries/tabulator-master/tabulator-master/dist/css/tabulator_bootstrap5.min.css') }}">
@@ -90,7 +90,14 @@
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
 
-
+      @if(Auth::user()->position == 1)
+        <!-- Email Icon Trigger -->
+        <li class="nav-item dropdown">
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="modal" data-bs-target="#SendEmailModal">
+            <i class="bi bi-envelope"></i>
+          </a>
+        </li>
+      @endif
 
         <li class="nav-item dropdown">
 
@@ -209,9 +216,7 @@
   <script type="text/javascript" src="{{ asset('libraries/toastify/toastify.js') }}"></script>
   <script src="{{ asset('libraries/aos/aos.js') }}"></script>
   <script src="{{ asset('js/admin.js') }}"></script>
-  
-  <!-- Template Main JS File -->
-  <script src="{{ asset('libraries/niceadmin/assets/js/main.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
     AOS.init();
 
@@ -226,9 +231,18 @@
             });
         }
     });
+
+    $(document).ready(function() {
+        $('#recipient_email').select2({
+            dropdownParent: $('#SendEmailModal'),
+            width: '100%',
+            placeholder: "Select recipients"
+        });
+    });
   </script>
   @yield('scripts')
 
+@include('layouts.modals.send_email_modal')
 
 <style>
 .full-width {

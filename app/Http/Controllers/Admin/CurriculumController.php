@@ -339,8 +339,8 @@ class CurriculumController extends Controller
         try {
             $validatedData = $request->validate([
                 'examination_type' => 'required',
-                'exam_date_start' => 'required',
-                'exam_date_end' => 'required',
+                'exam_start' => 'required|date|before_or_equal:today',
+                'exam_end' => 'required|date|before_or_equal:today',
                 'cvsu_total_passer' => 'required|integer|min:1',
                 'cvsu_total_takers' => 'required|integer|min:1',
                 'national_total_passer' => 'required|integer|min:1',
@@ -352,6 +352,9 @@ class CurriculumController extends Controller
             ]);
     
             try {
+                $validatedData['exam_date_start'] = $validatedData['exam_start'];
+                $validatedData['exam_date_end'] = $validatedData['exam_end'];
+                unset($validatedData['exam_start'], $validatedData['exam_end']);
                 $validatedData['module'] = 1;
                 $validatedData['added_by'] = auth()->user()->id;
                 $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
@@ -451,8 +454,8 @@ class CurriculumController extends Controller
         try {
             $validatedData = $request->validate([
                 'examination_type' => 'required',
-                'exam_date_start' => 'required',
-                'exam_date_end' => 'required',
+                'exam_start' => 'required|date|before_or_equal:today',
+                'exam_end' => 'required|date|before_or_equal:today',
                 'cvsu_total_passer' => 'required|integer|min:1',
                 'cvsu_total_takers' => 'required|integer|min:1',
                 'national_total_passer' => 'required|integer|min:1',
@@ -465,6 +468,9 @@ class CurriculumController extends Controller
             ]);
     
             try {
+                $validatedData['exam_date_start'] = $validatedData['exam_start'];
+                $validatedData['exam_date_end'] = $validatedData['exam_end'];
+                unset($validatedData['exam_start'], $validatedData['exam_end']);
                 $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
                 $validatedData['national_passing_rate'] = number_format(($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100, 2);
                 $validatedData['cvsu_overall_passing_rate'] = number_format(($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100, 2);

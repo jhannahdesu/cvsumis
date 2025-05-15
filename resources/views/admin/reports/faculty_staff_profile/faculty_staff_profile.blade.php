@@ -256,7 +256,11 @@
                 @foreach($local_seminars as $local_seminar)
                     <tr>
                         <td>{{ ucwords($local_seminar->conference_title) }}</td>
-                        <td>{{ ucwords($local_seminar->participants) }}</td>
+                        <td>
+                            @foreach(explode(',', $local_seminar->participants) as $p)
+                                {{ ucwords(trim($p)) }}<br>
+                            @endforeach
+                        </td>
                         <td>{{ date('M d, Y', strtotime($local_seminar->date)) }} / {{ ucwords($local_seminar->venue) }}</td>
                        
                     </tr>
@@ -416,7 +420,7 @@
                        
                     <th style="border: 1px solid #000; background-color: #007bff; color: white;">PRESENTER</th>
                     <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE AND VENUE </th>            
-                        
+                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">CO-AUTHORS</th>
                 </tr>
             </thead>
             <tbody>
@@ -425,8 +429,17 @@
                         <td>{{ ucwords($paper->presentation_type) }}</td>
                         <td>{{ ucwords($paper->conference_name) }}</td>
                         <td>{{ ucwords($paper->paper_name) }}</td>
-                        <td>{{ ucwords($paper->presenter_name) }}</td>
+                        <td>
+                            @foreach(explode(',', $paper->presenter_name ?? '') as $p)
+                                {{ ucwords(trim($p)) }}<br>
+                            @endforeach
+                        </td>
                         <td>{{ date('M d, Y', strtotime($paper->date)) }} / {{ ucwords($paper->venue) }}</td>
+                        <td>
+                            @foreach(explode(',', $paper->co_authors ?? '') as $co)
+                                {{ ucwords(trim($co)) }}<br>
+                            @endforeach
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

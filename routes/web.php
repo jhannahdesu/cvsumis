@@ -25,6 +25,8 @@ Route::post('/reset-password', [\App\Http\Controllers\ForgotPasswordController::
 Route::get('/reset-password-form/{id}', [\App\Http\Controllers\ResetPasswordController::class, 'index'])->name('reset_password.index');
 Route::post('/update-new-password/{id}', [\App\Http\Controllers\ResetPasswordController::class, 'resetPassword'])->name('reset_password.update');
 
+Route::post('/send-email', [App\Http\Controllers\SendEmailController::class, 'send'])->name('send.email');
+
 Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(function () {
      //SETTINGS 
         Route::get('change-password', [\App\Http\Controllers\Admin\ChangePasswordController::class, 'index'])->name('change_password.index');

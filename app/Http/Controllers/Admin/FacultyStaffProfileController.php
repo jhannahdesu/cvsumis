@@ -1380,13 +1380,14 @@ public function storeFacultyGraduateStudies(Request $request)
                 'conference_name' => 'required',
                 'paper_name' => 'required',
                 'presenter_name' => 'required',
+                'co_authors' => 'nullable|string',
                 'date' => 'required',
                 'venue' => 'required',
             ]);
-    
+
             try {
                 $validatedData['module'] = 3;
-                $validatedData['added_by'] = auth()->user()->id;
+                $validatedData['added_by'] = auth()->user()->id;     
                 PaperPresentation::create($validatedData);
                 Helper::storeNotifications(
                     Auth::id(),
@@ -1431,6 +1432,7 @@ public function storeFacultyGraduateStudies(Request $request)
                 'conference_name' => ucwords($item->conference_name),
                 'paper_name' => ucwords($item->paper_name),
                 'presenter_name' => ucwords($item->presenter_name),
+                'co_authors' => $item->co_authors, // <-- ADD THIS LINE
                 'date_venue' => date('F d, Y', strtotime($item->date)).' / '.ucwords($item->venue),
                 'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
@@ -1458,6 +1460,7 @@ public function storeFacultyGraduateStudies(Request $request)
             'conference_name' => $data->conference_name,
             'paper_name' => $data->paper_name,
             'presenter_name' => $data->presenter_name,
+            'co_authors' => $data->co_authors,
             'date' => date('Y-m-d', strtotime($data->date)),
             'venue' => $data->venue,
         ]);
@@ -1470,6 +1473,7 @@ public function storeFacultyGraduateStudies(Request $request)
                 'conference_name' => 'required',
                 'paper_name' => 'required',
                 'presenter_name' => 'required',
+                'co_authors' => 'nullable|string',
                 'date' => 'required',
                 'venue' => 'required',
             ]);
@@ -1507,5 +1511,5 @@ public function storeFacultyGraduateStudies(Request $request)
 }
 
 
-   
+
 

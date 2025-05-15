@@ -1259,6 +1259,20 @@ $('#submit-licensure-exam-btn').click(function(event) {
     event.preventDefault(); // <-- Always prevent default form submission
     var form = $('#licensure-exam-form')[0];
 
+    // Date validation
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    var start = new Date($('#exam_date_start').val());
+    var end = new Date($('#exam_date_end').val());
+    if (start > today || end > today) {
+        Swal.fire({
+            title: "Invalid Date",
+            text: "Future dates are not accommodated.",
+            icon: "warning"
+        });
+        return;
+    }
+
     if (form.checkValidity() === false) {
         event.stopPropagation();
         form.classList.add('was-validated');
@@ -2306,4 +2320,4 @@ $(document).on('click', '#remove-student-tvet-btn', function(){
             });
         }
     });
-}); 
+});

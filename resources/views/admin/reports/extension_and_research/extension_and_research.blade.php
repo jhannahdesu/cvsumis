@@ -35,7 +35,11 @@
                 @foreach($cvsu_researches as $cvsu_research)
                     <tr>
                         <td>{{ ucwords($cvsu_research->title) }}</td>
-                        <td>{{ ucwords($cvsu_research->researcher) }}</td>
+                        <td>
+                            @foreach(explode(',', $cvsu_research->researcher ?? '') as $r)
+                                {{ ucwords(trim($r)) }}<br>
+                            @endforeach
+                        </td>
                         <td>{{ date('Y', strtotime($cvsu_research->year)).' / '.$cvsu_research->budget}} <br>{{ $cvsu_research->status }}</td>
                        
                     </tr>
@@ -62,7 +66,11 @@
                 @foreach($outside_researches as $outside_research)
                     <tr>
                         <td>{{ ucwords($outside_research->title) }}</td>
-                        <td>{{ ucwords($outside_research->researcher) }}</td>
+                        <td>
+                            @foreach(explode(',', $outside_research->researcher ?? '') as $r)
+                                {{ ucwords(trim($r)) }}<br>
+                            @endforeach
+                        </td>
                         <td>{{ ucwords($outside_research->agency) }}</td>
                         <td>{{ date('Y', strtotime($outside_research->year)).' / '.$outside_research->budget}} <br>{{ $outside_research->status }}</td>
                        

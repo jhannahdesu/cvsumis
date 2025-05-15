@@ -130,7 +130,12 @@ let universityResearchTable = () => {
             headerHozAlign: "center",
             headerSort: false,
             hozAlign: "center",
-            vertAlign: "middle"
+            vertAlign: "middle",
+            formatter: function(cell) {
+                let val = cell.getValue();
+                if (!val) return '';
+                return val.split(',')[0]; // Show only the first researcher
+            }
         },
         { title:'STATUS',
             titleFormatter: () =>
@@ -943,4 +948,37 @@ $('#extensionActivityCsvSemesterInput').change(function() {
 $('#default_school_year').change(function() {
     var yearValue = $(this).val();
     document.getElementById('extensionActivityCsvYearInput').value = yearValue;
+});
+
+let researchersArr = [];
+
+$('#add-researcher-btn').on('click', function() {
+    const input = $('#researcher-input');
+    const name = input.val().trim();
+    if (name && !researchersArr.includes(name)) {
+        researchersArr.push(name);
+        $('#researchers-list').append(
+            `<li class="list-group-item d-flex justify-content-between align-items-center">
+                ${name}
+                <button type="button" class="btn btn-sm btn-danger remove-researcher-btn" data-name="${name}">&times;</button>
+            </li>`
+        );
+        $('#researchers-hidden').val(researchersArr.join(','));
+        input.val('');
+    }
+});
+
+$(document).on('click', '.remove-researcher-btn', function() {
+    const name = $(this).data('name');
+    researchersArr = researchersArr.filter(n => n !== name);
+    $(this).parent().remove();
+    $('#researchers-hidden').val(researchersArr.join(','));
+});
+
+// Reset researchersArr when modal is closed
+$('#UniversityResearchModal').on('hidden.bs.modal', function () {
+    researchersArr = [];
+    $('#researchers-list').empty();
+    $('#researchers-hidden').val('');
+    $('#researcher-input').val('');
 });

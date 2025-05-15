@@ -18,7 +18,8 @@ class PaperPresentation extends Model
         'module',
         'presenter_name',
         'date',
-        'venue'
+        'venue',
+        'co_authors'
     ];
 
     public function created_by_dtls(){

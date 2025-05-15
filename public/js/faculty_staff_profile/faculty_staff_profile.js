@@ -1,4 +1,3 @@
-
 // Declare global variables
 let default_sem, default_sy;
 
@@ -2351,7 +2350,12 @@ let facultySeminarTrainingTable = () => {
             headerHozAlign: "center",
             headerSort: false,
             hozAlign: "center",
-            vertAlign: "middle"
+            vertAlign: "middle",
+            formatter: function(cell) {
+                let val = cell.getValue();
+                if (!val) return '';
+                return val.split(',')[0]; // Show only the first participant
+            }
         },
         { title:'SPONSORING AGANCY',
             titleFormatter: () =>
@@ -3290,7 +3294,12 @@ let presentationTable = () => {
             headerHozAlign: "center",
             headerSort: false,
             hozAlign: "center",
-            vertAlign: "middle"
+            vertAlign: "middle",
+            formatter: function(cell) {
+                let val = cell.getValue();
+                if (!val) return '';
+                return val.split(',')[0]; // Show only the first presenter
+            }
         },
         { title:'DATE AND VENUE',
             titleFormatter: () =>
@@ -3304,6 +3313,25 @@ let presentationTable = () => {
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle"
+        },
+        {
+            title:'CO-AUTHORS',
+            titleFormatter: () =>
+                `<div style="line-height: 2.5;">
+                    <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                        CO-AUTHORS
+                    </strong>
+                </div>`,
+            field: "co_authors",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: function(cell) {
+                let val = cell.getValue();
+                if (!val) return '';
+                return val.split(',')[0]; // Show only the first co-author
+            }
         },
     ];
 
@@ -3725,5 +3753,96 @@ $('#presentationCsvSemesterInput').change(function() {
 $('#default_school_year').change(function() {
     var yearValue = $(this).val();
     document.getElementById('presentationCsvYearInput').value = yearValue;
+});
+
+let participantsArr = [];
+
+$('#add-participant-btn').on('click', function() {
+    const input = $('#participant-input');
+    const name = input.val().trim();
+    if (name && !participantsArr.includes(name)) {
+        participantsArr.push(name);
+        $('#participants-list').append(
+            `<li class="list-group-item d-flex justify-content-between align-items-center">
+                ${name}
+                <button type="button" class="btn btn-sm btn-danger remove-participant-btn" data-name="${name}">&times;</button>
+            </li>`
+        );
+        $('#participants-hidden').val(participantsArr.join(','));
+        input.val('');
+    }
+});
+
+$(document).on('click', '.remove-participant-btn', function() {
+    const name = $(this).data('name');
+    participantsArr = participantsArr.filter(n => n !== name);
+    $(this).parent().remove();
+    $('#participants-hidden').val(participantsArr.join(','));
+});
+
+let presentersArr = [];
+
+$('#add-presenter-btn').on('click', function() {
+    const input = $('#presenter-input');
+    const name = input.val().trim();
+    if (name && !presentersArr.includes(name)) {
+        presentersArr.push(name);
+        $('#presenters-list').append(
+            `<li class="list-group-item d-flex justify-content-between align-items-center">
+                ${name}
+                <button type="button" class="btn btn-sm btn-danger remove-presenter-btn" data-name="${name}">&times;</button>
+            </li>`
+        );
+        $('#presenters-hidden').val(presentersArr.join(','));
+        input.val('');
+    }
+});
+
+$(document).on('click', '.remove-presenter-btn', function() {
+    const name = $(this).data('name');
+    presentersArr = presentersArr.filter(n => n !== name);
+    $(this).parent().remove();
+    $('#presenters-hidden').val(presentersArr.join(','));
+});
+
+// Reset presentersArr when modal is closed
+$('#AddPresentation').on('hidden.bs.modal', function () {
+    presentersArr = [];
+    $('#presenters-list').empty();
+    $('#presenters-hidden').val('');
+    $('#presenter-input').val('');
+});
+
+let coAuthorsArr = [];
+
+$('#add-coauthor-btn').on('click', function() {
+    const input = $('#coauthor-input');
+    const name = input.val().trim();
+    if (name && !coAuthorsArr.includes(name)) {
+        coAuthorsArr.push(name);
+        $('#coauthors-list').append(
+            `<li class="list-group-item d-flex justify-content-between align-items-center">
+                ${name}
+                <button type="button" class="btn btn-sm btn-danger remove-coauthor-btn" data-name="${name}">&times;</button>
+            </li>`
+        );
+        $('#coauthors-hidden').val(coAuthorsArr.join(','));
+        input.val('');
+    }
+});
+
+$(document).on('click', '.remove-coauthor-btn', function() {
+    const name = $(this).data('name');
+    coAuthorsArr = coAuthorsArr.filter(n => n !== name);
+    $(this).parent().remove();
+    $('#coauthors-hidden').val(coAuthorsArr.join(','));
+});
+
+// Reset coAuthorsArr when modal is closed
+$('#AddPresentation').on('hidden.bs.modal', function () {
+    coAuthorsArr = [];
+    $('#coauthors-list').empty();
+    $('#coauthors-hidden').val('');
+    $('#coauthor-input').val('');
 });
 

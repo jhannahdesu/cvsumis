@@ -663,19 +663,14 @@
                 </div>
                 
                 <div class="col-md-12">
-                    <label for="fs_faculty_name" class="form-label">Participants</label>
-                    @if(Auth::user()->position == 4)
-                        {{-- Faculty Staff: Prefilled and Readonly --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="participants"
-                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
-                            required readonly>
-                    @else
-                        {{-- Other Roles: Editable --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="participants"
-                            placeholder="e.x. LastName, First Name MiddleInitial." required>
-                    @endif
+                    <label for="participants" class="form-label">Participants</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" id="participant-input" placeholder="Enter participant name">
+                        <button type="button" class="btn btn-outline-secondary" id="add-participant-btn">Add</button>
+                    </div>
+                    <ul id="participants-list" class="list-group mb-2"></ul>
+                    <input type="hidden" name="participants" id="participants-hidden" required>
                     <div class="valid-feedback">Looks good!</div>
-                    <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
                 </div>
 
                 <div class="col-md-12">
@@ -989,19 +984,25 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="fs_faculty_name" class="form-label">Presenter</label>
-                    @if(Auth::user()->position == 4)
-                        {{-- Faculty Staff: Prefilled and Readonly --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="presenter_name"
-                            value="{{ Auth::user()->firstname . ' ' . Auth::user()->middle_initial . ' ' . Auth::user()->lastname }}"
-                            required readonly>
-                    @else
-                        {{-- Other Roles: Editable --}}
-                        <input type="text" class="form-control" id="fs_faculty_name" name="presenter_name"
-                            placeholder="e.x. LastName, First Name MiddleInitial." required>
-                    @endif
+                    <label for="presenters" class="form-label">Presenters</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" id="presenter-input" placeholder="Enter presenter name">
+                        <button type="button" class="btn btn-outline-secondary" id="add-presenter-btn">Add</button>
+                    </div>
+                    <ul id="presenters-list" class="list-group mb-2"></ul>
+                    <input type="hidden" name="presenter_name" id="presenters-hidden" required>
                     <div class="valid-feedback">Looks good!</div>
-                    <div class="invalid-feedback" id="faculty-error-message" style="display:none;">Please enter a valid name.</div>
+                </div>
+                
+                <div class="col-md-12">
+                    <label for="co_authors" class="form-label">Co-Authors</label>
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" id="coauthor-input" placeholder="Enter co-author name">
+                        <button type="button" class="btn btn-outline-secondary" id="add-coauthor-btn">Add</button>
+                    </div>
+                    <ul id="coauthors-list" class="list-group mb-2"></ul>
+                    <input type="hidden" name="co_authors" id="coauthors-hidden">
+                    <div class="valid-feedback">Looks good!</div>
                 </div>
                 
                 <div class="col-md-12">
@@ -1077,6 +1078,12 @@
                     <div class="valid-feedback">
                         Looks good!
                     </div>
+                </div>
+
+                <div class="col-md-12">
+                    <label for="co_authors" class="form-label">Co-Authors</label>
+                    <input type="text" class="form-control" id="view_pp_co_authors" name="co_authors">
+                    <div class="valid-feedback">Looks good!</div>
                 </div>
 
                 <div class="col-md-12">
