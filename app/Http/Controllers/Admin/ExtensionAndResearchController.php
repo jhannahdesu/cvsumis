@@ -69,11 +69,11 @@ class ExtensionAndResearchController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required',
                 'researcher' => 'required',
+                'co_authors' => 'nullable|string',
                 'status' => 'required',
                 'year' => 'required',
                 'budget' => 'required|integer',
                 'agency' => 'nullable',
-
             ]);
     
             try {
@@ -116,6 +116,7 @@ class ExtensionAndResearchController extends Controller
                 'title' => ucwords($item->title),
                 'status_details' =>  date('Y', strtotime($item->year)).' / P'.$item->budget.'<br>'.ucwords($item->status),
                 'researcher' => ucwords($item->researcher),
+                'co_authors' => $item->co_authors, // <-- this must match your JS
                 'year' => date('Y m, d', strtotime($item->year)),
                 'agency' => empty($item->agency) ? 'CvSU' : ucwords($item->agency),
                 'budget' => $item->budget,
@@ -148,11 +149,11 @@ class ExtensionAndResearchController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required',
                 'researcher' => 'required',
+                'co_authors' => 'nullable|string',
                 'status' => 'required',
                 'year' => 'required',
                 'budget' => 'required|integer',
                 'agency' => 'nullable',
-
             ]);
     
             try {
@@ -282,6 +283,7 @@ class ExtensionAndResearchController extends Controller
                 'extensionist' => ucwords($item->extensionist),
                 'number_of_beneficiaries' => $item->number_of_beneficiaries,
                 'partner_agency' => ucwords($item->partner_agency),
+                'co_authors' => $item->co_authors,
                 'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];
@@ -354,4 +356,10 @@ class ExtensionAndResearchController extends Controller
         );
         return response()->json(['message' => 'Data removed successfully'], 200);
     }
-}   
+
+    public function getUniversityResearches()
+    {
+        $cvsu_researches = \App\Models\Research::where('funding', 'university')->get();
+        return view('admin.reports.extension_and_research.extension_and_research', compact('cvsu_researches'));
+    }
+}

@@ -151,6 +151,25 @@ let universityResearchTable = () => {
             vertAlign: "middle",
             formatter: "html"
         },
+        {
+            title:'CO-AUTHORS',
+            titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    CO-AUTHOR/S
+                </strong>
+            </div>`,
+            field: "co_authors",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: function(cell) {
+                let val = cell.getValue();
+                if (!val) return '';
+                return val.split(',')[0]; // Show only the first co-author
+            }
+        },
     ];
 
     if (window.userPosition != 5) {
@@ -981,4 +1000,52 @@ $('#UniversityResearchModal').on('hidden.bs.modal', function () {
     $('#researchers-list').empty();
     $('#researchers-hidden').val('');
     $('#researcher-input').val('');
+});
+
+// Show/hide co-authors section
+$('#add-coauthors-checkbox').on('change', function() {
+    if ($(this).is(':checked')) {
+        $('#coauthors-section').show();
+    } else {
+        $('#coauthors-section').hide();
+        $('#coauthors-list').empty();
+        $('#coauthors-hidden').val('');
+        coAuthorsArr = [];
+    }
+});
+
+// Dynamic co-authors logic
+let coAuthorsArr = [];
+
+$('#add-coauthor-btn').on('click', function() {
+    const input = $('#coauthor-input');
+    const name = input.val().trim();
+    if (name && !coAuthorsArr.includes(name)) {
+        coAuthorsArr.push(name);
+        $('#coauthors-list').append(
+            `<li class="list-group-item d-flex justify-content-between align-items-center">
+                ${name}
+                <button type="button" class="btn btn-sm btn-danger remove-coauthor-btn" data-name="${name}">&times;</button>
+            </li>`
+        );
+        $('#coauthors-hidden').val(coAuthorsArr.join(','));
+        input.val('');
+    }
+});
+
+$(document).on('click', '.remove-coauthor-btn', function() {
+    const name = $(this).data('name');
+    coAuthorsArr = coAuthorsArr.filter(n => n !== name);
+    $(this).parent().remove();
+    $('#coauthors-hidden').val(coAuthorsArr.join(','));
+});
+
+// Reset coAuthorsArr when modal is closed
+$('#UniversityResearchModal').on('hidden.bs.modal', function () {
+    coAuthorsArr = [];
+    $('#coauthors-list').empty();
+    $('#coauthors-hidden').val('');
+    $('#coauthor-input').val('');
+    $('#add-coauthors-checkbox').prop('checked', false);
+    $('#coauthors-section').hide();
 });

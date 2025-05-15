@@ -39,6 +39,12 @@
                             @foreach(explode(',', $cvsu_research->researcher ?? '') as $r)
                                 {{ ucwords(trim($r)) }}<br>
                             @endforeach
+                            @if($cvsu_research->co_authors)
+                                <strong>Co-Authors:</strong><br>
+                                @foreach(explode(',', $cvsu_research->co_authors) as $c)
+                                    {{ ucwords(trim($c)) }}<br>
+                                @endforeach
+                            @endif
                         </td>
                         <td>{{ date('Y', strtotime($cvsu_research->year)).' / '.$cvsu_research->budget}} <br>{{ $cvsu_research->status }}</td>
                        
