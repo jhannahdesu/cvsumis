@@ -16,7 +16,8 @@ class LicensureExamnination extends Model
         'examination_type',
         'cvsu_passing_rate',
         'national_passing_rate',
-        'exam_date',
+        'exam_date_start',
+        'exam_date_end',
         'cvsu_total_passer',
         'cvsu_total_takers',
         'national_total_passer',
@@ -27,7 +28,8 @@ class LicensureExamnination extends Model
         'national_overall_taker',
         'cvsu_overall_passing_rate',
         'national_overall_passing_rate',
-        'created_at'
+        'created_at',
+        'updated_at'
     ];
 
     public function created_by_dtls(){

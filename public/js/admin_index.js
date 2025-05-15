@@ -10,6 +10,7 @@ let extensionChart = null;
 let licensureChart = null;
 let gl_school_year = null;
 let gl_research_year = null;
+let gl_research_status = null;
 let gl_licensure_exam_year = null;
 let gl_exam_name = "All Exam";
 
@@ -68,11 +69,11 @@ $('#reset-extension').click(function() {
 });
 
 //Reset Licensure
-$('#reset-licensure').click(function() {
-    $('#licensure-year').val('');
-    $('.licensure_year_text').text('All data');
-    licensureReport();
-});
+// $('#reset-licensure').click(function() {
+//     $('#licensure-year').val('');
+//     $('.licensure_year_text').text('All data');
+//     licensureReport();
+// });
 
 
 const enroleesAnnualReport = (school_year, semester) => {
@@ -406,14 +407,13 @@ $('#semester').change(function() {
 
 $('#research-year').change(function() {
     gl_research_year = $(this).val();
-    $('.research_year_text').text(gl_research_year)
+    $('.research_year_text').text(gl_research_year);
+    researchReport(gl_research_year, gl_research_status);
 });
 
 $('#research-status').change(function() {
-    var research_status = $(this).val();
-    if (research_status) {
-        researchReport(gl_research_year, research_status);
-    }
+    gl_research_status = $(this).val();
+    researchReport(gl_research_year, gl_research_status);
 });
 
 $('#extension-year').change(function() {
@@ -435,11 +435,17 @@ let licensureExams = () =>{
     })
 
 }
-let licensureExamReport = (exam_year, exam_type) => {
+
+let licensureExamReport = (exam_year, exam_type, start_month = null, end_month = null) => {
     $.ajax({
         url: '/licensure-exam-report',
         method: 'GET',
-        data: {exam_year : exam_year, exam_type : exam_type},
+        data: {
+            exam_year: exam_year,
+            exam_type: exam_type,
+            start_month: start_month,
+            end_month: end_month
+        },
         dataType: 'json',
         success: function(response) {
             console.log(response);
@@ -462,67 +468,42 @@ let licensureExamReport = (exam_year, exam_type) => {
                 return item ? item.count : 0;
             });
 
-            // Chart options
             var options = {
                 chart: {
                     type: 'bar',
                     height: 400
                 },
                 series: [
-                    {
-                        name: 'Cvsu',
-                        data: localCounts
-                    },
-                    {
-                        name: 'National',
-                        data: nationalCounts
-                    },
-                    {
-                        name: 'Cvsu Overall',
-                        data: cvsuOverallCounts
-                    },
-                    {
-                        name: 'National Overall',
-                        data: nationalOverallCounts
-                    }
+                    { name: 'Cvsu', data: localCounts },
+                    { name: 'National', data: nationalCounts },
+                    { name: 'Cvsu Overall', data: cvsuOverallCounts },
+                    { name: 'National Overall', data: nationalOverallCounts }
                 ],
                 xaxis: {
                     categories: exams,
-                    title: {
-                        text: 'Exam Type'
-                    }
+                    title: { text: 'Exam Type' }
                 },
                 yaxis: {
-                    title: {
-                        text: 'Count'
-                    }
+                    title: { text: 'Count' }
                 },
                 title: {
-                    text: `Licensure Examination Passers`,
+                    text: 'Licensure Examination Passers',
                     align: 'center'
                 },
                 colors: ['#FF5733', '#3357FF', '#33FF57', '#FF33A1'],
-
                 plotOptions: {
                     bar: {
                         columnWidth: '80%',
                         grouped: true,
                         borderRadius: 4,
-                        dataLabels: {
-                            position: 'top'
-                        }
+                        dataLabels: { position: 'top' }
                     }
                 },
                 dataLabels: {
                     enabled: true,
-                    formatter: function(val) {
-                        return val;
-                    },
+                    formatter: function(val) { return val; },
                     offsetY: -20,
-                    style: {
-                        fontSize: '12px',
-                        colors: ["#304758"]
-                    }
+                    style: { fontSize: '12px', colors: ["#304758"] }
                 }
             };
 
@@ -537,16 +518,137 @@ let licensureExamReport = (exam_year, exam_type) => {
         }
     });
 };
+$('#filterYear, #startMonth, #endMonth').change(function () {
+    const year = $('#filterYear').val();
+    const startMonth = $('#startMonth').val();
+    const endMonth = $('#endMonth').val();
 
-$('#licensure-year').change(function() {
-    gl_licensure_exam_year = $(this).val();
+    if (year && startMonth && endMonth) {
+        licensureExamReport(year, null, startMonth, endMonth);
+    } else if (year && !startMonth && !endMonth) {
+        licensureExamReport(year, null, null, null);
+    }
 });
 
-$('#exam-type').change(function() {
-    var type = $(this).val();
-    gl_exam_name = $(this).find('option:selected').attr('data-name') || 'All Exam';
-    licensureExamReport(gl_licensure_exam_year, type);
+
+
+// Reset Licensure Report
+$('#reset-licensure').click(function () {
+    $('#filterYear').val('');
+    $('.licensure_year_text').text('All data');
+    licensureExamReport(); // call your chart update function with no filters
 });
+
+// When Year changes
+$('#filterYear').change(function () {
+    const selectedYear = $(this).val();
+    if (selectedYear) {
+        $('.licensure_year_text').text(selectedYear);
+        licensureExamReport(selectedYear); // pass the selected year to your chart
+    }
+});
+
+
+// $('#exam-type').change(function () {
+//     var examType = $(this).val();
+//     gl_exam_name = $(this).find('option:selected').text() || 'All Exam';
+//     getExamTrend(examType);
+// });
+
+$('#licensureExamTypeSelect').change(function () {
+    const examTypeId = $(this).val();
+    const examTypeName = $(this).find('option:selected').text() || 'All Exam';
+    gl_exam_name = examTypeName;
+    getExamTrend(examTypeId); // <-- This must exist
+});
+
+function getExamTrend(examTypeId) {
+  $.ajax({
+    url: '/licensure-exam-trend',
+    method: 'GET',
+    data: { exam_type: examTypeId },
+    success: function (response) {
+      if (licensureChart) licensureChart.destroy();
+
+      // Aggregate data by year and type
+      const aggregatedData = {};
+
+      response.forEach(item => {
+        const year = item.year;
+        const type = item.type;
+
+        if (!aggregatedData[year]) {
+          aggregatedData[year] = {
+            year,
+            cvsu: 0,
+            national: 0,
+            cvsu_overall: 0,
+            national_overall: 0
+          };
+        }
+
+        if (type === 'cvsu') aggregatedData[year].cvsu = item.count;
+        else if (type === 'national') aggregatedData[year].national = item.count;
+        else if (type === 'cvsu_overall') aggregatedData[year].cvsu_overall = item.count;
+        else if (type === 'national_overall') aggregatedData[year].national_overall = item.count;
+      });
+
+      const years = Object.keys(aggregatedData).sort();
+      const cvsu = years.map(year => aggregatedData[year].cvsu);
+      const national = years.map(year => aggregatedData[year].national);
+      const cvsuOverall = years.map(year => aggregatedData[year].cvsu_overall);
+      const nationalOverall = years.map(year => aggregatedData[year].national_overall);
+
+      const options = {
+        chart: {
+          type: 'line',
+          height: 400,
+          toolbar: {
+            show: true,
+            tools: {
+                download: true,
+                zoom: false,
+                pan: false,
+                reset: false,
+                zoomin: false,
+                zoomout: false,
+                selection: false,
+                menu: true
+            }
+          }
+        },
+        series: [
+          { name: 'CvSU', data: cvsu },
+          { name: 'National', data: national },
+          { name: 'CvSU Overall', data: cvsuOverall },
+          { name: 'National Overall', data: nationalOverall }
+        ],
+        xaxis: {
+          categories: years,
+          title: { text: 'Year' }
+        },
+        yaxis: {
+          title: { text: 'Count' }
+        },
+        title: {
+          text: `Licensure Exam Trend: ${gl_exam_name}`,
+          align: 'center'
+        },
+        colors: ['#FF5733', '#3357FF', '#33FF57', '#FF33A1'],
+        dataLabels: { enabled: true },
+        stroke: { curve: 'smooth' }
+      };
+
+      licensureChart = new ApexCharts(document.querySelector("#licensure-exam-chart"), options);
+      licensureChart.render();
+    },
+    error: function (error) {
+      console.error('Failed to fetch licensure exam trend', error);
+    }
+  });
+}
+
+
 
 
 $('#update-user-btn').click( function(event) {

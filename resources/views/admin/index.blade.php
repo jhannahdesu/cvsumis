@@ -103,7 +103,7 @@
           <div class="form-group me-2">
             <label for="programSelect" class="form-label">Program</label>
             <select id="programSelect" class="form-select">
-              <option disabled selected value="">Select Program</option>
+              <option disabled selected value="">Program</option>
               @foreach ($programs as $program)
                 <option value="{{ $program->id }}">{{ $program->abbreviation }}</option>
               @endforeach
@@ -200,74 +200,108 @@
 </div><!-- End row -->
 
 
+<!-- Licensure Reports -->
+<div class="col-12">
+  <div class="card">
+    <div class="card-body">
+      <!-- <h5 class="card-title">Licensure Report</h5> -->
+      <h5 class="card-title">Licensure Report | <span class="licensure_year_text">All data</span></h5>
+        <div class="d-flex justify-content-between align-items-end mb-2 flex-wrap">
+          <div class="d-flex flex-wrap">
+            <!-- Filter Mode -->
+            <div class="form-group me-2">
+              <label class="form-label">Filter Mode</label>
+              <select id="licensureFilterMode" class="form-select">
+                <option value="date_range" selected>By Date Range</option>
+                <option value="program">By Exam Type</option>
+              </select>
+            </div>
 
-          <div class="col-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Licensure Exam | <span class="licensure_year_text"> All data</span></h5>
-                <div class="d-flex justify-content-between align-items-end">
-                    <!-- 
-                    <div class="form-group me-2">
-                      <label for="yearSelect" class="form-label">Exam type</label>
-                      <select id="exam-type" class="form-select" aria-label="Select Exam">
-                          <option disabled selected value="">Select Exam</option>
-                          @foreach ($exam_types as $exam)
-                            <option data-name="{{ $exam->type }}" value="{{$exam->id}}">{{$exam->type}}</option>
-                          @endforeach
-                      </select>
-                    </div>
-                    -->
-                    <div class="form-group me-2">
-                      <label for="yearSelect" class="form-label">Year</label>
-                      <select id="licensure-year" class="form-select" aria-label="Year">
-                          <option disabled selected value="">Year</option>
-                          @foreach ($licensure_year as $year)
-                            <option value="{{ $year->year }}">{{ $year->year }}</option>
-                          @endforeach
-                      </select>
-                    </div>
-                    <button class="btn btn-outline-primary" id="reset-licensure">
-                        <i class="bi bi-database"></i> All Data
-                    </button>
-                </div>
-                <!-- Line Chart -->
-                <div id="licensure-exam-chart"></div>
+            <!-- By Date Range Filters -->
+            <div id="dateRangeFilters" class="d-flex flex-wrap">
+              <div class="form-group me-2">
+                <label class="form-label">Year</label>
+                <select id="filterYear" class="form-select">
+                  <option disabled selected value="">Year</option>
+                  @foreach ($licensure_year as $year)
+                    <option value="{{ $year->year }}">{{ $year->year }}</option>
+                  @endforeach
+                </select>
+              </div>
+
+              <div class="form-group me-2">
+                <label class="form-label">Start Month</label>
+                <select id="startMonth" class="form-select">
+                  <option disabled selected value="">Start Month</option>
+                  @foreach ([ '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
+                              '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
+                              '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
+                            ] as $num => $month)
+                    <option value="{{ $num }}">{{ $month }}</option>
+                  @endforeach
+                </select>
+              </div>
+
+              <div class="form-group me-2">
+                <label class="form-label">End Month</label>
+                <select id="endMonth" class="form-select">
+                  <option disabled selected value="">End Month</option>
+                  @foreach ([ '01' => 'January', '02' => 'February', '03' => 'March', '04' => 'April',
+                              '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
+                              '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
+                            ] as $num => $month)
+                    <option value="{{ $num }}">{{ $month }}</option>
+                  @endforeach
+                </select>
               </div>
             </div>
-          </div><!-- End Reports -->
 
-        <!-- <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Educational Attainment Report</h5>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <select name="school_year" id="school_year" class="form-select" data-default-year="{{ $defaultAcademicYears->school_year }}">
-                            @foreach($educational_attainment_years as $year)
-                                <option value="{{ $year->school_year }}"
-                                    {{ $year->school_year == $defaultAcademicYears->school_year ? 'selected' : '' }}>
-                                    {{ $year->school_year }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <select id="semester" class="form-select" data-default-semester="{{ $defaultAcademicYears->semester }}">
-                            <option value="1st Semester" {{ $defaultAcademicYears->semester == '1st Semester' ? 'selected' : '' }}>1st Semester</option>
-                            <option value="2nd Semester" {{ $defaultAcademicYears->semester == '2nd Semester' ? 'selected' : '' }}>2nd Semester</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="max-width: 500px; margin: auto;">
-                    <canvas id="educationPieChart" width="300" height="300"></canvas>
-                </div>
+            <!-- By Exam Type -->
+            <div id="licensureProgramFilters" class="d-none">
+              <div class="form-group me-2">
+                <label class="form-label">Examination Type</label>
+                <select id="licensureExamTypeSelect" class="form-select">
+                  <option disabled selected value="">Exam Type</option>
+                  @foreach ($examinationTypes as $examType)
+                    <option value="{{ $examType->id }}">{{ $examType->type }}</option>
+                  @endforeach
+                </select>
+              </div>
             </div>
-        </div> -->
-
+          </div>
+          <!-- Button -->
+          <div>
+            <button class="btn btn-outline-primary" id="reset-licensure">
+              <i class="bi bi-database"></i> All Data
+            </button>
+          </div>
         </div>
-      </div><!-- End Left side columns -->
+      <!-- Chart -->
+      <div id="licensure-exam-chart"></div>
     </div>
- 
-    {{-- END ADMIN DASHBOARD --}}
+  </div>
+</div>
+<!-- End Licensure Reports -->
+
+<!-- JS Toggle Script -->
+<script>
+  
+  document.getElementById('licensureFilterMode').addEventListener('change', function () {
+    const mode = this.value;
+    const dateRangeFilters = document.getElementById('dateRangeFilters');
+    const programFilters = document.getElementById('licensureProgramFilters');
+
+    if (mode === 'program') {
+      dateRangeFilters.classList.add('d-none');
+      programFilters.classList.remove('d-none');
+    } else {
+      dateRangeFilters.classList.remove('d-none');
+      programFilters.classList.add('d-none');
+    }
+  });
+</script>
+
+{{-- END ADMIN DASHBOARD --}}
 
 </section>
 @endsection
