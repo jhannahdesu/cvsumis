@@ -36,13 +36,13 @@
                         </label>
                     </div>
                     <div id="coauthors-section" style="display:none;">
-                        <label for="co_authors" class="form-label">Co-Authors</label>
+                        <label for="co_researcher" class="form-label">Co-Authors</label>
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" id="coauthor-input" placeholder="Enter co-author name">
                             <button type="button" class="btn btn-outline-secondary" id="add-coauthor-btn">Add</button>
                         </div>
                         <ul id="coauthors-list" class="list-group mb-2"></ul>
-                        <input type="hidden" name="co_authors" id="coauthors-hidden">
+                        <input type="hidden" name="co_researcher" id="coauthors-hidden">
                         <div class="valid-feedback">Looks good!</div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
 
                 <div class="col-12">
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="outside-agency" required>
+                      <input class="form-check-input" type="checkbox" id="outside-agency">
                       <label class="form-check-label" for="invalidCheck2">
                       Check if the research is externally funded
                     </div>

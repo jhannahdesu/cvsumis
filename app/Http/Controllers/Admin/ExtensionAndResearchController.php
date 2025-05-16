@@ -69,7 +69,7 @@ class ExtensionAndResearchController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required',
                 'researcher' => 'required',
-                'co_authors' => 'nullable|string',
+                'co_researcher' => 'nullable|string',
                 'status' => 'required',
                 'year' => 'required',
                 'budget' => 'required|integer',
@@ -116,7 +116,7 @@ class ExtensionAndResearchController extends Controller
                 'title' => ucwords($item->title),
                 'status_details' =>  date('Y', strtotime($item->year)).' / P'.$item->budget.'<br>'.ucwords($item->status),
                 'researcher' => ucwords($item->researcher),
-                'co_authors' => $item->co_authors, // <-- this must match your JS
+                'co_researcher' => $item->co_researcher, // <-- this must match your JS
                 'year' => date('Y m, d', strtotime($item->year)),
                 'agency' => empty($item->agency) ? 'CvSU' : ucwords($item->agency),
                 'budget' => $item->budget,
@@ -149,7 +149,7 @@ class ExtensionAndResearchController extends Controller
             $validatedData = $request->validate([
                 'title' => 'required',
                 'researcher' => 'required',
-                'co_authors' => 'nullable|string',
+                'co_researcher' => 'nullable|string',
                 'status' => 'required',
                 'year' => 'required',
                 'budget' => 'required|integer',
@@ -283,7 +283,6 @@ class ExtensionAndResearchController extends Controller
                 'extensionist' => ucwords($item->extensionist),
                 'number_of_beneficiaries' => $item->number_of_beneficiaries,
                 'partner_agency' => ucwords($item->partner_agency),
-                'co_authors' => $item->co_authors,
                 'updated_at' => $item->updated_at->format('F d, Y'),
                 'action' => $actions['button']
             ];

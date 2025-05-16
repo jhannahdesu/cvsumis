@@ -989,7 +989,8 @@ let licensureExamTable = () => {
             title:"EXAM START",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">EXAM START</strong>
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                EXAM START</strong>
             </div>`,
             field: "exam_date_start",
             headerHozAlign: "center",
@@ -1007,7 +1008,8 @@ let licensureExamTable = () => {
             title:"EXAM END",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">EXAM END</strong>
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                EXAM END</strong>
             </div>`,
             field: "exam_date_end",
             headerHozAlign: "center",
@@ -2320,4 +2322,9 @@ $(document).on('click', '#remove-student-tvet-btn', function(){
             });
         }
     });
+});
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
 });

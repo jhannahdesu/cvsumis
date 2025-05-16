@@ -88,16 +88,19 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU PASSING % </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL PASSING %  </th>
-                        
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">EXAM START</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">EXAM END</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU PASSING %</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL PASSING %</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($licensure_exams as $licensure_exam)
                     <tr>
                         <td>{{ ucwords($licensure_exam->examination_type_dtls->type) }}</td>
+                        <td>{{ date('F d, Y', strtotime($licensure_exam->exam_date_start)) }}</td>
+                        <td>{{ date('F d, Y', strtotime($licensure_exam->exam_date_end)) }}</td>
                         <td>{{ $licensure_exam->cvsu_passing_rate }}</td>
                         <td>{{ $licensure_exam->national_passing_rate }}</td>
                     </tr>

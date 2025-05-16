@@ -254,14 +254,14 @@
 
                 <div class="col-md-6">
                     <label class="form-label">Exam Start</label>
-                    <input type="date" class="form-control" id="exam_date_start" name="exam_start" required>
+                    <input type="date" class="form-control" id="exam_date_start" name="exam_date_start" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Exam End</label>
-                     <input type="date" class="form-control" id="exam_date_end" name="exam_end" required>
+                     <input type="date" class="form-control" id="exam_date_end" name="exam_date_end" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -270,10 +270,10 @@
                     <label class="form-label">Exam Start - End</label>
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="date" class="form-control" id="exam_date_start" name="exam_start" required>
+                            <input type="date" class="form-control" id="exam_date_start" name="exam_date_start" required>
                         </div>
                         <div class="col-md-6">
-                            <input type="date" class="form-control" id="exam_date_end" name="exam_end" required>
+                            <input type="date" class="form-control" id="exam_date_end" name="exam_date_end" required>
                         </div>
                     </div>
                     <div class="valid-feedback">
@@ -413,10 +413,10 @@
                     <label class="form-label">Exam End</label>
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="date" class="form-control" id="exam_date_start" name="exam_start" required>
+                            <input type="date" class="form-control" id="exam_date_start" name="exam_date_start" required>
                         </div>
                         <div class="col-md-6">
-                            <input type="date" class="form-control" id="exam_date_end" name="exam_end" required>
+                            <input type="date" class="form-control" id="exam_date_end" name="exam_date_end" required>
                         </div>
                     </div>
                     <div class="valid-feedback">

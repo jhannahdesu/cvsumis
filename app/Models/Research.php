@@ -13,6 +13,7 @@ class Research extends Model
     protected $fillable = [
         'added_by',
         'researcher',
+        'co_researcher',
         'title',
         'status',
         'module',

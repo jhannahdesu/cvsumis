@@ -137,6 +137,27 @@ let universityResearchTable = () => {
                 return val.split(',')[0]; // Show only the first researcher
             }
         },
+
+        {
+            title:'CO-RESEARCHER/S',
+            titleFormatter: () =>
+            `<div style="line-height: 2.5;">
+                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
+                    CO-RESEARCHER/S
+                </strong>
+            </div>`,
+            field: "co_researcher",
+            headerHozAlign: "center",
+            headerSort: false,
+            hozAlign: "center",
+            vertAlign: "middle",
+            formatter: function(cell) {
+                let val = cell.getValue();
+                if (!val) return '';
+                return val.split(',')[0]; // Show only the first co-author
+            }
+        },
+
         { title:'STATUS',
             titleFormatter: () =>
             `<div style="line-height: 2.5;">
@@ -151,25 +172,7 @@ let universityResearchTable = () => {
             vertAlign: "middle",
             formatter: "html"
         },
-        {
-            title:'CO-AUTHORS',
-            titleFormatter: () =>
-            `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                    CO-AUTHOR/S
-                </strong>
-            </div>`,
-            field: "co_authors",
-            headerHozAlign: "center",
-            headerSort: false,
-            hozAlign: "center",
-            vertAlign: "middle",
-            formatter: function(cell) {
-                let val = cell.getValue();
-                if (!val) return '';
-                return val.split(',')[0]; // Show only the first co-author
-            }
-        },
+        
     ];
 
     if (window.userPosition != 5) {
@@ -379,13 +382,31 @@ $('#view-outside-agency').click(function() {
     }
 });
 
-$('#submit-university-research-btn').click( function() {
+$('#submit-university-research-btn').click( function(event) {
     var form = $('#university-research-form')[0];
+
+    // Dynamically set required for agency
+    if ($('#outside-agency').is(':checked')) {
+        $('#agency').prop('required', true);
+    } else {
+        $('#agency').prop('required', false);
+    }
+
     if (form.checkValidity() === false) {
         event.preventDefault();
         event.stopPropagation();
+        return;
     }
     form.classList.add('was-validated');
+
+    if (!$('#researchers-hidden').val()) {
+        Toastify({
+            text: "Please add at least one researcher.",
+            duration: 3000,
+            backgroundColor: "linear-gradient(to right, #ff0000, #ff7f50)",
+        }).showToast();
+        return;
+    }
     
     $.ajax({
         url: '/store-university-research',

@@ -39,9 +39,9 @@
                             @foreach(explode(',', $cvsu_research->researcher ?? '') as $r)
                                 {{ ucwords(trim($r)) }}<br>
                             @endforeach
-                            @if($cvsu_research->co_authors)
+                            @if($cvsu_research->co_researcher)
                                 <strong>Co-Authors:</strong><br>
-                                @foreach(explode(',', $cvsu_research->co_authors) as $c)
+                                @foreach(explode(',', $cvsu_research->co_researcher) as $c)
                                     {{ ucwords(trim($c)) }}<br>
                                 @endforeach
                             @endif
