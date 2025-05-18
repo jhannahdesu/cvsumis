@@ -17,6 +17,7 @@ class EventsAndAccomplishments extends Model
         'faculty',
         'program_id',
         'program_dtls',
+        'image', // <-- add this
         'module',
         'university',
         'start_date',
@@ -29,5 +30,10 @@ class EventsAndAccomplishments extends Model
 
     public function program_details(){
         return $this->belongsTo(Programs::class, 'program_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(\App\Models\AccomplishmentImage::class, 'accomplishment_id');
     }
 }

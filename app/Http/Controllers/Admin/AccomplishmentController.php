@@ -74,11 +74,21 @@ public function storeEventsAndAccomplishments(Request $request) {
             'university' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
+            'image' => 'nullable|image|max:2048', // add validation
         ]);
 
         try {
             $validatedData['module'] = 2;
             $validatedData['added_by'] = auth()->user()->id;
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $filename = time().'_'.$image->getClientOriginalName();
+                $image->move(public_path('uploads/accomplishments'), $filename);
+                $validatedData['image'] = $filename;
+            }
+
             EventsAndAccomplishments::create($validatedData);
             Helper::storeNotifications(
                 Auth::id(),
@@ -189,5 +199,13 @@ public function removeEventsAndAccomplishments($id){
         Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Removed Data in Other Events/Accomplishments',
     );
     return response()->json(['message' => 'Data removed successfully'], 200);
+}
+
+public function generateAccomplishmentReport(Request $request)
+{
+    $year = $request->input('year', date('Y'));
+    $accomplishments = EventsAndAccomplishments::with(['program_details', 'images'])->get();
+
+    return view('admin.reports.accomplishment.accomplishment', compact('accomplishments', 'year'));
 }
 }

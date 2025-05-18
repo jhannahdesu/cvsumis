@@ -7,7 +7,7 @@
                 <article class="card">
                     <div class="card-body">
                         <h5 class="card-title">Other Events/Accomplishments</h5>
-                        <form class="row g-3 needs-validation" id="accomplishment-form" novalidate>
+                        <form class="row g-3 needs-validation" id="accomplishment-form" novalidate enctype="multipart/form-data">
                             @csrf
                     
                             <div class="col-md-6">
@@ -61,6 +61,11 @@
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="image" class="form-label">Event Image (optional)</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
                             </div>
                             
                             <div class="col-md-6">

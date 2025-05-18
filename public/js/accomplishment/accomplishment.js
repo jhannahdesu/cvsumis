@@ -284,17 +284,6 @@ $('#accomplishments-download-csv').click(function() {
     accomplishments.download("csv", "Accomplishments.csv", { filter: true });
 });
 
-// function searchaccomplishments(value){
-//     accomplishments.setFilter([
-//         [
-//             //{title:'NO', field: 'no'},
-//             {field:"name", type:"like", value:value.trim()},
-//             {field:"program_id", type:"like", value:value.trim()},
-//             {field:"university", type:"like", value:value.trim()},
-//             {field:"faculty", type:"like", value:value.trim()},
-//         ]
-//     ]);
-// }
 function searchaccomplishments(value) {
     let searchTerms = value.trim().toLowerCase().split(/\s+/);
 
@@ -330,11 +319,15 @@ $('#submit-accomplishment-btn').on('click', function(event) {
         event.stopPropagation();
     }
     form.classList.add('was-validated');
-    
+
+    var formData = new FormData(form);
+
     $.ajax({
         url: '/store-accomplishment',
         type: 'POST',
-        data: $('#accomplishment-form').serialize(),
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function(response) {
             Swal.fire({
                 title: "Success!",

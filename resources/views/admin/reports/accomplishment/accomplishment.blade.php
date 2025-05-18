@@ -41,6 +41,18 @@
                 @endforeach
             </tbody>
         </table>
+        <br>
+        <h4>Event Images</h4>
+        @foreach($accomplishments as $accomplishment)
+            @if($accomplishment->images && $accomplishment->images->count())
+                <div style="margin-bottom: 20px;">
+                    <strong>{{ ucwords($accomplishment->faculty) }} - {{ ucwords(optional($accomplishment->program_details)->program) }}</strong><br>
+                    @foreach($accomplishment->images as $img)
+                        <img src="{{ public_path('uploads/accomplishments/' . $img->image) }}" alt="Event Image" style="max-width:300px; max-height:200px; margin-bottom:10px;">
+                    @endforeach
+                </div>
+            @endif
+        @endforeach
     @else
         <p>No awards available.</p>
     @endif
