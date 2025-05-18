@@ -124,27 +124,39 @@ class FacultyStaffProfileController extends Controller
                 'education' => 'required',
                 'semester' => 'required',
                 'school_year' => 'required',
-                'number_of_faculty' => 'required|integer',
             ]);
-    
-            try {
+
+            DB::beginTransaction();
+
+            // Check if a record already exists for this education, semester, and school_year
+            $existing = EducationalAttainment::where('education', $validatedData['education'])
+                ->where('semester', $validatedData['semester'])
+                ->where('school_year', $validatedData['school_year'])
+                ->first();
+
+            if ($existing) {
+                // Increment number_of_faculty
+                $existing->increment('number_of_faculty');
+            } else {
+                // Create new record with number_of_faculty = 1
                 $validatedData['module'] = 3;
                 $validatedData['added_by'] = auth()->user()->id;
+                $validatedData['number_of_faculty'] = 1;
                 EducationalAttainment::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Faculty Staff Profile Faculty profile by educational attainment',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Faculty Staff Profile Faculty profile by educational attainment',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
             }
-        }catch (ValidationException $e) {
+
+            Helper::storeNotifications(
+                Auth::id(),
+                'You Added Data in Faculty Staff Profile Faculty profile by educational attainment',
+                Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Faculty Staff Profile Faculty profile by educational attainment',
+            );
+            DB::commit();
+            return response()->json(['message' => 'Data added successfully'], 200);
+
+        } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
         }
     }
@@ -300,27 +312,39 @@ class FacultyStaffProfileController extends Controller
                 'apointment_nature' => 'required',
                 'semester' => 'required',
                 'school_year' => 'required',
-                'number_of_faculty' => 'required|integer',
             ]);
-    
-            try {
+
+            DB::beginTransaction();
+
+            // Check if a record already exists for this nature, semester, and school_year
+            $existing = NatureOfAppointment::where('apointment_nature', $validatedData['apointment_nature'])
+                ->where('semester', $validatedData['semester'])
+                ->where('school_year', $validatedData['school_year'])
+                ->first();
+
+            if ($existing) {
+                // Increment number_of_faculty
+                $existing->increment('number_of_faculty');
+            } else {
+                // Create new record with number_of_faculty = 1
                 $validatedData['module'] = 3;
                 $validatedData['added_by'] = auth()->user()->id;
+                $validatedData['number_of_faculty'] = 1;
                 NatureOfAppointment::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Faculty Staff Profile Faculty profile by nature of appointment List',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Faculty Staff Profile Faculty profile by nature of appointment List',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
             }
-        }catch (ValidationException $e) {
+
+            Helper::storeNotifications(
+                Auth::id(),
+                'You Added Data in Faculty Staff Profile Faculty profile by nature of appointment List',
+                Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Faculty Staff Profile Faculty profile by nature of appointment List',
+            );
+            DB::commit();
+            return response()->json(['message' => 'Data added successfully'], 200);
+
+        } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
         }
     }
@@ -484,27 +508,39 @@ class FacultyStaffProfileController extends Controller
                 'academic_rank' => 'required',
                 'semester' => 'required',
                 'school_year' => 'required',
-                'number_of_faculty' => 'required|integer',
             ]);
-    
-            try {
+
+            DB::beginTransaction();
+
+            // Check if a record already exists for this academic rank, semester, and school_year
+            $existing = AcademicRank::where('academic_rank', $validatedData['academic_rank'])
+                ->where('semester', $validatedData['semester'])
+                ->where('school_year', $validatedData['school_year'])
+                ->first();
+
+            if ($existing) {
+                // Increment number_of_faculty
+                $existing->increment('number_of_faculty');
+            } else {
+                // Create new record with number_of_faculty = 1
                 $validatedData['module'] = 3;
                 $validatedData['added_by'] = auth()->user()->id;
+                $validatedData['number_of_faculty'] = 1;
                 AcademicRank::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Faculty Staff Profile Faculty profile by academic rank',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Faculty Staff Profile Faculty profile by academic rank',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
             }
-        }catch (ValidationException $e) {
+
+            Helper::storeNotifications(
+                Auth::id(),
+                'You Added Data in Faculty Staff Profile Faculty profile by academic rank List',
+                Auth::user()->firstname . ' ' . Auth::user()->lastname . ' Added Data in Faculty Staff Profile Faculty profile by academic rank List',
+            );
+            DB::commit();
+            return response()->json(['message' => 'Data added successfully'], 200);
+
+        } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
         }
     }

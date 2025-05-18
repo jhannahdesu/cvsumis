@@ -9,30 +9,17 @@
             <form class="row g-3 needs-validation" id="educational-attainment-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="school_year" class="form-label">School Year</label>
-                    <select class="form-select" id="school_year" name="school_year" required>
-                        <option selected @readonly(true) value="{{ $defaultAcademicYears->school_year }}">{{ $defaultAcademicYears->school_year }}</option>
-                        @foreach ($academicYears as $academicYear)
-                        <option value="{{ $academicYear->year_start.'-'.$academicYear->year_end }}">{{ $academicYear->year_start.'-'.$academicYear->year_end  }}</option>
-                        @endforeach
+                    <label class="form-label">School Year</label>
+                    <select class="form-select" id="school_year" name="school_year" readonly>
+                        <option value="{{ $defaultAcademicYears->school_year }}">{{ $defaultAcademicYears->school_year }}</option>
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
-
                 <div class="col-md-12">
-                    <label for="semester" class="form-label">Semester</label>
-                    <select class="form-select" id="semester" name="semester" required>
-                        <option selected @readonly(true) value="{{ $defaultAcademicYears->semester }}">{{ $defaultAcademicYears->semester }}</option>
-                        <option value="1st Semester">1st</option>
-                        <option value="2nd Semester">2nd</option>
+                    <label class="form-label">Semester</label>
+                    <select class="form-select" id="semester" name="semester" readonly>
+                        <option value="{{ $defaultAcademicYears->semester }}">{{ $defaultAcademicYears->semester }}</option>
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
-               
                 <div class="col-md-12">
                     <label for="education" class="form-label">Educational Attainment</label>
                     <select class="form-select" id="education" name="education" required>
@@ -41,18 +28,6 @@
                         <option value="{{ $type->id }}">{{ $type->type }}</option>
                         @endforeach
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-                
-               
-                <div class="col-md-12">
-                    <label for="number_of_faculty" class="form-label">Number of Faculty</label>
-                    <input type="number" class="form-control" id="number_of_faculty" name="number_of_faculty" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
             </form>
         </div>
@@ -142,50 +117,30 @@
             <form class="row g-3 needs-validation" id="nature-appointment-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="education" class="form-label">Nature of Appointment</label>
+                    <label for="apointment_nature" class="form-label">Nature of Appointment</label>
                     <select class="form-select" id="nop_apointment_nature" name="apointment_nature" required>
                         <option selected disabled value="">Select Type</option>
                         @foreach ($appointments as $type)
                         <option value="{{ $type->id }}">{{ $type->type }}</option>
                         @endforeach
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
-                
                 <div class="col-md-12">
                     <label for="semester" class="form-label">Semester</label>
                     <select class="form-select" id="nop_semester" name="semester" required>
-                        <option selected @readonly(true) value="{{ $defaultAcademicYears->semester }}">{{ $defaultAcademicYears->semester }}</option>
-                        <option value="1st Semester">1st</option>
-                        <option value="2nd Semester">2nd</option>
+                        <option value="{{ $defaultAcademicYears->semester }}">{{ $defaultAcademicYears->semester }}</option>
+                        <option value="1st Semester">1st Semester</option>
+                        <option value="2nd Semester">2nd Semester</option>
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
-
                 <div class="col-md-12">
                     <label for="nop_school_year" class="form-label">School Year</label>
                     <select class="form-select" id="nop_school_year" name="school_year" required>
-                        <option selected @readonly(true) value="{{ $defaultAcademicYears->school_year }}">{{ $defaultAcademicYears->school_year }}</option>
+                        <option value="{{ $defaultAcademicYears->school_year }}">{{ $defaultAcademicYears->school_year }}</option>
                         @foreach ($academicYears as $academicYear)
                         <option value="{{ $academicYear->year_start.'-'.$academicYear->year_end }}">{{ $academicYear->year_start.'-'.$academicYear->year_end  }}</option>
                         @endforeach
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-            
-
-                <div class="col-md-12">
-                    <label for="number_of_faculty" class="form-label">Number of Faculty</label>
-                    <input type="number" class="form-control" id="nop_number_of_faculty" name="number_of_faculty" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
             </form>
         </div>
@@ -273,49 +228,30 @@
             <form class="row g-3 needs-validation" id="academic-rank-form" novalidate>
                 @csrf
                 <div class="col-md-12">
-                    <label for="education" class="form-label">Academic Rank</label>
-                    <select class="form-select" id="ar_academic_rank" name="academic_rank" required>
-                        <option selected disabled value="">Select Type</option>
-                        @foreach ($academicRanks as $type)
-                        <option value="{{ $type->id }}">{{ $type->type }}</option>
+                    <label for="academic_rank" class="form-label">Academic Rank</label>
+                    <select class="form-select" id="academic_rank" name="academic_rank" required>
+                        <option selected disabled value="">Select Academic Rank</option>
+                        @foreach ($academicRanks as $rank)
+                        <option value="{{ $rank->id }}">{{ $rank->type }}</option>
                         @endforeach
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
-                
                 <div class="col-md-12">
                     <label for="semester" class="form-label">Semester</label>
                     <select class="form-select" id="ar_semester" name="semester" required>
-                        <option selected @readonly(true) value="{{ $defaultAcademicYears->semester }}">{{ $defaultAcademicYears->semester }}</option>
-                        <option value="1st Semester">1st</option>
-                        <option value="2nd Semester">2nd</option>
+                        <option value="{{ $defaultAcademicYears->semester }}">{{ $defaultAcademicYears->semester }}</option>
+                        <option value="1st Semester">1st Semester</option>
+                        <option value="2nd Semester">2nd Semester</option>
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
-
                 <div class="col-md-12">
                     <label for="ar_school_year" class="form-label">School Year</label>
                     <select class="form-select" id="ar_school_year" name="school_year" required>
-                        <option selected @readonly(true) value="{{ $defaultAcademicYears->school_year }}">{{ $defaultAcademicYears->school_year }}</option>
+                        <option value="{{ $defaultAcademicYears->school_year }}">{{ $defaultAcademicYears->school_year }}</option>
                         @foreach ($academicYears as $academicYear)
                         <option value="{{ $academicYear->year_start.'-'.$academicYear->year_end }}">{{ $academicYear->year_start.'-'.$academicYear->year_end  }}</option>
                         @endforeach
                     </select>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                </div>
-
-                <div class="col-md-12">
-                    <label for="number_of_faculty" class="form-label">Number of Faculty</label>
-                    <input type="number" class="form-control" id="ar_number_of_faculty" name="number_of_faculty" required>
-                    <div class="valid-feedback">
-                        Looks good!
-                    </div>
                 </div>
             </form>
         </div>
