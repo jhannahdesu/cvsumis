@@ -32,8 +32,8 @@ class EventsAndAccomplishments extends Model
         return $this->belongsTo(Programs::class, 'program_id');
     }
 
-    public function images()
-    {
-        return $this->hasMany(\App\Models\AccomplishmentImage::class, 'accomplishment_id');
-    }
+    // public function images()
+    // {
+    //     return $this->hasMany(\App\Models\AccomplishmentImage::class, 'accomplishment_id');
+    // }
 }

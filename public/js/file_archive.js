@@ -340,29 +340,29 @@ $(document).on('click', '#remove-sp-file-btn', function (e) {
     });
 });
 
-function curricullumReport(){
+function curricullumReport(data) {
     $.ajax({
         url: '/curriculum-report',
         type: 'get',
-        data: {year: selectedYear},
-        success: function(response) {
+        data: data,
+        success: function (response) {
             Swal.fire({
                 title: "Success!",
                 text: response.message,
                 icon: "success"
             });
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.log(xhr.responseText);
         }
     });
 }
 
-function studentProfileReport(){
+function studentProfileReport(data){
     $.ajax({
         url: '/student-profile-report',
         type: 'get',
-        data: {year: selectedYear},
+        data: data,
         success: function(response) {
             Swal.fire({
                 title: "Success!",
@@ -376,11 +376,11 @@ function studentProfileReport(){
     });
 }
 
-function facultyStaffProfileReport(){
+function facultyStaffProfileReport(data){
     $.ajax({
         url: '/faculty-staff-profile-report',
         type: 'get',
-        data: {year: selectedYear},
+        data: data,
         success: function(response) {
             Swal.fire({
                 title: "Success!",
@@ -394,11 +394,11 @@ function facultyStaffProfileReport(){
     });
 }
 
-function studentDevelopmentReport(){
+function studentDevelopmentReport(data){
     $.ajax({
         url: '/student-development-report',
         type: 'get',
-        data: {year: selectedYear},
+        data: data,
         success: function(response) {
             Swal.fire({
                 title: "Success!",
@@ -412,11 +412,11 @@ function studentDevelopmentReport(){
     });
 }
 
-function ResearchAndExtension(){
+function ResearchAndExtension(data){
     $.ajax({
         url: '/research-and-extension-report',
         type: 'get',
-        data: {year: selectedYear},
+        data: data,
         success: function(response) {
             Swal.fire({
                 title: "Success!",
@@ -430,11 +430,11 @@ function ResearchAndExtension(){
     });
 }
 
-function infrastractureDevelopment(){
+function infrastractureDevelopment(data){
     $.ajax({
         url: '/infrastructure-development-report',
         type: 'get',
-        data: {year : selectedYear},
+        data: data,
         success: function(response) {
             Swal.fire({
                 title: "Success!",
@@ -448,11 +448,11 @@ function infrastractureDevelopment(){
     });
 }
 
-function accomplishmentEvents(){
+function accomplishmentEvents(data){
     $.ajax({
         url: '/accomplishment-events-report',
         type: 'get',
-        data: {year: selectedYear},
+        data: data,
         success: function(response) {
             Swal.fire({
                 title: "Success!",
@@ -466,11 +466,11 @@ function accomplishmentEvents(){
     });
 }
 
-function linkages(){
+function linkages(data){
     $.ajax({
         url: '/linkages-report',
         type: 'get',
-        data: {year: selectedYear},
+        data: data,
         success: function(response) {
             Swal.fire({
                 title: "Success!",
@@ -512,45 +512,47 @@ $('#year').change(function() {
     selectedYear = $(this).val(); 
   });
 
-$('#generate-report-btn').click( function(e){
-    switch(type){
-        case 1: 
-            curricullumReport();
-            fetchReport();
+$('#generate-report-btn').click(function (e) {
+    const filterType = $('#filter-type-archive').val();
+    const selectedQuarter = $('#quarter').val();
+    const selectedHalf = $('#half').val();
+    const selectedYear = $('#year').val();
+
+    let data = { year: selectedYear };
+
+    if (filterType === 'quarter') {
+        data.quarter = selectedQuarter;
+    } else if (filterType === 'half') {
+        data.half = selectedHalf;
+    }
+
+    switch (type) {
+        case 1:
+            curricullumReport(data);
             break;
         case 2:
-            studentProfileReport();
-            fetchReport();
+            studentProfileReport(data);
             break;
         case 3:
-            facultyStaffProfileReport();
-            fetchReport();
+            facultyStaffProfileReport(data);
             break;
         case 4:
-            studentDevelopmentReport();
-            fetchReport();
+            studentDevelopmentReport(data);
             break;
         case 5:
-            ResearchAndExtension();
-            fetchReport();
+            ResearchAndExtension(data);
             break;
-        
         case 7:
-            linkages();
-            fetchReport();
+            linkages(data);
             break;
-            
         case 8:
-            infrastractureDevelopment();
-            fetchReport();
+            infrastractureDevelopment(data);
             break;
         case 9:
-            accomplishmentEvents();
-            fetchReport();
+            accomplishmentEvents(data);
             break;
-            
     }
-    
+
     $('#FileArchiveModal').modal('hide');
-    
 });
+

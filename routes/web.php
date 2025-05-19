@@ -66,6 +66,8 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
     Route::get('/fetch-file-archive', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'fetchReportData'])->name('file_archive.fetch');
     Route::post('/remove-file/{filename}', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'deleteSpFile'])->name('file_archive.remove');
     Route::get('/module-year', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'getYearPerModule'])->name('file_archive.get_year');
+    Route::get('/module-periods', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'getQuartersAndHalves'])->name('file_archive.get_periods');
+
     Route::post('/delete-selected-files', [\App\Http\Controllers\ReportController\FileArchiveController::class, 'deleteSelectedFiles'])->name('file_archive.delete_selected');
     //REPORTSS  
     Route::get('/manage-annual-report', [\App\Http\Controllers\Admin\AnnualReportController::class, 'index'])->name('manage_annual_report.index');

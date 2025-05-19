@@ -23,7 +23,7 @@
           <select class="form-select" id="filter-type-archive" required>
             <option selected disabled value="">Filter Type</option>
             <option value="quarter">By Quarter</option>
-            <option value="half">By Half of the Year</option>
+            <option value="half">Semi-Annual</option>
             <option value="year">By Year</option>
           </select>
         </div>
@@ -45,8 +45,8 @@
           <label for="half" class="form-label">Semi-Annual</label>
           <select class="form-select" id="half" name="half">
             <option disabled selected value="">Semi-Annual</option>
-            <option value="first">1st Half (January – June)</option>
-            <option value="second">2nd Half (July – December)</option>
+            <option value="1st">1st Half (January – June)</option>
+            <option value="2nd">2nd Half (July – December)</option>
           </select>
         </div>
 

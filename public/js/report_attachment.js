@@ -122,7 +122,7 @@ function searchattachments(value) {
                 !data.name.toLowerCase().includes(term) &&
                 !data.module_id.toLowerCase().includes(term) &&
                 !data.attachment_detail.toLowerCase().includes(term) &&
-                !data.created_at.toLowerCase().includes(term) // Ensuring 'created_at' is treated as a string
+                !data.created_at.toLowerCase().includes(term)
             ) {
                 matches = false;
             }

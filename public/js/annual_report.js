@@ -193,13 +193,24 @@ const loadingSwal = () => {
 };
 
 
-$('#generate-annual-report-btn').click( function(){
-    const loadingAlert = loadingSwal(); 
+$('#generate-annual-report-btn').click(function () {
+    const filterType = $('#filter-type').val();
+    const year = $('#year').val();
+    const quarter = $('#quarter').val();
+    const half = $('#half').val();
+
+    const loadingAlert = loadingSwal();
+
     $.ajax({
         url: '/generate-annual-report',
         type: 'get',
-        data: {year: $('#year').val()},
-        success: function(response) {
+        data: {
+            filter_type: filterType,
+            year: year,
+            quarter: quarter,
+            half: half
+        },
+        success: function (response) {
             loadingAlert.close();
             Swal.fire({
                 title: "Success!",
@@ -215,6 +226,7 @@ $('#generate-annual-report-btn').click( function(){
         }
     });
 });
+
 
 $(document).on('click', '#view-file-btn', function (e) {
     var filename = $(this).attr('data-name');

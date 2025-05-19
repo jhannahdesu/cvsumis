@@ -36,7 +36,8 @@ use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
-    public function index($year){
+    public function index($year, $filterType = 'year', $quarter = null, $half = null)
+    {
         $tables = [
             AccreditationStatus::class,
             ProgramsWithGovntRecognition::class,
@@ -64,61 +65,94 @@ class IndexController extends Controller
             EventsAndAccomplishments::class,
         ];
         
-        $hasRecords = collect($tables)->every(fn($model) => $model::whereYear('created_at', $year)->exists());
-        
+        switch ($filterType) {
+            case 'quarter':
+                $ranges = [
+                    'Q1' => ['01', '03'],
+                    'Q2' => ['04', '06'],
+                    'Q3' => ['07', '09'],
+                    'Q4' => ['10', '12']
+                ];
+                [$startMonth, $endMonth] = $ranges[$quarter] ?? ['01', '12'];
+                 $filterLabel = strtoupper($quarter);
+                break;
+
+            case 'half':
+                $ranges = [
+                    'first' => ['01', '06'],
+                    'second' => ['07', '12']
+                ];
+                [$startMonth, $endMonth] = $ranges[$half] ?? ['01', '12'];
+                 $filterLabel = ucfirst($half) . ' Half';
+                break;
+
+           default:
+                $startMonth = '01';
+                $endMonth = '12';
+                $filterLabel = $year;
+        }
+
+        $startDate = "$year-$startMonth-01 00:00:00";
+        $endDate = date("Y-m-t 23:59:59", strtotime("$year-$endMonth-01"));
+
+        // Check if at least one model has records in the date range
+        $hasRecords = collect($tables)->contains(function ($model) use ($startDate, $endDate) {
+            return $model::whereBetween('updated_at', [$startDate, $endDate])->exists(); 
+        });
 
         if (!$hasRecords) {
-            return response()->json(['errors' => ["No records found for the year {$year}"]], 422);
+            return response()->json(['errors' => ["No records found in the selected period"]], 422);
         }
-        //CURROCULLUM
-    
-        $accreditations_status = AccreditationStatus::get();
-        $gov_recognitions = ProgramsWithGovntRecognition::get();
-        $licensure_exams = LicensureExamnination::get();
-        $faculty_tvets = FacultyTVET::get();
-        $student_tvets = StudentsTVET::get();
+
+        
+        //CURRICULUM
+        $accreditations_status = AccreditationStatus::whereBetween('updated_at', [$startDate, $endDate])->get();
+        $gov_recognitions = ProgramsWithGovntRecognition::whereBetween('updated_at', [$startDate, $endDate])->get();
+        $licensure_exams = LicensureExamnination::whereBetween('updated_at', [$startDate, $endDate])->get();
+        $faculty_tvets = FacultyTVET::whereBetween('updated_at', [$startDate, $endDate])->get();
+        $student_tvets = StudentsTVET::whereBetween('updated_at', [$startDate, $endDate])->get();
 
         //STUDENT PROFILE
-        $enrollments = Enrollment::get()->groupBy('program_id');
-        $foreign_students = ForeignStudent::get()->groupBy('country');
-        $graduates = GraduateHeader::get()->groupBy('program_id');
-        $scholarships = Scholarship::get()->groupBy('scholarship_type');
-        $awards = AwardsHeader::with('award_dtls')->get();
+        $enrollments = Enrollment::whereBetween('updated_at', [$startDate, $endDate])->get()->groupBy('program_id');
+        $foreign_students = ForeignStudent::whereBetween('updated_at', [$startDate, $endDate])->get()->groupBy('country');
+        $graduates = GraduateHeader::whereBetween('updated_at', [$startDate, $endDate])->get()->groupBy('program_id');
+        $scholarships = Scholarship::whereBetween('updated_at', [$startDate, $endDate])->get()->groupBy('scholarship_type');
+        $awards = AwardsHeader::with('award_dtls')->whereBetween('updated_at', [$startDate, $endDate])->get();
 
         //FACULTY STAFF PROFILE
-        $educational_attainments = EducationalAttainment::get()->groupBy('education');
-        $nature_of_appointments = NatureOfAppointment::get()->groupBy('apointment_nature');
-        $academic_ranks = AcademicRank::get()->groupBy('academic_rank');
-        $faculty_scholars = FacultyScholars::get();
-        $graduate_studies = FacultyGraduteStudies::get();
-        $local_seminars = SeminarsAndTraining::where('seminar_category', 'Local')->get();
-        $provincial_seminars = SeminarsAndTraining::where('seminar_category', 'Provincial')->get();
-        $international_seminars = SeminarsAndTraining::where('seminar_category', 'International')->get();
-        $national_seminars = SeminarsAndTraining::where('seminar_category', 'National')->get();
-        $regional_seminars = SeminarsAndTraining::where('seminar_category', 'Regional')->get();
-        $recognitions = RecognitionAndAwards::get();
-        $papers = PaperPresentation::get();
+        $educational_attainments = EducationalAttainment::whereBetween('updated_at', [$startDate, $endDate])->get()->groupBy('education');
+        $nature_of_appointments = NatureOfAppointment::whereBetween('updated_at', [$startDate, $endDate])->get()->groupBy('apointment_nature');
+        $academic_ranks = AcademicRank::whereBetween('updated_at', [$startDate, $endDate])->get()->groupBy('academic_rank');
+        $faculty_scholars = FacultyScholars::whereBetween('updated_at', [$startDate, $endDate])->get();
+        $graduate_studies = FacultyGraduteStudies::whereBetween('updated_at', [$startDate, $endDate])->get();
+        $local_seminars = SeminarsAndTraining::where('seminar_category', 'Local')->whereBetween('updated_at', [$startDate, $endDate])->get();
+        $provincial_seminars = SeminarsAndTraining::where('seminar_category', 'Provincial')->whereBetween('updated_at', [$startDate, $endDate])->get();
+        $international_seminars = SeminarsAndTraining::where('seminar_category', 'International')->whereBetween('updated_at', [$startDate, $endDate])->get();
+        $national_seminars = SeminarsAndTraining::where('seminar_category', 'National')->whereBetween('updated_at', [$startDate, $endDate])->get();
+        $regional_seminars = SeminarsAndTraining::where('seminar_category', 'Regional')->whereBetween('updated_at', [$startDate, $endDate])->get();
+        $recognitions = RecognitionAndAwards::whereBetween('updated_at', [$startDate, $endDate])->get();
+        $papers = PaperPresentation::whereBetween('updated_at', [$startDate, $endDate])->get();
 
         //STUDENT ORGANIZATION
-        $organizations = StudentOrganizations::get();
+        $organizations = StudentOrganizations::whereBetween('updated_at', [$startDate, $endDate])->get();
 
         //RESEARCH AND EXTENSION
-        $cvsu_researches = Research::whereNull('agency')->get();
-        $outside_researches = Research::whereNotNull('agency')->get();
-        $extensions = ExtensionActivity::get();
+        $cvsu_researches = Research::whereNull('agency')->whereBetween('updated_at', [$startDate, $endDate])->get();
+        $outside_researches = Research::whereNotNull('agency')->whereBetween('updated_at', [$startDate, $endDate])->get();
+        $extensions = ExtensionActivity::whereBetween('updated_at', [$startDate, $endDate])->get();
 
         //LINKAGES
-        $linkages = Linkages::get();
+        $linkages = Linkages::whereBetween('updated_at', [$startDate, $endDate])->get();
 
         //INFRASTRUCTURE DEVELOPMENT
-        $infrastructures = InfrastructureDevelopment::get();
+        $infrastructures = InfrastructureDevelopment::whereBetween('updated_at', [$startDate, $endDate])->get();
 
-        //OTHER ACCOMPLISMHENTS AND EVENTS
-        $accomplishments = EventsAndAccomplishments::get();
+        //OTHER ACCOMPLISHMENTS AND EVENTS
+        $accomplishments = EventsAndAccomplishments::whereBetween('updated_at', [$startDate, $endDate])->get();
 
         //ATTACHMENTS
+        $attachments = ReportAttachmentHeader::whereBetween('updated_at', [$startDate, $endDate])->get();
 
-        $attachments = ReportAttachmentHeader::get();
         $pdf = PDF::loadView('admin.reports.annual_report.annual_report',  
         compact(
             'faculty_tvets', 
@@ -160,17 +194,17 @@ class IndexController extends Controller
 
             'attachments',
 
+            'filterLabel',
             'year'
-
         ));
       
-        $fileName = 'ANNUAL_REPORT_OF_YEAR_'.$year. '.pdf';
-        
+        $fileName = 'ANNUAL_REPORT_' . strtoupper($filterType) . "_{$filterLabel}_{$year}.pdf";
         $filePath = public_path('reports/' . $fileName);
 
         $pdf->save($filePath);
+
         FileArchive::create([
-            'filename' => $fileName, 
+            'filename' => $fileName,
             'module_id' => 10,
             'created_by' => Auth::id(),
         ]);
@@ -181,12 +215,19 @@ class IndexController extends Controller
 
     public function generateReport(Request $request){
         try {
-            $validatedData = $request->validate([
-                'year' => 'required',
-                
+             $validatedData = $request->validate([
+                'year' => 'required|integer',
+                'filter_type' => 'required|string',
+                'quarter' => 'nullable|string',
+                'half' => 'nullable|string',
             ]);
             try {
-                return $this->index($request->year);
+                return $this->index(
+                    $validatedData['year'], 
+                    $validatedData['filter_type'], 
+                    $validatedData['quarter'], 
+                    $validatedData['half']
+                );
                 
             }catch (\Exception $e) {
                 return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
