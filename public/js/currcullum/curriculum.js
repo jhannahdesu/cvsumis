@@ -986,41 +986,20 @@ let licensureExamTable = () => {
             vertAlign: "middle"
         },
         { 
-            title:"EXAM START",
+            title:"EXAM DATE (Start - End)",
             titleFormatter: () => 
             `<div style="line-height: 2.5;">
                 <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                EXAM START</strong>
+                EXAM DATE (Start - End)</strong>
             </div>`,
-            field: "exam_date_start",
+            field: "exam_date_range",
             headerHozAlign: "center",
             headerSort: false,
             hozAlign: "center",
             vertAlign: "middle",
             formatter: function(cell) {
                 const value = cell.getValue();
-                if (!value) return '';
-                const date = new Date(value);
-                return date.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
-            }
-        },
-        { 
-            title:"EXAM END",
-            titleFormatter: () => 
-            `<div style="line-height: 2.5;">
-                <strong style="background: linear-gradient(45deg, rgb(254, 160, 37), rgb(255, 186, 96)); -webkit-background-clip: text; color: transparent;">
-                EXAM END</strong>
-            </div>`,
-            field: "exam_date_end",
-            headerHozAlign: "center",
-            headerSort: false,
-            hozAlign: "center",
-            vertAlign: "middle",
-            formatter: function(cell) {
-                const value = cell.getValue();
-                if (!value) return '';
-                const date = new Date(value);
-                return date.toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
+                return value ? value : '';
             }
         },
         { title:"CVSU FIRST TIME TAKER",

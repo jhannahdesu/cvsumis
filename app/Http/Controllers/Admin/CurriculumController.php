@@ -353,9 +353,9 @@ class CurriculumController extends Controller
             ]);
     
             try {
-                $validatedData['exam_date_start'] = $validatedData['exam_date_start'];
-                $validatedData['exam_date_end'] = $validatedData['exam_date_end'];
-                unset($validatedData['exam_date_start'], $validatedData['exam_date_end']);
+                // $validatedData['exam_date_start'] = $validatedData['exam_date_start'];
+                // $validatedData['exam_date_end'] = $validatedData['exam_date_end'];
+                // unset($validatedData['exam_date_start'], $validatedData['exam_date_end']);
                 $validatedData['module'] = 1;
                 $validatedData['added_by'] = auth()->user()->id;
                 $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
@@ -394,21 +394,31 @@ class CurriculumController extends Controller
         }
         foreach ($data as $key => $item) {
             $actions = $this->licensureExamAction($item);
+
+            // Format the date range for display
+            $exam_date_range = '';
+            if ($item->exam_date_start && $item->exam_date_end) {
+                $start = \Carbon\Carbon::parse($item->exam_date_start)->format('F d, Y');
+                $end = \Carbon\Carbon::parse($item->exam_date_end)->format('F d, Y');
+                $exam_date_range = $start . ' - ' . $end;
+            }
+
             $response[] = [
-            'no' => ++$key,
-            'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
-            'exam' => ucwords($item->examination_type_dtls->type),
-            'cvsu_rate' => "{$item->cvsu_total_passer}/{$item->cvsu_total_takers} - {$item->cvsu_passing_rate}%",
-            'national_rate' => "{$item->national_total_passer}/{$item->national_total_takers} - {$item->national_passing_rate}%",
-            'cvsu_overall_passing_rate' => "{$item->cvsu_overall_passer}/{$item->cvsu_overall_taker} - {$item->cvsu_overall_passing_rate}%",
-            'national_overall_passing_rate' => "{$item->national_overall_passer}/{$item->national_overall_taker} - {$item->national_overall_passing_rate}%",
-            'examination_type' => ucwords($item->examination_type_dtls->type),
-            'exam_date_start' => $item->exam_date_start,
-            'exam_date_end' => $item->exam_date_end,
-            'updated_at' => $item->updated_at->format('F d, Y'),
-            'action' => $actions['button'],
-            
-        ];
+                'no' => ++$key,
+                'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
+                'exam' => ucwords($item->examination_type_dtls->type),
+                'exam_date_range' => $exam_date_range, // <-- Add this line
+                'exam_date_start' => $item->exam_date_start,
+                'exam_date_end' => $item->exam_date_end,
+                'cvsu_rate' => "{$item->cvsu_total_passer}/{$item->cvsu_total_takers} - {$item->cvsu_passing_rate}%",
+                'national_rate' => "{$item->national_total_passer}/{$item->national_total_takers} - {$item->national_passing_rate}%",
+                'cvsu_overall_passing_rate' => "{$item->cvsu_overall_passer}/{$item->cvsu_overall_taker} - {$item->cvsu_overall_passing_rate}%",
+                'national_overall_passing_rate' => "{$item->national_overall_passer}/{$item->national_overall_taker} - {$item->national_overall_passing_rate}%",
+                'examination_type' => ucwords($item->examination_type_dtls->type),
+                'updated_at' => $item->updated_at->format('F d, Y'),
+                'action' => $actions['button'],
+                
+            ];
         }        
         
         return response()->json($response);
@@ -469,9 +479,9 @@ class CurriculumController extends Controller
             ]);
     
             try {
-                $validatedData['exam_date_start'] = $validatedData['exam_date_start'];
-                $validatedData['exam_date_end'] = $validatedData['exam_date_end'];
-                unset($validatedData['exam_date_start'], $validatedData['exam_date_end']);
+                // $validatedData['exam_date_start'] = $validatedData['exam_date_start'];
+                // $validatedData['exam_date_end'] = $validatedData['exam_date_end'];
+                // unset($validatedData['exam_date_start'], $validatedData['exam_date_end']);
                 $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
                 $validatedData['national_passing_rate'] = number_format(($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100, 2);
                 $validatedData['cvsu_overall_passing_rate'] = number_format(($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100, 2);
