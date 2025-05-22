@@ -340,8 +340,8 @@ class CurriculumController extends Controller
             DB::beginTransaction(); // <-- ADD THIS LINE
             $validatedData = $request->validate([
                 'examination_type' => 'required',
-                'exam_date_start' => 'required|date|before_or_equal:today',
-                'exam_date_end' => 'required|date|before_or_equal:today',
+                'start_date' => 'required|date|before_or_equal:today',
+                'end_date' => 'required|date|before_or_equal:today', // <-- fix here
                 'cvsu_total_passer' => 'required|integer|min:1',
                 'cvsu_total_takers' => 'required|integer|min:1',
                 'national_total_passer' => 'required|integer|min:1',
@@ -353,9 +353,7 @@ class CurriculumController extends Controller
             ]);
     
             try {
-                // $validatedData['exam_date_start'] = $validatedData['exam_date_start'];
-                // $validatedData['exam_date_end'] = $validatedData['exam_date_end'];
-                // unset($validatedData['exam_date_start'], $validatedData['exam_date_end']);
+                $validatedData['end_date'] = $request->end_date; // use end_date everywhere
                 $validatedData['module'] = 1;
                 $validatedData['added_by'] = auth()->user()->id;
                 $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
@@ -397,9 +395,9 @@ class CurriculumController extends Controller
 
             // Format the date range for display
             $exam_date_range = '';
-            if ($item->exam_date_start && $item->exam_date_end) {
-                $start = \Carbon\Carbon::parse($item->exam_date_start)->format('F d, Y');
-                $end = \Carbon\Carbon::parse($item->exam_date_end)->format('F d, Y');
+            if ($item->start_date && $item->end_date) {
+                $start = \Carbon\Carbon::parse($item->start_date)->format('F d, Y');
+                $end = \Carbon\Carbon::parse($item->end_date)->format('F d, Y');
                 $exam_date_range = $start . ' - ' . $end;
             }
 
@@ -408,8 +406,8 @@ class CurriculumController extends Controller
                 'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
                 'exam' => ucwords($item->examination_type_dtls->type),
                 'exam_date_range' => $exam_date_range, // <-- Add this line
-                'exam_date_start' => $item->exam_date_start,
-                'exam_date_end' => $item->exam_date_end,
+                'start_date' => $item->start_date,
+                'end_date' => $item->end_date,
                 'cvsu_rate' => "{$item->cvsu_total_passer}/{$item->cvsu_total_takers} - {$item->cvsu_passing_rate}%",
                 'national_rate' => "{$item->national_total_passer}/{$item->national_total_takers} - {$item->national_passing_rate}%",
                 'cvsu_overall_passing_rate' => "{$item->cvsu_overall_passer}/{$item->cvsu_overall_taker} - {$item->cvsu_overall_passing_rate}%",
@@ -441,10 +439,8 @@ class CurriculumController extends Controller
             'examination_type' => $data->examination_type,
             'cvsu_passing_rate' => $data->cvsu_passing_rate,
             'national_passing_rate' => $data->national_passing_rate,
-            // 'exam_date_start' => date('Y-m-d', strtotime($data->exam_date_start)),
-            // 'exam_date_end' => date('Y-m-d', strtotime($data->exam_date_end)),
-            'exam_date_start' => $data->exam_date_start,
-            'exam_date_end' => $data->exam_date_end,
+            'start_date' => $data->start_date,
+            'end_date' => $data->end_date,
             'cvsu_total_passer' => $data->cvsu_total_passer,
             'cvsu_total_takers' => $data->cvsu_total_takers,
             'national_total_passer' => $data->national_total_passer,
@@ -465,8 +461,8 @@ class CurriculumController extends Controller
         try {
             $validatedData = $request->validate([
                 'examination_type' => 'required',
-                'exam_date_start' => 'required|date|before_or_equal:today',
-                'exam_date_end' => 'required|date|before_or_equal:today',
+                'start_date' => 'required|date|before_or_equal:today',
+                'end_date' => 'required|date|before_or_equal:today', // <-- fix here
                 'cvsu_total_passer' => 'required|integer|min:1',
                 'cvsu_total_takers' => 'required|integer|min:1',
                 'national_total_passer' => 'required|integer|min:1',
@@ -479,9 +475,7 @@ class CurriculumController extends Controller
             ]);
     
             try {
-                // $validatedData['exam_date_start'] = $validatedData['exam_date_start'];
-                // $validatedData['exam_date_end'] = $validatedData['exam_date_end'];
-                // unset($validatedData['exam_date_start'], $validatedData['exam_date_end']);
+                $validatedData['end_date'] = $request->end_date; // use end_date everywhere
                 $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
                 $validatedData['national_passing_rate'] = number_format(($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100, 2);
                 $validatedData['cvsu_overall_passing_rate'] = number_format(($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100, 2);

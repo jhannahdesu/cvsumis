@@ -99,8 +99,8 @@
                 @foreach($licensure_exams as $licensure_exam)
                     <tr>
                         <td>{{ ucwords($licensure_exam->examination_type_dtls->type) }}</td>
-                        <td>{{ date('F d, Y', strtotime($licensure_exam->exam_date_start)) }}</td>
-                        <td>{{ date('F d, Y', strtotime($licensure_exam->exam_date_end)) }}</td>
+                        <td>{{ date('F d, Y', strtotime($licensure_exam->start_date)) }}</td>
+                        <td>{{ date('F d, Y', strtotime($licensure_exam->end_date)) }}</td>
                         <td>{{ $licensure_exam->cvsu_passing_rate }}</td>
                         <td>{{ $licensure_exam->national_passing_rate }}</td>
                     </tr>

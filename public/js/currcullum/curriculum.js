@@ -1217,8 +1217,8 @@ document.getElementById("licensure-search").addEventListener("input", function (
             if (
                 !data.name.toLowerCase().includes(term) &&
                 !data.exam.toLowerCase().includes(term) &&
-                !data.exam_date_start.toLowerCase().includes(term) &&
-                !data.exam_date_end.toLowerCase().includes(term) &&
+                !data.start_date.toLowerCase().includes(term) &&
+                !data.end_date.toLowerCase().includes(term) &&
                 !data.cvsu_rate.toString().includes(term) &&
                 !data.national_rate.toString().includes(term) &&
                 !data.cvsu_overall_passing_rate.toString().includes(term) &&
@@ -1237,14 +1237,39 @@ $('#licensure-exam-modal').click(function() {
 });
 //updateLicensureExam
 $('#submit-licensure-exam-btn').click(function(event) {
-    event.preventDefault(); // <-- Always prevent default form submission
+    event.preventDefault(); // Always prevent default form submission
     var form = $('#licensure-exam-form')[0];
+
+    // Get values
+    var cvsuPassers = parseInt($('#cvsu_total_passer').val()) || 0;
+    var cvsuTakers = parseInt($('#cvsu_total_takers').val()) || 0;
+    var natPassers = parseInt($('#national_total_passer').val()) || 0;
+    var natTakers = parseInt($('#national_total_takers').val()) || 0;
+    var cvsuOverallPassers = parseInt($('#cvsu_overall_passer').val()) || 0;
+    var cvsuOverallTakers = parseInt($('#cvsu_overall_taker').val()) || 0;
+    var natOverallPassers = parseInt($('#national_overall_passer').val()) || 0;
+    var natOverallTakers = parseInt($('#national_overall_taker').val()) || 0;
+
+    // Validation: Passers should not exceed takers
+    if (
+        cvsuPassers > cvsuTakers ||
+        natPassers > natTakers ||
+        cvsuOverallPassers > cvsuOverallTakers ||
+        natOverallPassers > natOverallTakers
+    ) {
+        Swal.fire({
+            title: "Invalid Entry",
+            text: "Number of passers cannot be greater than the number of takers.",
+            icon: "warning"
+        });
+        return;
+    }
 
     // Date validation
     var today = new Date();
     today.setHours(0,0,0,0);
-    var start = new Date($('#exam_date_start').val());
-    var end = new Date($('#exam_date_end').val());
+    var start = new Date($('#start_date').val());
+    var end = new Date($('#end_date').val());
     if (start > today || end > today) {
         Swal.fire({
             title: "Invalid Date",
@@ -1311,8 +1336,8 @@ $(document).on('click', '#edit-licensure-exam-btn', function (e) {
             $('#view_examination_type').val(response.examination_type);
             $('#view_cvsu_passing_rate').val(response.cvsu_passing_rate);
             $('#view_national_passing_rate').val(response.national_passing_rate);
-            $('#view_exam_date_start').val(response.exam_date_start);
-            $('#view_exam_date_end').val(response.exam_date_end);
+            $('#view_start_date').val(response.start_date);
+            $('#view_end_date').val(response.end_date);
             $('#view_cvsu_total_passer').val(response.cvsu_total_passer);
             $('#view_cvsu_total_takers').val(response.cvsu_total_takers);
             $('#view_national_total_passer').val(response.national_total_passer);
@@ -1324,6 +1349,7 @@ $(document).on('click', '#edit-licensure-exam-btn', function (e) {
             $('#view_national_overall_taker').val(response.national_overall_taker);
             $('#view_cvsu_overall_passing_rate').val(response.cvsu_overall_passing_rate);
             $('#view_national_overall_passing_rate').val(response.national_overall_passing_rate);
+           
         },
         error: function (xhr, status) {
             console.log("Error:", xhr.responseText);
