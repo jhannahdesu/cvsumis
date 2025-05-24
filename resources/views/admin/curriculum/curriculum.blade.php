@@ -3,8 +3,8 @@
 <script>
     window.userPosition = {{ Auth::user()->position }};
 </script>
-
-<div class="container">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<div class="container" >
     <div class="row">
         <div class="accordion" id="accordionFlushExample">
 

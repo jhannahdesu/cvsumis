@@ -11,6 +11,7 @@ use App\Models\FacultyTVET;
 use App\Models\Helper;
 use App\Models\LicensureExamnination;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\Programs;
 use App\Models\ProgramsWithGovntRecognition;
@@ -334,49 +335,56 @@ class CurriculumController extends Controller
 
     //Performance in the licensure examination
 
-    public function storeLicensureExam(Request $request) {
-         \Log::info('Request data:', $request->all());
-        try {
-            DB::beginTransaction(); // <-- ADD THIS LINE
-            $validatedData = $request->validate([
-                'examination_type' => 'required',
-                'start_date' => 'required|date|before_or_equal:today',
-                'end_date' => 'required|date|before_or_equal:today', // <-- fix here
-                'cvsu_total_passer' => 'required|integer|min:1',
-                'cvsu_total_takers' => 'required|integer|min:1',
-                'national_total_passer' => 'required|integer|min:1',
-                'national_total_takers' => 'required|integer|min:1',
-                'cvsu_overall_taker' => 'required|integer|min:1',
-                'cvsu_overall_passer' => 'required|integer|min:1',
-                'national_overall_passer' => 'required|integer|min:1',
-                'national_overall_taker' => 'required|integer|min:1',
-            ]);
-    
-            try {
-                $validatedData['end_date'] = $request->end_date; // use end_date everywhere
-                $validatedData['module'] = 1;
-                $validatedData['added_by'] = auth()->user()->id;
-                $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
-                $validatedData['national_passing_rate'] = number_format(($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100, 2);
-                $validatedData['cvsu_overall_passing_rate'] = number_format(($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100, 2);
-                $validatedData['national_overall_passing_rate'] = number_format(($validatedData['national_overall_passer'] / $validatedData['national_overall_taker']) * 100, 2);
+    public function storeLicensureExam(Request $request)
+    {
+        \Log::info('Request data:', $request->all());
+        $today = Carbon::today()->toDateString();
 
-                LicensureExamnination::create($validatedData);
-                Helper::storeNotifications(
-                    Auth::id(),
-                    'You Added Data in Curriculum Performance in the licensure examination (first time takers only)',
-                    Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Curriculum Performance in the licensure examination (first time takers only)',
-                );
-                DB::commit();
-                return response()->json(['message' => 'Data added successfully'], 200);
-            }catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
-            }
-        }catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
-        }catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred: ' . $e->getMessage()], 500);
+        // Use manual validator
+        $validator = Validator::make($request->all(), [
+            'examination_type' => 'required',
+            'start_date' => ['required', 'date', 'before_or_equal:' . $today, 'before_or_equal:end_date'],
+            'end_date' => ['required', 'date', 'before_or_equal:' . $today, 'after_or_equal:start_date'],
+            'cvsu_total_passer' => 'required|integer|min:1',
+            'cvsu_total_takers' => 'required|integer|min:1',
+            'national_total_passer' => 'required|integer|min:1',
+            'national_total_takers' => 'required|integer|min:1',
+            'cvsu_overall_taker' => 'required|integer|min:1',
+            'cvsu_overall_passer' => 'required|integer|min:1',
+            'national_overall_passer' => 'required|integer|min:1',
+            'national_overall_taker' => 'required|integer|min:1',
+        ]);
+
+        // Return 422 if validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $validatedData = $validator->validated();
+            $validatedData['end_date'] = $request->end_date;
+            $validatedData['module'] = 1;
+            $validatedData['added_by'] = auth()->user()->id;
+            $validatedData['cvsu_passing_rate'] = number_format(($validatedData['cvsu_total_passer'] / $validatedData['cvsu_total_takers']) * 100, 2);
+            $validatedData['national_passing_rate'] = number_format(($validatedData['national_total_passer'] / $validatedData['national_total_takers']) * 100, 2);
+            $validatedData['cvsu_overall_passing_rate'] = number_format(($validatedData['cvsu_overall_passer'] / $validatedData['cvsu_overall_taker']) * 100, 2);
+            $validatedData['national_overall_passing_rate'] = number_format(($validatedData['national_overall_passer'] / $validatedData['national_overall_taker']) * 100, 2);
+
+            LicensureExamnination::create($validatedData);
+
+            Helper::storeNotifications(
+                Auth::id(),
+                'You Added Data in Curriculum Performance in the licensure examination (first time takers only)',
+                Auth::user()->firstname . ' ' . Auth::user()->lastname . ' added Data in Curriculum Performance in the licensure examination (first time takers only)',
+            );
+
+            DB::commit();
+            return response()->json(['message' => 'Data added successfully'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Error storing the item: ' . $e->getMessage()], 500);
         }
     }
 
@@ -405,7 +413,7 @@ class CurriculumController extends Controller
                 'no' => ++$key,
                 'name' => ucwords($item->created_by_dtls->firstname . ' ' . $item->created_by_dtls->lastname),
                 'exam' => ucwords($item->examination_type_dtls->type),
-                'exam_date_range' => $exam_date_range, // <-- Add this line
+                'exam_date_range' => Carbon::parse($item->start_date)->format('F d, Y') . ' - ' . Carbon::parse($item->end_date)->format('F d, Y'),
                 'start_date' => $item->start_date,
                 'end_date' => $item->end_date,
                 'cvsu_rate' => "{$item->cvsu_total_passer}/{$item->cvsu_total_takers} - {$item->cvsu_passing_rate}%",
@@ -458,11 +466,12 @@ class CurriculumController extends Controller
     }
 
     public function updateLicensureExam(Request $request, $id) {
+        $today = Carbon::today()->toDateString();
         try {
             $validatedData = $request->validate([
                 'examination_type' => 'required',
-                'start_date' => 'required|date|before_or_equal:today',
-                'end_date' => 'required|date|before_or_equal:today', // <-- fix here
+                'start_date' => ['required', 'date', 'before_or_equal:' . $today, 'before_or_equal:end_date'],
+                'end_date' => ['required', 'date', 'before_or_equal:' . $today, 'after_or_equal:start_date'],
                 'cvsu_total_passer' => 'required|integer|min:1',
                 'cvsu_total_takers' => 'required|integer|min:1',
                 'national_total_passer' => 'required|integer|min:1',

@@ -1265,11 +1265,15 @@ $('#submit-licensure-exam-btn').click(function(event) {
         return;
     }
 
-    // Date validation
     var today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
+
     var start = new Date($('#start_date').val());
+    start.setHours(0, 0, 0, 0);
+
     var end = new Date($('#end_date').val());
+    end.setHours(0, 0, 0, 0);
+
     if (start > today || end > today) {
         Swal.fire({
             title: "Invalid Date",
@@ -1302,8 +1306,7 @@ $('#submit-licensure-exam-btn').click(function(event) {
             $('#AddLicensureExam').modal('hide');
             fetchLicensureExamData();
         },
-        error: function(xhr, status) {
-            console.log("Error response:", xhr.responseText);
+        error: function (xhr, status) {
             throwError(xhr, status);
         }
     });
