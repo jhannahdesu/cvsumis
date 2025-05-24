@@ -24,31 +24,28 @@
             line-height: 75px;
         }
         .image-container {
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); /* Adjust for up to 4 items per row */
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             margin-bottom: 20px;
             padding: 0 50px;
+            justify-items: center; /* Center images horizontally */
         }
 
         .image-container img {
-            width: 100%;
-            height: auto;
             max-width: 100%;
+            max-height: 450px;
+            width: auto;
+            height: auto;
             object-fit: contain;
             border-radius: 8px;
             display: block;
             transition: transform 0.3s ease;
-            /* transform: scale(0.6); */
         }
-
-
-
-
 
     </style>
 
-<style>
+    <style>
         body { font-family: Arial, Arial; font-size: 14px; }
         .container { text-align: center; margin: 50px; }
         h1 { font-size: 24px; margin-bottom: 20px; }
@@ -104,132 +101,141 @@
         <h2>ANNUAL REPORT {{ $year }} COLLEGE OF ENGINEERING AND INFORMATION TECHNOLOGY</h2>
     </center>
     <h4>I. CURRICULUM</h4>
-    <h4>Table 1. Accreditation status of academic programs </h4>
-    @if($accreditations_status->isNotEmpty())
-        <table>
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">PROGRAM </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">STATUS</th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">---</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($accreditations_status as $accreditations)
+        <h4>Accreditation status of academic programs</h4>
+        @if($accreditations_status->isNotEmpty())
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ ucwords($accreditations->program_dtls->program) }}</td>
-                        <td>{{ $accreditations->status_dtls->status }}</td>
-                        <td>Accreditation Visit: <br>{{ date('F d, Y', strtotime($accreditations->visit_date)) }}</td>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">PROGRAM </th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">STATUS</th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">---</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>No Data available.</p>
-    @endif
+                </thead>
+                <tbody>
+                    @foreach($accreditations_status as $accreditations)
+                        <tr>
+                            <td>{{ ucwords($accreditations->program_dtls->program) }}</td>
+                            <td>{{ $accreditations->status_dtls->status }}</td>
+                            <td>Accreditation Visit: <br>{{ date('F d, Y', strtotime($accreditations->visit_date)) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No Data available.</p>
+        @endif
 
-    <br>
-     <br>
-    <h4> Table 2. Academic programs with Government Recognition (CoPC) </h4>
-    @if($gov_recognitions->isNotEmpty())
-        <table>
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">LIST OF ALL OFFERED PROGRAMS </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">STATUS <br> (with COPC / without COPC)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($gov_recognitions as $gov_recognition)
+
+        <div class="page-break"></div>
+        <h4> Academic programs with Government Recognition (CoPC) </h4>
+        @if($gov_recognitions->isNotEmpty())
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ ucwords($gov_recognition->program_dtls->program) }}</td>
-                        <td> {{ $gov_recognition->status_dtls->status }} <br> (COPC NO. {{ $gov_recognition->copc_number.' '.date('F d, Y', strtotime($gov_recognition->date)) }} )</td>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">LIST OF ALL OFFERED PROGRAMS </th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">STATUS <br> (with COPC / without COPC)</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>No Data available.</p>
-    @endif
+                </thead>
+                <tbody>
+                    @foreach($gov_recognitions as $gov_recognition)
+                        <tr>
+                            <td>{{ ucwords($gov_recognition->program_dtls->program) }}</td>
+                            <td> {{ $gov_recognition->status_dtls->status }} <br> (COPC NO. {{ $gov_recognition->copc_number.' '.date('F d, Y', strtotime($gov_recognition->date)) }} )</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No Data available.</p>
+        @endif
 
-    
-     <br>
-    <h4>Performance in the Licensure Examination</h4>
-    <h4> Table 3. Performance in the licensure examination (first time takers only)</h4>
-    @if($licensure_exams->isNotEmpty())
-        <table>
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU PASSING % </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL PASSING %  </th>
-                        
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($licensure_exams as $licensure_exam)
+
+        <div class="page-break"></div>
+        <h4> Performance in the licensure examination</h4>
+        @if($licensure_exams->isNotEmpty())
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ ucwords($licensure_exam->examination_type_dtls->type) }}</td>
-                        <td>{{ $licensure_exam->cvsu_passing_rate }}</td>
-                        <td>{{ $licensure_exam->national_passing_rate }}</td>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION</th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">EXAM START</th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">EXAM END</th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU %</th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL %</th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU OVERALL %</th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL OVERALL %</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>No Data available.</p>
-    @endif
+                </thead>
+                <tbody>
+                    @foreach($licensure_exams as $licensure_exam)
+                        <tr>
+                            <td>{{ ucwords($licensure_exam->examination_type_dtls->type) }}</td>
+                            <td>{{ date('F d, Y', strtotime($licensure_exam->exam_date_start)) }}</td>
+                            <td>{{ date('F d, Y', strtotime($licensure_exam->exam_date_end)) }}</td>
+                            <td>{{ $licensure_exam->cvsu_passing_rate }}</td>
+                            <td>{{ $licensure_exam->national_passing_rate }}</td>
+                            <td>{{ $licensure_exam->cvsu_overall_passing_rate }}</td>
+                            <td>{{ $licensure_exam->national_overall_passing_rate }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No Data available.</p>
+        @endif
 
 
-     <br>
-    <h4>National TVET Qualification and Certification</h4>
-    <h4> Table 4. List of faculty members with national TVET qualification and certification </h4>
-    @if($faculty_tvets->isNotEmpty())
-        <table>
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF CERTIFICATE HOLDER <br> (Faculty)</th>                 
-                               
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($faculty_tvets as $faculty_tvet)
+        <div class="page-break"></div>
+        <h4>  List of faculty members with national TVET qualification and certification  </h4>
+        @if($faculty_tvets->isNotEmpty())
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ ucwords($faculty_tvet->certification_type_dtls->type) }} <br> {{ date('F d, Y', strtotime($faculty_tvet->date)) }} <br> {{ ucwords($faculty_tvet->certificate_details) }}</td>
-                        <td>{{ $faculty_tvet->certificate_holder }}</td>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION </th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF CERTIFICATE HOLDER <br> (Faculty)</th>                 
+                                
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>No Data available.</p>
-    @endif
+                </thead>
+                <tbody>
+                    @foreach($faculty_tvets as $faculty_tvet)
+                        <tr>
+                            <td>{{ ucwords($faculty_tvet->certification_type_dtls->type) }} <br> {{ date('F d, Y', strtotime($faculty_tvet->date)) }} <br> {{ ucwords($faculty_tvet->certificate_details) }}</td>
+                            <td>{{ $faculty_tvet->certificate_holder }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No Data available.</p>
+        @endif
 
 
-     <br>
-    <h4> Table 5. Number of students with national TVET qualification and certification  </h4>
-    @if($student_tvets->isNotEmpty())
-        <table>
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NUMBER OF STUDENTS  WITH CERTIFICATES </th>                        
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($student_tvets as $student_tvet)
+        <div class="page-break"></div>
+        <h4>  Number of students with national TVET qualification and certification  </h4>
+        @if($student_tvets->isNotEmpty())
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ ucwords($student_tvet->certification_type_dtls->type) }} <br> {{ ucwords($student_tvet->student_tvet_location) .' - '. date('F d, Y', strtotime($student_tvet->date))}}</td>
-                        <td>{{ $student_tvet->number_of_student }}</td>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION </th>
+                        <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NUMBER OF STUDENTS  WITH CERTIFICATES </th>                        
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>No Data available.</p>
-    @endif
-    
+                </thead>
+                <tbody>
+                    @foreach($student_tvets as $student_tvet)
+                        <tr>
+                            <td>
+                                {{ ucwords($student_tvet->certification_type_dtls->type) }}<br>
+                                {{ ucwords($student_tvet->student_tvet_location) }} -
+                                {{ \Carbon\Carbon::parse($student_tvet->student_tvet_date)->format('F d, Y') }}
+                            </td>
+                            <td>{{ $student_tvet->number_of_student }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No Data available.</p>
+        @endif
+        
     {{-- CURRICULUM ATTACHMENT--}}
     @if($attachments->isNotEmpty())
         @foreach ($attachments as $item)
@@ -954,7 +960,7 @@
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF AWARDEE/S  </th>
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">AWARD/ RECOGNITION </th>  
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">GRANTING  AGENCY/ INSTITUTION </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE   RECEIVED </th>            
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE RECEIVED </th>            
                 </tr>
             </thead>
             <tbody>
@@ -964,7 +970,7 @@
                         <td>{{ ucwords($recognition->awardee_name) }}</td>
                         <td>{{ ucwords($recognition->award) }}</td>
                         <td>{{ ucwords($recognition->agency) }}</td>
-                        <td>{{ date('F d, Y', strtotime($recognition->date_received)) }} / {{ ucwords($recognition->venue) }}</td>
+                        <td>{{ date('F d, Y', strtotime($recognition->date_received)) }} / {{ ucwords($recognition->event) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -977,38 +983,6 @@
 
     <h3> G. Paper Presentation </h3>
     <h4>Table 22. List of paper presentations of the faculty members </h4>
-    @if($recognitions->isNotEmpty())
-        <table>
-            <thead>
-                <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE</th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF AWARDEE/S  </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">AWARD/ RECOGNITION </th>  
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">GRANTING  AGENCY/ INSTITUTION </th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE   RECEIVED </th>            
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($recognitions as $recognition)
-                    <tr>
-                        <td>{{ ucwords($recognition->award_type) }}</td>
-                        <td>{{ ucwords($recognition->awardee_name) }}</td>
-                        <td>{{ ucwords($recognition->award) }}</td>
-                        <td>{{ ucwords($recognition->agency) }}</td>
-                        <td>{{ date('F d, Y', strtotime($recognition->date_received)) }} / {{ ucwords($recognition->venue) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>No Data available.</p>
-    @endif
-
-
-    <br>
-
-    <h3> H. Publication</h3>
-    <h4>Table 23. List of publications of faculty researches</h4>
     @if($papers->isNotEmpty())
         <table>
             <thead>
@@ -1019,7 +993,7 @@
                        
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">PRESENTER</th>
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE AND VENUE </th>            
-                        
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CO-AUTHORS</th>
                 </tr>
             </thead>
             <tbody>
@@ -1028,8 +1002,17 @@
                         <td>{{ ucwords($paper->presentation_type) }}</td>
                         <td>{{ ucwords($paper->conference_name) }}</td>
                         <td>{{ ucwords($paper->paper_name) }}</td>
-                        <td>{{ ucwords($paper->presenter_name) }}</td>
-                        <td>{{ date('F d, Y', strtotime($paper->date)) }} / {{ ucwords($paper->venue) }}</td>
+                        <td>
+                            @foreach(explode(',', $paper->presenter_name ?? '') as $p)
+                                {{ ucwords(trim($p)) }}<br>
+                            @endforeach
+                        </td>
+                        <td>{{ date('M d, Y', strtotime($paper->date)) }} / {{ ucwords($paper->venue) }}</td>
+                        <td>
+                            @foreach(explode(',', $paper->co_authors ?? '') as $co)
+                                {{ ucwords(trim($co)) }}<br>
+                            @endforeach
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
@@ -1371,34 +1354,48 @@
         
     @endif
     
-
-    {{-- Other Events/Accomplishments--}}
-    <div class="page-break"></div>
-    <h3>IX. Other Events/Accomplishments</h3>
-        
-    <h4>Faculty Invited as AACCUP Accreditor</h4>
-    @if($accomplishments->isNotEmpty())
-    <table>
-        <thead>
+<h3>IX. Events And Accomplishment</h3>
+<h4>Faculty Invited as AACCUP Accreditor</h4>
+@if($accomplishments->isNotEmpty())
+<table>
+    <thead>
+        <tr>
+            <th style="border: 1px solid #000; background-color: #ffa500; color: white;">FACULTY</th>
+            <th style="border: 1px solid #000; background-color: #ffa500; color: white;">PROGRAM</th>
+            <th style="border: 1px solid #000; background-color: #ffa500; color: white;">SUC / DATE</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($accomplishments as $accomplishment)
             <tr>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white;">FACULTY</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white;">PROGRAM</th>
-                <th style="border: 1px solid #000; background-color: #ffa500; color: white;">SUC / DATE</th>
+                <td>{{ ucwords($accomplishment->faculty) }}</td>
+                <td>{{ ucwords($accomplishment->program_details->program) }}<br>{{ ucwords($accomplishment->program_dtls) }}</td>
+                <td>
+                    {{ ucwords($accomplishment->university) }}<br>
+                    {{ \Carbon\Carbon::parse($accomplishment->start_date)->format('F d, Y') }} - 
+                    {{ \Carbon\Carbon::parse($accomplishment->end_date)->format('F d, Y') }}
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($accomplishments as $accomplishment)
-                <tr>
-                    <td>{{ ucwords($accomplishment->faculty) }}</td>
-                    <td>{{ ucwords($accomplishment->program_details->program) }}<br>{{ ucwords($accomplishment->program_dtls) }}</td>
-                    <td>{{ ucwords($accomplishment->university) }}<br>{{ ucwords($accomplishment->date) }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-    @else
-        <p>No data available.</p>
+        @endforeach
+    </tbody>
+</table>
+<h4>Event Images</h4>
+<br>
+{{-- Images --}}
+@foreach($accomplishments as $accomplishment)
+    @if($accomplishment->image)
+        <div style="text-align: center; margin-bottom: 10px;">
+            <img src="{{ public_path('uploads/accomplishments/' . $accomplishment->image) }}" 
+                alt="Faculty Image"
+                style="max-width: 600px; max-height: 450px; width: auto; height: auto; display: inline-block;">
+            <h4>{{ ucwords($accomplishment->program_dtls) }}</h4>
+        </div>
     @endif
+@endforeach
+
+@else
+    <p>No data available.</p>
+@endif
 
     {{-- Other Events/Accomplishments ATTACHMENT--}}
     @if($attachments->isNotEmpty())

@@ -26,45 +26,6 @@ class AccomplishmentController extends Controller
         return $data;
     }
 
-//     public function EventsAndAccomplishmentsCSV(Request $request)
-// {
-//     $directory = public_path('reports');
-//     if (!file_exists($directory)) {
-//         mkdir($directory, 0755, true);
-//     }
-
-//     $filename = $directory . '/Events_And_Accomplishments_List.csv';
-
-//     $fp = fopen($filename, "w+");
-
-//     fputcsv($fp, ['ADDED BY', 'CATEGORY', 'CATEGORY NAME ','PROGRAM', 'PROGRAM DETAILS', 'UNIVERSITY VENUE', 'SPONSORING AGENCY ', 'START DATE', 'END DATE']);
-
-//     $query = EventsAndAccomplishments::latest()->with('created_by_dtls', 'program_details');
-
-//     // Apply filters if provided (if you have any filtering logic)
-//     // Example: if ($request->has('some_filter')) { $query->where('some_column', $request->some_filter); }
-
-//     $data = $query->get();
-
-//     foreach ($data as $row) {
-//         fputcsv($fp, [
-//             ucwords($row->created_by_dtls->firstname . ' ' . $row->created_by_dtls->lastname),
-//             ucwords($row->faculty),
-//             ucwords($row->program_details->program),
-//             ucwords($row->program_dtls),
-//             ucwords($row->university),
-//             date('Y-m-d', strtotime($row->start_date)),
-//             date('Y-m-d', strtotime($row->end_date))
-//         ]);
-//     }
-
-//     fclose($fp);
-
-//     $headers = ['Content-Type' => 'text/csv'];
-
-//     return response()->download($filename, 'Events_And_Accomplishments_List.csv', $headers)->deleteFileAfterSend(true);
-// }
-
 public function storeEventsAndAccomplishments(Request $request) {
     try {
         $validatedData = $request->validate([
@@ -74,7 +35,8 @@ public function storeEventsAndAccomplishments(Request $request) {
             'university' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
-            'image' => 'nullable|image|max:2048', // add validation
+            'image' => 'nullable',
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {

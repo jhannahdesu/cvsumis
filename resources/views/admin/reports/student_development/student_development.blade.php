@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+    .centered-title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+<h4 class="centered-title">STUDENT DEVELOPMENT</h4>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 14px; }
         .page-break { page-break-after: always; }
-
         footer {
             position: fixed;
             bottom: -30px;
@@ -18,6 +25,7 @@
     </style>
 </head>
 <body>
+
     <h3> Recognized Student Organizations </h3>
     <ul class="list-group" style="list-style: none">
         @foreach ($organizations as  $key=>$organization)

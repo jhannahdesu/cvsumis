@@ -12,7 +12,7 @@
 
 <head>
     <style>
-        body { font-family: Arial, sans-serif; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 14px; }
         table { width: 100%; border-collapse: collapse;}
         th, td { border: 1px solid black; padding: 8px; text-align: left; }
         .page-break { page-break-after: always; }
@@ -83,7 +83,7 @@
 
 
     <div class="page-break"></div>
-    <h4> Performance in the licensure examination (first time takers only) </h4>
+    <h4> Performance in the licensure examination</h4>
     @if($licensure_exams->isNotEmpty())
         <table>
             <thead>
@@ -91,8 +91,10 @@
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE OF EXAMINATION</th>
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">EXAM START</th>
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white;">EXAM END</th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU PASSING %</th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL PASSING %</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU %</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL %</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CVSU OVERALL %</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NATIONAL OVERALL %</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,6 +105,8 @@
                         <td>{{ date('F d, Y', strtotime($licensure_exam->end_date)) }}</td>
                         <td>{{ $licensure_exam->cvsu_passing_rate }}</td>
                         <td>{{ $licensure_exam->national_passing_rate }}</td>
+                        <td>{{ $licensure_exam->cvsu_overall_passing_rate }}</td>
+                        <td>{{ $licensure_exam->national_overall_passing_rate }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -150,7 +154,11 @@
             <tbody>
                 @foreach($student_tvets as $student_tvet)
                     <tr>
-                        <td>{{ ucwords($student_tvet->certification_type_dtls->type) }} <br> {{ ucwords($student_tvet->certificate_details) }}</td>
+                        <td>
+                            {{ ucwords($student_tvet->certification_type_dtls->type) }}<br>
+                            {{ ucwords($student_tvet->student_tvet_location) }} -
+                            {{ \Carbon\Carbon::parse($student_tvet->student_tvet_date)->format('F d, Y') }}
+                        </td>
                         <td>{{ $student_tvet->number_of_student }}</td>
                     </tr>
                 @endforeach

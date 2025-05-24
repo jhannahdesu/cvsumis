@@ -7,8 +7,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+    .centered-title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+<h4 class="centered-title">STUDENT PROFILE</h4>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 14px; }
         table { width: 100%; border-collapse: collapse;}
         th, td { border: 1px solid black; padding: 8px; text-align: left; }
         .page-break { page-break-after: always; }
@@ -29,7 +37,6 @@
     </style>
 </head>
 <body>
-
     <h3>Enrollment</h3>
     <table style="width: 100%; border-collapse: collapse;">
         <thead>

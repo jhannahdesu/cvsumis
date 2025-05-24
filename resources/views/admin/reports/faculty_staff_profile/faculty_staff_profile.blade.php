@@ -1,12 +1,24 @@
+<?php
+    $year = date('Y');
+    $secondSem = "2<sup>nd</sup> SEM AY " . ($year - 1) . "-" . $year;
+    $firstSem = "1<sup>st</sup> SEM AY " . $year . "-" . ($year + 1);
+?>
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+    .centered-title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+<h4 class="centered-title">FACULTY AND STAFF PROFILE</h4>
     <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        body { font-family: Arial, Arial; font-size: 14px; }
         table { width: 100%; border-collapse: collapse;}
         th, td { border: 1px solid black; padding: 8px; text-align: left; }
         .page-break { page-break-after: always; }
-
        
         /* Header style, if needed */
         /* Footer style */
@@ -23,7 +35,7 @@
     </style>
 </head>
 <body>
- 
+
     <h4> Faculty profile by educational attainment</h4>
     @if($educational_attainments->isNotEmpty())
         <table style="width: 100%; border-collapse: collapse;">
@@ -33,8 +45,12 @@
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF FACULTY</th>
                 </tr>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                        <?php echo $secondSem; ?>
+                    </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                        <?php echo $firstSem; ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -86,8 +102,12 @@
                     <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;" colspan="2">NO. OF FACULTY</th>
                 </tr>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">2<sup>nd</sup> SEM. AY 2022-2023</th>
-                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">1<sup>st</sup> SEM. AY 2023-2024</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                        <?php echo $secondSem; ?>
+                    </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white; padding: 8px; text-align: center;">
+                        <?php echo $firstSem; ?>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -188,11 +208,11 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF FACULTY  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">SCHOLARSHIP/ PONSORSHIP</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF FACULTY  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">SCHOLARSHIP/ PONSORSHIP</th>
                         S
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">INSTITUTION</th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">PROGRAM</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">INSTITUTION</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">PROGRAM</th>
                 </tr>
             </thead>
             <tbody>
@@ -218,10 +238,10 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF FACULTY  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DEGREE </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">INSTITUTION</th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE OF GRADUATION</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF FACULTY  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DEGREE </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">INSTITUTION</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE OF GRADUATION</th>
                 </tr>
             </thead>
             <tbody>
@@ -247,9 +267,9 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF  PARTICIPANT/S  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE AND  VENUE</th>           
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF  PARTICIPANT/S  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE AND  VENUE</th>           
                 </tr>
             </thead>
             <tbody>
@@ -277,9 +297,9 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF  PARTICIPANT/S  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE AND  VENUE</th>           
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF  PARTICIPANT/S  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE AND  VENUE</th>           
                 </tr>
             </thead>
             <tbody>
@@ -304,9 +324,9 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF  PARTICIPANT/S  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE AND  VENUE</th>           
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF  PARTICIPANT/S  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE AND  VENUE</th>           
                 </tr>
             </thead>
             <tbody>
@@ -330,9 +350,9 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF  PARTICIPANT/S  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE AND  VENUE</th>           
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF  PARTICIPANT/S  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE AND  VENUE</th>           
                 </tr>
             </thead>
             <tbody>
@@ -357,9 +377,9 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF  PARTICIPANT/S  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE AND  VENUE</th>           
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TITLE OF CONFERENCE/ SEMINAR/ TRAINING/ WORKSHOP </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF  PARTICIPANT/S  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE AND  VENUE</th>           
                 </tr>
             </thead>
             <tbody>
@@ -384,11 +404,11 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TYPE</th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">NAME OF AWARDEE/S  </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">AWARD/ RECOGNITION </th>  
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">GRANTING  AGENCY/ INSTITUTION </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE   RECEIVED </th>            
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">NAME OF AWARDEE/S  </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">AWARD/ RECOGNITION </th>  
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">GRANTING  AGENCY/ INSTITUTION </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE   RECEIVED </th>            
                 </tr>
             </thead>
             <tbody>
@@ -414,13 +434,13 @@
         <table>
             <thead>
                 <tr>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TYPE</th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TITILE OF CONFERENCE </th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">TITLE OF PAPER/  STUDY PRESENTED </th>  
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TYPE</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TITILE OF CONFERENCE </th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">TITLE OF PAPER/  STUDY PRESENTED </th>  
                        
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">PRESENTER</th>
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">DATE AND VENUE </th>            
-                    <th style="border: 1px solid #000; background-color: #007bff; color: white;">CO-AUTHORS</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">PRESENTER</th>
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">DATE AND VENUE </th>            
+                    <th style="border: 1px solid #000; background-color: #ffa500; color: white;">CO-AUTHORS</th>
                 </tr>
             </thead>
             <tbody>
