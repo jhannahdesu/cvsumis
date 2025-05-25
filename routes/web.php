@@ -72,7 +72,7 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
     //REPORTSS  
     Route::get('/manage-annual-report', [\App\Http\Controllers\Admin\AnnualReportController::class, 'index'])->name('manage_annual_report.index');
     Route::get('/fetch-annual-report', [\App\Http\Controllers\Admin\AnnualReportController::class, 'fetchAnnualReportData'])->name('manage_annual_report.fetch');
-    Route::post('/generate-year', [\App\Http\Controllers\Admin\AnnualReportController::class, 'generateYear'])->name('manage_annual_report.generate_year');
+    Route::post('/generate-year', [\App\Http\Controllers\Admin\AnnualReportController::class, 'generateYear'])->name('manage_annual_report.generate');
 
 
     //SETTINGS  
@@ -389,6 +389,6 @@ Route::middleware(['auth', CheckChangePasswordMiddleware::class])->group(functio
         
     });
 
-   
+    Route::get('/get-users-for-research', [App\Http\Controllers\Admin\ExtensionAndResearchController::class, 'getUsersForResearch']);
 
 });

@@ -600,10 +600,11 @@
                 
                 <div class="col-md-12">
                     <label for="participants" class="form-label">Participants</label>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" id="participant-input" placeholder="Enter participant name">
-                        <button type="button" class="btn btn-outline-secondary" id="add-participant-btn">Add</button>
-                    </div>
+                    <input type="text" class="form-control" id="participant-input" placeholder="participant name" list="participant-suggestions">
+                    <datalist id="participant-suggestions">
+                        <!-- Options will be populated dynamically -->
+                    </datalist>
+                    <button type="button" class="btn btn-primary btn-sm mt-2" id="add-participant-btn">Add </button>
                     <ul id="participants-list" class="list-group mb-2"></ul>
                     <input type="hidden" name="participants" id="participants-hidden" required>
                     <div class="valid-feedback">Looks good!</div>

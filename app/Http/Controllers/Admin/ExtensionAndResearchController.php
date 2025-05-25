@@ -361,4 +361,16 @@ class ExtensionAndResearchController extends Controller
         $cvsu_researches = \App\Models\Research::where('funding', 'university')->get();
         return view('admin.reports.extension_and_research.extension_and_research', compact('cvsu_researches'));
     }
+
+    public function getUsersForResearch() {
+        try {
+            // Fetch users from the database (adjust the query as needed)
+            $users = \App\Models\User::select('firstname', 'lastname')->get();
+
+            return response()->json($users);
+        } catch (\Exception $e) {
+            \Log::error($e); // Log the error
+            return response()->json(['error' => 'An error occurred'], 500); // Return an error response
+        }
+    }
 }

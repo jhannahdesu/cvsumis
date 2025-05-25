@@ -19,10 +19,11 @@
 
                 <div class="col-md-12">
                     <label for="researchers" class="form-label">Researchers</label>
-                    <div class="input-group mb-2">
-                        <input type="text" class="form-control" id="researcher-input" placeholder="Enter researcher name">
-                        <button type="button" class="btn btn-outline-secondary" id="add-researcher-btn">Add</button>
-                    </div>
+                    <input type="text" class="form-control" id="researcher-input" placeholder="Type researcher name..." list="researcher-suggestions">
+                    <datalist id="researcher-suggestions">
+                        <!-- Options will be populated dynamically -->
+                    </datalist>
+                    <button type="button" class="btn btn-primary btn-sm mt-2" id="add-researcher-btn">Add Researcher</button>
                     <ul id="researchers-list" class="list-group mb-2"></ul>
                     <input type="hidden" name="researcher" id="researchers-hidden" required>
                     <div class="valid-feedback">Looks good!</div>

@@ -393,3 +393,11 @@ $('#submit-user-btn').click(function () {
         form.addClass('was-validated');
     }
 });
+
+const researcherInput = document.getElementById('researcher-input');
+if (researcherInput) {
+    researcherInput.addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+}

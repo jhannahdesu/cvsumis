@@ -390,6 +390,22 @@
 }
 
     }
+
+    #confirmConsent:enabled {
+        background: linear-gradient(45deg, #FF6B35);
+        color: #fff;
+        border: none;
+        box-shadow: 0 2px 8px rgba(52,100,235,0.15);
+        cursor: pointer;
+        opacity: 1;
+        transition: background 0.3s, opacity 0.3s;
+    }
+    #confirmConsent:disabled {
+        background: #ccc;
+        color: #888;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
 </style>
 
 <div class="bg-slideshow">
@@ -473,6 +489,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">Data Privacy Act of 2012 - Consent Confirmation</h3>
+            <button type="button" class="btn-close" id="closePrivacyModal" aria-label="Close" style="position:absolute;top:18px;right:18px;font-size:1.5rem;background:none;border:none;">&times;</button>
         </div>
         <div class="modal-body">
             <p><em>Before proceeding with entering your personal data into the system, we require that you carefully review and confirm your agreement to the <strong>Data Privacy Act of 2012 (Republic Act No. 10173)</strong>, a law that ensures the protection and proper handling of your personal information. By confirming your consent, you acknowledge the following details regarding the collection, processing, storage, and security of your data:</em></p>
@@ -523,16 +540,15 @@
                 <p>The <strong>Data Privacy Act of 2012</strong> is in place to ensure that your personal data is protected and handled responsibly. <strong>By confirming</strong> your consent, you are helping us fulfill our legal obligations while maintaining the privacy and security of your data. Your trust is essential to us, and we are committed to safeguarding your personal information throughout its lifecycle.</p>
             </div>
 
-            <p><em>Please review the information above carefully. By clicking <strong>'I understand'</strong>, you acknowledge that you have read, understood, and consent to the collection, processing, and storage of your personal data as described.</em></p>
+            <p><em>Please review the information above carefully. By clicking <strong>'I Agree'</strong>, you acknowledge that you have read, understood, and consent to the collection, processing, and storage of your personal data as described.</em></p>
 
-            <!-- <div class="privacy-checkbox-container">
+            <div class="privacy-checkbox-container">
                 <input type="checkbox" class="privacy-checkbox" id="privacyConsent">
                 <label for="privacyConsent">I have read, understood, and agree to the data privacy terms outlined above.</label>
-            </div> -->
+            </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="document.getElementById('privacyModal').classList.remove('show')">I Understand</button>
-            <!-- <button type="button" class="btn btn-primary">I Understand</button> -->
+            <button type="button" class="btn btn-primary" id="confirmConsent" disabled>I Agree</button>
         </div>
 
     </div>
@@ -797,6 +813,53 @@
             modal.classList.remove("show");
         }
     });
+</script>
+
+<script>
+$(document).ready(function () {
+    const privacyModal = $('#privacyModal');
+    const confirmPrivacyBtn = $('#confirmConsent');
+    const privacyConsent = $('#privacyConsent');
+    const closePrivacyBtn = $('#closePrivacyModal');
+
+    // Show modal when clicking the Data Privacy Act link
+    $('#openPrivacyModal').on('click', function(e) {
+        e.preventDefault();
+        privacyModal.addClass('show');
+        $('body').css('overflow', 'hidden');
+    });
+
+    // Enable/disable "I Agree" button
+    privacyConsent.on('change', function() {
+        confirmPrivacyBtn.prop('disabled', !this.checked);
+    });
+
+    // "I Agree" closes modal only if checked
+    confirmPrivacyBtn.on('click', function() {
+        if (privacyConsent.prop('checked')) {
+            privacyModal.removeClass('show');
+            $('body').css('overflow', '');
+            privacyConsent.prop('checked', false);
+            confirmPrivacyBtn.prop('disabled', true);
+        }
+    });
+
+    // "X" button always closes modal
+    closePrivacyBtn.on('click', function() {
+        privacyModal.removeClass('show');
+        $('body').css('overflow', '');
+        privacyConsent.prop('checked', false);
+        confirmPrivacyBtn.prop('disabled', true);
+    });
+
+    // Prevent closing modal by clicking outside
+    $(window).on('click', function(event) {
+        if (event.target === privacyModal[0]) {
+            // Do nothing
+            return;
+        }
+    });
+});
 </script>
 
 

@@ -54,67 +54,44 @@ $(document).ready(function () {
 
     // Privacy Modal Functionality
     const privacyModal = $('#privacyModal');
-    const showPrivacyBtn = $('#show-privacy-btn');
-    const cancelPrivacyBtn = $('#cancel-privacy-btn');
-    const confirmPrivacyBtn = $('#confirm-privacy-btn');
+    const confirmPrivacyBtn = $('#confirmConsent');
     const privacyConsent = $('#privacyConsent');
+    const closePrivacyBtn = $('#closePrivacyModal');
 
-    // Show privacy modal when sign in button is clicked
-    showPrivacyBtn.on('click', function() {
-        const email = $('input[name="email"]').val();
-        const password = $('input[name="password"]').val();
-
-        // Basic validation
-        if (!email || !password) {
-            if (!email) {
-                $('input[name="email"]').addClass('is-invalid');
-            }
-            if (!password) {
-                $('input[name="password"]').addClass('is-invalid');
-            }
-            return;
-        }
-
-        // Show privacy modal
+    // Show modal when clicking the Data Privacy Act link
+    $('#openPrivacyModal').on('click', function(e) {
+        e.preventDefault();
         privacyModal.addClass('show');
-        // Prevent background scrolling
         $('body').css('overflow', 'hidden');
     });
 
-    // Close privacy modal
-    cancelPrivacyBtn.on('click', function() {
-        privacyModal.removeClass('show');
-        // Re-enable background scrolling
-        $('body').css('overflow', '');
-        // Reset checkbox
-        privacyConsent.prop('checked', false);
-        confirmPrivacyBtn.prop('disabled', true);
-    });
-
-    // Enable/disable confirm button based on checkbox
+    // Enable/disable "I Agree" button and highlight
     privacyConsent.on('change', function() {
         confirmPrivacyBtn.prop('disabled', !this.checked);
     });
 
-    // Proceed with login after privacy consent
+    // "I Agree" closes modal only
     confirmPrivacyBtn.on('click', function() {
-        if (!privacyConsent.prop('checked')) {
-            return; // Do nothing if consent not checked
-        }
-
-        // Set privacy consent as confirmed
-        privacyConsentConfirmed = true;
-
-        // Hide privacy modal
         privacyModal.removeClass('show');
-        // Re-enable background scrolling
         $('body').css('overflow', '');
+        privacyConsent.prop('checked', false);
+        confirmPrivacyBtn.prop('disabled', true);
+    });
 
-        // Show loading animation on button
-        showPrivacyBtn.html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Signing in...');
+    // "X" button closes modal
+    closePrivacyBtn.on('click', function() {
+        privacyModal.removeClass('show');
+        $('body').css('overflow', '');
+        privacyConsent.prop('checked', false);
+        confirmPrivacyBtn.prop('disabled', true);
+    });
 
-        // Submit login form
-        $('#login_form').submit();
+    // Prevent closing modal by clicking outside
+    $(window).on('click', function(event) {
+        if (event.target === privacyModal[0]) {
+            // Do nothing
+            return;
+        }
     });
 
     // Handle form submission
@@ -179,15 +156,6 @@ $(document).ready(function () {
                 }
             }
         });
-    });
-
-    // Prevent closing modal by clicking outside
-    $(window).on('click', function(event) {
-        if (event.target === privacyModal[0]) {
-            // Do NOT close modal by clicking outside
-            // This prevents users from bypassing the consent checkbox
-            return;
-        }
     });
 
     // Form input validation

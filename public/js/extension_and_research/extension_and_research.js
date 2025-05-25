@@ -5,7 +5,36 @@ $(document).ready(function() {
     extensionActvitieTable();
     fetchExtensionActivity();
     $('#agency-input').prop('hidden', true);
+
+    // Fetch users for auto-suggestions
+    fetchUsersForSuggestions();
 });
+
+// Function to fetch users from the backend
+function fetchUsersForSuggestions() {
+    $.ajax({
+        url: '/get-users-for-research', // Define this route in your Laravel routes file
+        type: 'GET',
+        success: function(response) {
+            populateSuggestions(response);
+        },
+        error: function (xhr, status) {
+            throwError(xhr, status);
+        }
+    });
+}
+
+// Function to populate the datalist with suggestions
+function populateSuggestions(users) {
+    const datalist = document.getElementById('researcher-suggestions');
+    datalist.innerHTML = ''; // Clear existing options
+
+    users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.firstname + ' ' + user.lastname;
+        datalist.appendChild(option);
+    });
+}
 
 function throwError(xhr, status){
     var response = JSON.parse(xhr.responseText);
@@ -993,26 +1022,32 @@ $('#default_school_year').change(function() {
 let researchersArr = [];
 
 $('#add-researcher-btn').on('click', function() {
-    const input = $('#researcher-input');
-    const name = input.val().trim();
-    if (name && !researchersArr.includes(name)) {
-        researchersArr.push(name);
-        $('#researchers-list').append(
+    const researcherName = $('#researcher-input').val(); // Get value from the input field
+    if (researcherName && !researchersArr.includes(researcherName)) {
+        researchersArr.push(researcherName);
+        updateResearchersList();
+        $('#researcher-input').val(''); // Clear the input field after adding
+    }
+});
+
+function updateResearchersList() {
+    const list = $('#researchers-list');
+    list.empty(); // Clear the existing list
+    researchersArr.forEach(name => {
+        list.append(
             `<li class="list-group-item d-flex justify-content-between align-items-center">
                 ${name}
                 <button type="button" class="btn btn-sm btn-danger remove-researcher-btn" data-name="${name}">&times;</button>
             </li>`
         );
-        $('#researchers-hidden').val(researchersArr.join(','));
-        input.val('');
-    }
-});
+    });
+    $('#researchers-hidden').val(researchersArr.join(','));
+}
 
 $(document).on('click', '.remove-researcher-btn', function() {
     const name = $(this).data('name');
     researchersArr = researchersArr.filter(n => n !== name);
-    $(this).parent().remove();
-    $('#researchers-hidden').val(researchersArr.join(','));
+    updateResearchersList();
 });
 
 // Reset researchersArr when modal is closed
@@ -1070,3 +1105,11 @@ $('#UniversityResearchModal').on('hidden.bs.modal', function () {
     $('#add-coauthors-checkbox').prop('checked', false);
     $('#coauthors-section').hide();
 });
+
+const researcherInput = document.getElementById('researcher-input');
+if (researcherInput) {
+    researcherInput.addEventListener('input', function() {
+        // Allow letters, spaces, commas, and periods
+        this.value = this.value.replace(/[^A-Za-z\s.,]/g, '');
+    });
+}

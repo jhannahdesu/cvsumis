@@ -34,7 +34,36 @@ $(document).ready(function() {
     fetchpresentation();
 
     updateDefaults();
+
+    // Fetch users for auto-suggestions
+    fetchUsersForSuggestions();
 });
+
+// Function to fetch users from the backend
+function fetchUsersForSuggestions() {
+    $.ajax({
+        url: '/get-users-for-research', // Define this route in your Laravel routes file
+        type: 'GET',
+        success: function(response) {
+            populateSuggestions(response);
+        },
+        error: function (xhr, status) {
+            throwError(xhr, status);
+        }
+    });
+}
+
+// Function to populate the datalist with suggestions
+function populateSuggestions(users) {
+    const datalist = document.getElementById('participant-suggestions');
+    datalist.innerHTML = ''; // Clear existing options
+
+    users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.firstname + ' ' + user.lastname;
+        datalist.appendChild(option);
+    });
+}
 
 function throwError(xhr, status){
     var response = JSON.parse(xhr.responseText);
@@ -2148,9 +2177,6 @@ $('#submit-faculty-graduate-studies-btn').on('click', function () {
     });
 });
 
-
-
-
 function fetchfacultyGraduateStudies(){
     $.ajax({
         url: '/fetch-faculty-graduate-studies',
@@ -3758,91 +3784,97 @@ $('#default_school_year').change(function() {
 let participantsArr = [];
 
 $('#add-participant-btn').on('click', function() {
-    const input = $('#participant-input');
-    const name = input.val().trim();
-    if (name && !participantsArr.includes(name)) {
-        participantsArr.push(name);
-        $('#participants-list').append(
-            `<li class="list-group-item d-flex justify-content-between align-items-center">
-                ${name}
-                <button type="button" class="btn btn-sm btn-danger remove-participant-btn" data-name="${name}">&times;</button>
-            </li>`
-        );
-        $('#participants-hidden').val(participantsArr.join(','));
-        input.val('');
+    const participantName = $('#participant-input').val(); // Get value from the input field
+    if (participantName && !participantsArr.includes(participantName)) {
+        participantsArr.push(participantName);
+        updateParticipantsList();
+        $('#participant-input').val(''); // Clear the input field after adding
     }
 });
+
+function updateParticipantsList() {
+    const participantsList = $('#participants-list');
+    participantsList.empty(); // Clear the list
+
+    participantsArr.forEach(participant => {
+        const listItem = $('<li class="list-group-item d-flex justify-content-between align-items-center">' +
+            participant +
+            '<button type="button" class="btn btn-outline-danger btn-sm remove-participant-btn" data-name="' + participant + '">Remove</button>' +
+            '</li>');
+        participantsList.append(listItem);
+    });
+
+    $('#participants-hidden').val(participantsArr.join(',')); // Update hidden input
+}
 
 $(document).on('click', '.remove-participant-btn', function() {
     const name = $(this).data('name');
     participantsArr = participantsArr.filter(n => n !== name);
-    $(this).parent().remove();
-    $('#participants-hidden').val(participantsArr.join(','));
+    updateParticipantsList();
 });
 
 let presentersArr = [];
+let coauthorsArr = [];
 
+// Presenters
 $('#add-presenter-btn').on('click', function() {
-    const input = $('#presenter-input');
-    const name = input.val().trim();
-    if (name && !presentersArr.includes(name)) {
-        presentersArr.push(name);
-        $('#presenters-list').append(
-            `<li class="list-group-item d-flex justify-content-between align-items-center">
-                ${name}
-                <button type="button" class="btn btn-sm btn-danger remove-presenter-btn" data-name="${name}">&times;</button>
-            </li>`
-        );
-        $('#presenters-hidden').val(presentersArr.join(','));
-        input.val('');
+    const presenterName = $('#presenter-input').val();
+    if (presenterName && !presentersArr.includes(presenterName)) {
+        presentersArr.push(presenterName);
+        updatePresentersList();
+        $('#presenter-input').val('');
     }
 });
+
+function updatePresentersList() {
+    const presentersList = $('#presenters-list');
+    presentersList.empty();
+
+    presentersArr.forEach(presenter => {
+        const listItem = $('<li class="list-group-item d-flex justify-content-between align-items-center">' +
+            presenter +
+            '<button type="button" class="btn btn-outline-danger btn-sm remove-presenter-btn" data-name="' + presenter + '">Remove</button>' +
+            '</li>');
+        presentersList.append(listItem);
+    });
+
+    $('#presenters-hidden').val(presentersArr.join(','));
+}
 
 $(document).on('click', '.remove-presenter-btn', function() {
     const name = $(this).data('name');
     presentersArr = presentersArr.filter(n => n !== name);
-    $(this).parent().remove();
-    $('#presenters-hidden').val(presentersArr.join(','));
+    updatePresentersList();
 });
 
-// Reset presentersArr when modal is closed
-$('#AddPresentation').on('hidden.bs.modal', function () {
-    presentersArr = [];
-    $('#presenters-list').empty();
-    $('#presenters-hidden').val('');
-    $('#presenter-input').val('');
-});
-
-let coAuthorsArr = [];
-
+// Co-Authors
 $('#add-coauthor-btn').on('click', function() {
-    const input = $('#coauthor-input');
-    const name = input.val().trim();
-    if (name && !coAuthorsArr.includes(name)) {
-        coAuthorsArr.push(name);
-        $('#coauthors-list').append(
-            `<li class="list-group-item d-flex justify-content-between align-items-center">
-                ${name}
-                <button type="button" class="btn btn-sm btn-danger remove-coauthor-btn" data-name="${name}">&times;</button>
-            </li>`
-        );
-        $('#coauthors-hidden').val(coAuthorsArr.join(','));
-        input.val('');
+    const coauthorName = $('#coauthor-input').val();
+    if (coauthorName && !coauthorsArr.includes(coauthorName)) {
+        coauthorsArr.push(coauthorName);
+        updateCoauthorsList();
+        $('#coauthor-input').val('');
     }
 });
 
+function updateCoauthorsList() {
+    const coauthorsList = $('#coauthors-list');
+    coauthorsList.empty();
+
+    coauthorsArr.forEach(coauthor => {
+        const listItem = $('<li class="list-group-item d-flex justify-content-between align-items-center">' +
+            coauthor +
+            '<button type="button" class="btn btn-outline-danger btn-sm remove-coauthor-btn" data-name="' + coauthor + '">Remove</button>' +
+            '</li>');
+        coauthorsList.append(listItem);
+    });
+
+    $('#coauthors-hidden').val(coauthorsArr.join(','));
+}
+
 $(document).on('click', '.remove-coauthor-btn', function() {
     const name = $(this).data('name');
-    coAuthorsArr = coAuthorsArr.filter(n => n !== name);
-    $(this).parent().remove();
-    $('#coauthors-hidden').val(coAuthorsArr.join(','));
-});
-
-// Reset coAuthorsArr when modal is closed
-$('#AddPresentation').on('hidden.bs.modal', function () {
-    coAuthorsArr = [];
-    $('#coauthors-list').empty();
-    $('#coauthors-hidden').val('');
-    $('#coauthor-input').val('');
+    coauthorsArr = coauthorsArr.filter(n => n !== name);
+    updateCoauthorsList();
 });
 
